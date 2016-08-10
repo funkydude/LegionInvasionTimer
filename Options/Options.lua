@@ -35,7 +35,7 @@ local acOptions = {
 			set = function(info, value)
 				local list = media:List("font")
 				local font = list[value]
-				op[info[#info]] = font
+				op.font = font
 
 				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize)
 				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize)
@@ -48,6 +48,31 @@ local acOptions = {
 			max = 40,
 			min = 6,
 			step = 1,
+			set = function(info, value)
+				op.fontSize = value
+
+				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), value)
+				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), value)
+			end,
+		},
+		texture = {
+			type = "select",
+			name = L.texture,
+			order = 4,
+			values = media:List("statusbar"),
+			itemControl = "DDI-Statusbar",
+			get = function()
+				for i, v in next, media:List("statusbar") do
+					if v == op.texture then return i end
+				end
+			end,
+			set = function(info, value)
+				local list = media:List("statusbar")
+				local texture = list[value]
+				op.texture = texture
+
+				frame.bar:SetTexture(texture)
+			end,
 		},
 	},
 }
