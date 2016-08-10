@@ -1,0 +1,16 @@
+## Interface: 70000
+## Title: LegionInvasionTimer
+## Author: Funkydude
+## Notes: Shows the Legion invasion timer.
+## Version: 0
+
+# SavedVariables: LegionInvasionTimerDB
+
+## X-Category: 0
+## OptionalDeps: LibSharedMedia-3.0, LibCandyBar-3.0
+## X-Embeds: LibSharedMedia-3.0, LibCandyBar-3.0
+
+embeds.xml
+
+LegionInvasionTimer.lua
+
