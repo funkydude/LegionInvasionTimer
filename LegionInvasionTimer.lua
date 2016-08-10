@@ -37,7 +37,7 @@ header:SetText(name)
 
 local function startBar(timeLeft, startedFromDB)
 	if frame.bar then frame.bar:Stop() end
-	frame.bar = candy:New(media:Fetch("statusbar", "BantoBar"), 200, 30)
+	frame.bar = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), 200, 30)
 	frame.bar:SetLabel("Invasion")
 	frame.bar.candyBarLabel:SetJustifyH("LEFT")
 	frame.bar:SetDuration(timeLeft)
@@ -65,10 +65,12 @@ local function runOnLogin()
 	if not found and legionInvasionTimerDB then
 		local t, rem = legionInvasionTimerDB[1], legionInvasionTimerDB[2]
 		if t and rem then
-			found = true
 			local deduct = (GetTime() - t) / 60
 			local timeLeftMinutes = rem - deduct
-			startBar(timeLeftMinutes * 60, true)
+			local sec = timeLeftMinutes * 60
+			if sec > 0 then
+				startBar(sec, true)
+			end
 		end
 	end
 end
@@ -76,6 +78,7 @@ end
 frame:SetScript("OnEvent", function()
 	frame.optionsTbl = { -- XXX not saving for now
 		fontSize = 10,
+		texture = "BantoBar",
 	}
 	runOnLogin()
 	C_Timer.After(7, runOnLogin) -- Safety
