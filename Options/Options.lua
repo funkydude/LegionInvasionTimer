@@ -24,7 +24,7 @@ local acOptions = {
 		font = {
 			type = "select",
 			name = "Font",
-			order = 1,
+			order = 2,
 			values = media:List("font"),
 			itemControl = "DDI-Font",
 			get = function()
@@ -40,6 +40,14 @@ local acOptions = {
 				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize)
 				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize)
 			end,
+		},
+		fontSize = {
+			type = "range",
+			name = "Font Size",
+			order = 3,
+			max = 40,
+			min = 6,
+			step = 1,
 		},
 	},
 }
