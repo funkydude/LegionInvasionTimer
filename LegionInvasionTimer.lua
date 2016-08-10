@@ -22,13 +22,13 @@ header:SetAllPoints(frame)
 header:SetText(name)
 
 local function startBar(timeLeft)
-	local bar = candy:New(media:Fetch("statusbar", "BantoBar"), 200, 30)
-	bar:SetLabel("Invasion")
-	bar.candyBarLabel:SetJustifyH("LEFT")
-	bar:SetDuration(timeLeft)
-	bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-	bar:SetPoint("TOP", LegionInvasionTimer, "BOTTOM")
-	bar:Start()
+	frame.bar = candy:New(media:Fetch("statusbar", "BantoBar"), 200, 30)
+	frame.bar:SetLabel("Invasion")
+	frame.bar.candyBarLabel:SetJustifyH("LEFT")
+	frame.bar:SetDuration(timeLeft)
+	frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+	frame.bar:SetPoint("TOP", LegionInvasionTimer, "BOTTOM")
+	frame.bar:Start()
 end
 
 local function runOnLogin()

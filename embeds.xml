@@ -8,5 +8,9 @@
 <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
 <Include file="Libs\LibCandyBar-3.0\lib.xml"/>
 <!--@end-no-lib-strip@-->
+
+<!--@debug@-->
+<Include file="Options\embeds.xml"/>
+<!--@end-debug@-->
 </Ui>
 
