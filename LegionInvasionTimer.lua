@@ -42,6 +42,8 @@ local function startBar(timeLeft)
 	frame.bar:SetDuration(timeLeft)
 	frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 	frame.bar:SetPoint("TOP", name, "BOTTOM")
+	frame.bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize)
+	frame.bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize)
 	frame.bar:Start()
 end
 
@@ -74,5 +76,10 @@ local function runOnLogin()
 	end
 end
 
-frame:SetScript("OnEvent", runOnLogin)
+frame:SetScript("OnEvent", function()
+	frame.optionsTbl = { -- XXX not saving for now
+		fontSize = 10,
+	}
+	runOnLogin()
+end)
 
