@@ -2,11 +2,10 @@
 ## Title: LegionInvasionTimer
 ## Author: Funkydude
 ## Notes: Shows the Legion invasion timer.
-## Version: 0
-
-# SavedVariables: LegionInvasionTimerDB
-
-## X-Category: 0
+## Version: @project-version@
+## X-Category: Miscellaneous
+## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
+## X-Curse-Project-ID: legioninvasiontimer
 ## OptionalDeps: LibSharedMedia-3.0, LibCandyBar-3.0
 ## X-Embeds: LibSharedMedia-3.0, LibCandyBar-3.0
 
