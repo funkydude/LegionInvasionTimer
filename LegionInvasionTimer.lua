@@ -50,8 +50,8 @@ end
 local function runOnLogin()
 	local found = false
 
-	for i = 1, 300 do
-		local name, timeLeftMinutes, rewardQuestID = GetInvasionInfoByMapAreaID(i)
+	for i = 1, 20 do
+		local name, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 then
 			found = true
 			legionInvasionTimerDB = {GetTime(), timeLeftMinutes}
@@ -72,7 +72,7 @@ local function runOnLogin()
 	end
 
 	if not found then
-		C_Timer.After(7, runOnLogin) -- The very first login doesn't have GetInvasionInfoByMapAreaID data fast enough, delay it
+		C_Timer.After(7, runOnLogin) -- The very first login doesn't have GetInvasionInfo data fast enough, delay it
 	end
 end
 
