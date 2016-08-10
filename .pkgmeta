@@ -1,4 +1,9 @@
 package-as: LegionInvasionTimer
+wowi-archive-previous: no
+
+ignore:
+  - .travis.yml
+  - README.md
 
 externals:
 	Libs/LibSharedMedia-3.0: svn://svn.wowace.com/wow/libsharedmedia-3-0/mainline/trunk/LibSharedMedia-3.0
