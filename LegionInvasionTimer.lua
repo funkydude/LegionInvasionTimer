@@ -35,7 +35,8 @@ local header = frame:CreateFontString("TargetPercentText", "OVERLAY", "TextStatu
 header:SetAllPoints(frame)
 header:SetText(name)
 
-local function startBar(timeLeft)
+local function startBar(timeLeft, startedFromDB)
+	if frame.bar then frame.bar:Stop() end
 	frame.bar = candy:New(media:Fetch("statusbar", "BantoBar"), 200, 30)
 	frame.bar:SetLabel("Invasion")
 	frame.bar.candyBarLabel:SetJustifyH("LEFT")
@@ -67,12 +68,8 @@ local function runOnLogin()
 			found = true
 			local deduct = (GetTime() - t) / 60
 			local timeLeftMinutes = rem - deduct
-			startBar(timeLeftMinutes * 60)
+			startBar(timeLeftMinutes * 60, true)
 		end
-	end
-
-	if not found then
-		C_Timer.After(7, runOnLogin) -- The very first login doesn't have GetInvasionInfo data fast enough, delay it
 	end
 end
 
@@ -81,5 +78,6 @@ frame:SetScript("OnEvent", function()
 		fontSize = 10,
 	}
 	runOnLogin()
+	C_Timer.After(7, runOnLogin) -- Safety
 end)
 
