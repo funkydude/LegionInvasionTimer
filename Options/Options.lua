@@ -10,7 +10,6 @@ local acOptions = {
 	name = "LegionInvasionTimer",
 	get = function(info)
 		return op[info[#info]]
-		return
 	end,
 	set = function(info, value)
 		local key = info[#info]
