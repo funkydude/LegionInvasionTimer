@@ -12,12 +12,16 @@ local acOptions = {
 		local key = info[#info]
 		legionInvasionTimerDB[key] = value
 	end,
-	--args = {
-	--	barHeight = {
-	--		type = "toggle",
-	--		name = "Bar Height",
-	--		order = 1,
-	--		width = "full",
-	--	},
-	--},
+	args = {
+		lock = {
+			type = "toggle",
+			name = "Lock",
+			order = 1,
+			width = "full",
+		},
+	},
 }
+
+acr:RegisterOptionsTable(acOptions.name, acOptions, true)
+acd:SetDefaultSize(acOptions.name, 400, 400)
+

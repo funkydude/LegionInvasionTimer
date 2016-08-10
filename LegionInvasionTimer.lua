@@ -3,7 +3,7 @@ local name = ...
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 
-local frame = CreateFrame("Frame", "LegionInvasionTimer", UIParent)
+local frame = CreateFrame("Frame", name, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
 frame:SetWidth(180)
 frame:SetHeight(15)
@@ -13,6 +13,12 @@ frame:RegisterForDrag("LeftButton")
 frame:SetClampedToScreen(true)
 frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
 frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
+frame:SetScript("OnMouseUp", function(f, btn)
+	if btn == "RightButton" then
+		LoadAddOn("LegionInvasionTimer_Options")
+		LibStub("AceConfigDialog-3.0"):Open(name)
+	end
+end)
 frame:RegisterEvent("PLAYER_LOGIN")
 local bg = frame:CreateTexture(nil, "PARENT")
 bg:SetAllPoints(frame)
@@ -27,7 +33,7 @@ local function startBar(timeLeft)
 	frame.bar.candyBarLabel:SetJustifyH("LEFT")
 	frame.bar:SetDuration(timeLeft)
 	frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-	frame.bar:SetPoint("TOP", LegionInvasionTimer, "BOTTOM")
+	frame.bar:SetPoint("TOP", name, "BOTTOM")
 	frame.bar:Start()
 end
 
