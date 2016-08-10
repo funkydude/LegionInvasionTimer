@@ -12,8 +12,7 @@ local acOptions = {
 		return op[info[#info]]
 	end,
 	set = function(info, value)
-		local key = info[#info]
-		op[key] = value
+		op[info[#info]] = value
 	end,
 	args = {
 		lock = {
@@ -28,11 +27,18 @@ local acOptions = {
 			order = 1,
 			values = media:List("font"),
 			itemControl = "DDI-Font",
+			get = function()
+				for i, v in next, media:List("font") do
+					if v == op.font then return i end
+				end
+			end,
 			set = function(info, value)
-				local key = info[#info]
-				op[key] = value
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", value), op.fontSize)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", value), op.fontSize)
+				local list = media:List("font")
+				local font = list[value]
+				op[info[#info]] = font
+
+				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize)
+				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize)
 			end,
 		},
 	},
