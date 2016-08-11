@@ -37,8 +37,8 @@ local acOptions = {
 				local font = list[value]
 				op.font = font
 
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize)
+				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
 			end,
 		},
 		fontSize = {
@@ -51,13 +51,13 @@ local acOptions = {
 			set = function(info, value)
 				op.fontSize = value
 
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), value)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), value)
+				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
 			end,
 		},
 		texture = {
 			type = "select",
-			name = L.texture,
+			name = "Texture",
 			order = 4,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
@@ -71,7 +71,23 @@ local acOptions = {
 				local texture = list[value]
 				op.texture = texture
 
-				frame.bar:SetTexture(texture)
+				frame.bar:SetTexture(media:Fetch("statusbar", texture))
+			end,
+		},
+		outline = {
+			type = "select",
+			name = "Outline",
+			order = 5,
+			values = {
+				NONE = "None",
+				OUTLINE = "Thin",
+				THICKOUTLINE = "Thick",
+			},
+			set = function(info, value)
+				op.outline = value
+
+				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
 			end,
 		},
 	},
