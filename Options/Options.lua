@@ -29,8 +29,9 @@ local acOptions = {
 	args = {
 		lock = {
 			type = "toggle",
-			name = "Lock",
+			name = "Lock (Coming soon)",
 			order = 1,
+			disabled = function() return true end,
 		},
 		icon = {
 			type = "toggle",
