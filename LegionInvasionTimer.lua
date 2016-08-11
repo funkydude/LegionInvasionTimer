@@ -31,31 +31,48 @@ frame:RegisterEvent("PLAYER_LOGIN")
 local bg = frame:CreateTexture(nil, "PARENT")
 bg:SetAllPoints(frame)
 bg:SetColorTexture(0, 1, 0, 0.3)
-local header = frame:CreateFontString("TargetPercentText", "OVERLAY", "TextStatusBarText")
+local header = frame:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 header:SetAllPoints(frame)
 header:SetText(name)
 
-local function startBar(timeLeft)
-	if frame.bar then frame.bar:Stop() end
-	frame.bar = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
-	frame.bar:SetLabel("Invasion")
-	frame.bar.candyBarLabel:SetJustifyH("LEFT")
-	frame.bar:SetDuration(timeLeft)
-	if frame.optionsTbl.icon then
-		frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+local function startBar(zone, timeLeft, rewardQuestID, first)
+	local bar
+	if first then
+		if frame.bar1 then frame.bar1:Stop() end
+		frame.bar1 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
+		bar = frame.bar1
+		bar:SetPoint("TOP", name, "BOTTOM")
+	else
+		if frame.bar2 then frame.bar2:Stop() end
+		frame.bar2 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
+		bar = frame.bar2
+		bar:SetPoint("BOTTOM", name, "TOP")
 	end
-	frame.bar:SetPoint("TOP", name, "BOTTOM")
-	frame.bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
-	frame.bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
-	frame.bar:Start()
+
+	bar:SetLabel(zone:match("[^%:]+:(.+)"))
+	bar.candyBarLabel:SetJustifyH("LEFT")
+	bar:SetDuration(timeLeft)
+	if IsQuestFlaggedCompleted(rewardQuestID) then
+		bar:SetColor(0,1,0,1)
+	else
+		bar:SetColor(1,0,0,1)
+	end
+	if frame.optionsTbl.icon then
+		bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+	end
+	bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
+	bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
+	bar:Start()
 end
 
 local function findTimer()
+	local first = true
 	for i = 1, 20 do
-		local name, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
+		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 then
-			startBar(timeLeftMinutes * 60)
-			break
+			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
+			if not first then break end -- I'm assuming it's always 2 events
+			first = false
 		end
 	end
 end
