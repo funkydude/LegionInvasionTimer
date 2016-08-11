@@ -28,7 +28,8 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 		if frame.bar2 then frame.bar2:Stop() end
 		frame.bar2 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 		bar = frame.bar2
-		bar:SetPoint("BOTTOM", name, "TOP")
+		bar:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT")
+		bar:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT")
 	end
 
 	bar:SetLabel(zone:match("[^%:]+:(.+)"))
@@ -83,7 +84,7 @@ frame:SetScript("OnEvent", function(f)
 		outline = "NONE",
 		font = media:GetDefault("font"),
 		width = 200,
-		height = 30,
+		height = 20,
 		icon = true,
 	}
 
