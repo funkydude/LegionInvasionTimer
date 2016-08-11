@@ -143,7 +143,12 @@ frame:SetScript("OnEvent", function(f)
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
 		if not aboutToStopBar and bar == frame.bar1 then
-			Timer(20, findTimer) -- Start hunting for the next event
+			Timer(20, findTimer) -- Event over, start hunting for the next event
+		end
+		if bar == frame.bar1 then
+			frame.bar1 = nil
+		elseif bar == frame.bar2 then
+			frame.bar2 = nil
 		end
 	end)
 
