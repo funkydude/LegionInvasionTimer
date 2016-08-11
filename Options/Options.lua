@@ -23,7 +23,7 @@ local acOptions = {
 		icon = {
 			type = "toggle",
 			name = "Bar Icon",
-			order = 1.1,
+			order = 2,
 			set = function(info, value)
 				op.icon = value
 				frame.bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
@@ -32,7 +32,7 @@ local acOptions = {
 		font = {
 			type = "select",
 			name = "Font",
-			order = 2,
+			order = 3,
 			values = media:List("font"),
 			itemControl = "DDI-Font",
 			get = function()
@@ -51,7 +51,7 @@ local acOptions = {
 		fontSize = {
 			type = "range",
 			name = "Font Size",
-			order = 3,
+			order = 4,
 			max = 40,
 			min = 6,
 			step = 1,
@@ -64,7 +64,7 @@ local acOptions = {
 		texture = {
 			type = "select",
 			name = "Texture",
-			order = 4,
+			order = 5,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
 			get = function()
@@ -82,7 +82,7 @@ local acOptions = {
 		outline = {
 			type = "select",
 			name = "Outline",
-			order = 5,
+			order = 6,
 			values = {
 				NONE = "None",
 				OUTLINE = "Thin",
@@ -97,7 +97,7 @@ local acOptions = {
 		width = {
 			type = "range",
 			name = "Bar Width",
-			order = 6,
+			order = 7,
 			max = 2000,
 			min = 10,
 			step = 1,
@@ -109,7 +109,7 @@ local acOptions = {
 		height = {
 			type = "range",
 			name = "Bar Height",
-			order = 7,
+			order = 8,
 			max = 100,
 			min = 5,
 			step = 1,
@@ -117,6 +117,13 @@ local acOptions = {
 				op.height = value
 				frame.bar:SetHeight(value)
 			end,
+		},
+		introduction = {
+			type = "description",
+			name = "\n\nThese options don't permanently save yet.",
+			fontSize = "medium",
+			order = 9,
+			width = "full",
 		},
 	},
 }
