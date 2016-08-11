@@ -155,9 +155,13 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				op.spacing = value
-				frame.bar2:ClearAllPoints()
-				frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -value)
-				frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -value)
+				if op.growUp then
+					frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, value)
+					frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, value)
+				else
+					frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -value)
+					frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -value)
+				end
 			end,
 		},
 		width = {
@@ -214,6 +218,25 @@ local acOptions = {
 				op.alignTime = value
 				frame.bar1.candyBarDuration:SetJustifyH(value)
 				frame.bar2.candyBarDuration:SetJustifyH(value)
+			end,
+		},
+		growUp = {
+			type = "toggle",
+			name = "Grow Upwards",
+			order = 15,
+			set = function(info, value)
+				op.growUp = value
+				frame.bar1:ClearAllPoints()
+				frame.bar2:ClearAllPoints()
+				if value then
+					frame.bar1:SetPoint("BOTTOM", frame, "TOP")
+					frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, op.spacing)
+					frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, op.spacing)
+				else
+					frame.bar1:SetPoint("TOP", frame, "BOTTOM")
+					frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -op.spacing)
+					frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -op.spacing)
+				end
 			end,
 		},
 	},

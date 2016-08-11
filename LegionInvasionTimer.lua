@@ -23,13 +23,22 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
 		frame.bar1 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 		bar = frame.bar1
-		bar:SetPoint("TOP", name, "BOTTOM")
+		if frame.optionsTbl.growUp then
+			bar:SetPoint("BOTTOM", name, "TOP")
+		else
+			bar:SetPoint("TOP", name, "BOTTOM")
+		end
 	else
 		if frame.bar2 then frame.bar2:Stop() end
 		frame.bar2 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 		bar = frame.bar2
-		bar:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -frame.optionsTbl.spacing)
-		bar:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -frame.optionsTbl.spacing)
+		if frame.optionsTbl.growUp then
+			frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, frame.optionsTbl.spacing)
+			frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, frame.optionsTbl.spacing)
+		else
+			frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -frame.optionsTbl.spacing)
+			frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -frame.optionsTbl.spacing)
+		end
 	end
 
 	bar:SetLabel(zone:match("[^%:]+:(.+)"))
@@ -106,10 +115,12 @@ frame:SetScript("OnEvent", function(f)
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
 	f:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
+	SlashCmdList[name] = function() LoadAddOn("LegionInvasionTimer_Options") LibStub("AceConfigDialog-3.0"):Open(name) end
+	SLASH_LegionInvasionTimer1 = "/lit"
+	SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
 	f:SetScript("OnMouseUp", function(f, btn)
 		if btn == "RightButton" then
-			LoadAddOn("LegionInvasionTimer_Options")
-			LibStub("AceConfigDialog-3.0"):Open(name)
+			SlashCmdList[name]()
 		end
 	end)
 	f:SetScript("OnEnter", function(f)
