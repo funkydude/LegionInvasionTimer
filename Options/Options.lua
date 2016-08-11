@@ -19,7 +19,15 @@ local acOptions = {
 			type = "toggle",
 			name = "Lock",
 			order = 1,
-			width = "full",
+		},
+		icon = {
+			type = "toggle",
+			name = "Bar Icon",
+			order = 1.1,
+			set = function(info, value)
+				op.icon = value
+				frame.bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			end,
 		},
 		font = {
 			type = "select",

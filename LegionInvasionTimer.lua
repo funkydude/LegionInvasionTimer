@@ -41,7 +41,9 @@ local function startBar(timeLeft, startedFromDB)
 	frame.bar:SetLabel("Invasion")
 	frame.bar.candyBarLabel:SetJustifyH("LEFT")
 	frame.bar:SetDuration(timeLeft)
-	frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+	if frame.optionsTbl.icon then
+		frame.bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+	end
 	frame.bar:SetPoint("TOP", name, "BOTTOM")
 	frame.bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
 	frame.bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
@@ -83,6 +85,7 @@ frame:SetScript("OnEvent", function()
 		font = media:GetDefault("font"),
 		width = 200,
 		height = 30,
+		icon = true,
 	}
 	runOnLogin()
 	C_Timer.After(7, runOnLogin) -- Safety
