@@ -3,7 +3,7 @@ local acr = LibStub("AceConfigRegistry-3.0")
 local acd = LibStub("AceConfigDialog-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local frame = LegionInvasionTimer
-local op = LegionInvasionTimer.optionsTbl
+local op = legionTimerDB
 
 local function updateFlags()
 	local flags = nil

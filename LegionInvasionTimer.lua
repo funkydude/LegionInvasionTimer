@@ -21,50 +21,50 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	if first then
 		frame.header:SetText(name) -- We may have changed the header after the event ended
 		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
-		frame.bar1 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
+		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar1
-		if frame.optionsTbl.growUp then
+		if legionTimerDB.growUp then
 			bar:SetPoint("BOTTOM", name, "TOP")
 		else
 			bar:SetPoint("TOP", name, "BOTTOM")
 		end
 	else
 		if frame.bar2 then frame.bar2:Stop() end
-		frame.bar2 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
+		frame.bar2 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar2
-		if frame.optionsTbl.growUp then
-			frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, frame.optionsTbl.spacing)
-			frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, frame.optionsTbl.spacing)
+		if legionTimerDB.growUp then
+			frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, legionTimerDB.spacing)
+			frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, legionTimerDB.spacing)
 		else
-			frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -frame.optionsTbl.spacing)
-			frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -frame.optionsTbl.spacing)
+			frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -legionTimerDB.spacing)
+			frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -legionTimerDB.spacing)
 		end
 	end
 
 	bar:SetLabel(zone:match("[^%:]+:(.+)"))
-	bar.candyBarLabel:SetJustifyH(frame.optionsTbl.alignZone)
-	bar.candyBarDuration:SetJustifyH(frame.optionsTbl.alignTime)
+	bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
+	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
 	bar:SetDuration(timeLeft)
 	if IsQuestFlaggedCompleted(rewardQuestID) then
 		bar:SetColor(0,1,0,1)
 	else
 		bar:SetColor(1,0,0,1)
 	end
-	if frame.optionsTbl.icon then
+	if legionTimerDB.icon then
 		bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 	end
-	bar:SetTimeVisibility(frame.optionsTbl.timeText)
-	bar:SetFill(frame.optionsTbl.fill)
+	bar:SetTimeVisibility(legionTimerDB.timeText)
+	bar:SetFill(legionTimerDB.fill)
 	local flags = nil
-	if frame.optionsTbl.monochrome and frame.optionsTbl.outline ~= "NONE" then
-		flags = "MONOCHROME," .. frame.optionsTbl.outline
-	elseif frame.optionsTbl.monochrome then
+	if legionTimerDB.monochrome and legionTimerDB.outline ~= "NONE" then
+		flags = "MONOCHROME," .. legionTimerDB.outline
+	elseif legionTimerDB.monochrome then
 		flags = "MONOCHROME"
-	elseif frame.optionsTbl.outline ~= "NONE" then
-		flags = frame.optionsTbl.outline
+	elseif legionTimerDB.outline ~= "NONE" then
+		flags = legionTimerDB.outline
 	end
-	bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, flags)
-	bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, flags)
+	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
+	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar:Start()
 end
 
@@ -98,19 +98,21 @@ frame:SetScript("OnEvent", function(f)
 		return -- Good times come to an end
 	end
 
-	f.optionsTbl = { -- XXX not saving for now
-		fontSize = 10,
-		texture = "BantoBar",
-		outline = "NONE",
-		font = media:GetDefault("font"),
-		width = 200,
-		height = 20,
-		icon = true,
-		timeText = true,
-		spacing = 0,
-		alignZone = "LEFT",
-		alignTime = "RIGHT",
-	}
+	if type(legionTimerDB) ~= "table" then
+		legionTimerDB = {
+			fontSize = 10,
+			texture = "BantoBar",
+			outline = "NONE",
+			font = media:GetDefault("font"),
+			width = 200,
+			height = 20,
+			icon = true,
+			timeText = true,
+			spacing = 0,
+			alignZone = "LEFT",
+			alignTime = "RIGHT",
+		}
+	end
 
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
