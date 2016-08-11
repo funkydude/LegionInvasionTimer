@@ -5,6 +5,18 @@ local media = LibStub("LibSharedMedia-3.0")
 local frame = LegionInvasionTimer
 local op = LegionInvasionTimer.optionsTbl
 
+local function updateFlags()
+	local flags = nil
+	if op.monochrome and op.outline ~= "NONE" then
+		flags = "MONOCHROME," .. op.outline
+	elseif op.monochrome then
+		flags = "MONOCHROME"
+	elseif op.outline ~= "NONE" then
+		flags = op.outline
+	end
+	return flags
+end
+
 local acOptions = {
 	type = "group",
 	name = "LegionInvasionTimer",
@@ -33,7 +45,7 @@ local acOptions = {
 		timeText = {
 			type = "toggle",
 			name = "Show Time",
-			order = 2.1,
+			order = 3,
 			set = function(info, value)
 				op.timeText = value
 				frame.bar1:SetTimeVisibility(value)
@@ -43,7 +55,7 @@ local acOptions = {
 		fill = {
 			type = "toggle",
 			name = "Fill Bar",
-			order = 2.2,
+			order = 4,
 			set = function(info, value)
 				op.fill = value
 				frame.bar1:SetFill(value)
@@ -53,7 +65,7 @@ local acOptions = {
 		font = {
 			type = "select",
 			name = "Font",
-			order = 3,
+			order = 5,
 			values = media:List("font"),
 			itemControl = "DDI-Font",
 			get = function()
@@ -65,31 +77,60 @@ local acOptions = {
 				local list = media:List("font")
 				local font = list[value]
 				op.font = font
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, updateFlags())
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, updateFlags())
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, updateFlags())
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, updateFlags())
 			end,
 		},
 		fontSize = {
 			type = "range",
 			name = "Font Size",
-			order = 4,
+			order = 6,
 			max = 40,
 			min = 6,
 			step = 1,
 			set = function(info, value)
 				op.fontSize = value
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), value, updateFlags())
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), value, updateFlags())
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), value, updateFlags())
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), value, updateFlags())
+			end,
+		},
+		monochrome = {
+			type = "toggle",
+			name = "Monochrome Text",
+			order = 7,
+			set = function(info, value)
+				op.monochrome = value
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+			end,
+		},
+		outline = {
+			type = "select",
+			name = "Outline",
+			order = 8,
+			values = {
+				NONE = "None",
+				OUTLINE = "Thin",
+				THICKOUTLINE = "Thick",
+			},
+			set = function(info, value)
+				op.outline = value
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, updateFlags())
 			end,
 		},
 		texture = {
 			type = "select",
 			name = "Texture",
-			order = 5,
+			order = 9,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
 			get = function()
@@ -105,27 +146,24 @@ local acOptions = {
 				frame.bar2:SetTexture(media:Fetch("statusbar", texture))
 			end,
 		},
-		outline = {
-			type = "select",
-			name = "Outline",
-			order = 6,
-			values = {
-				NONE = "None",
-				OUTLINE = "Thin",
-				THICKOUTLINE = "Thick",
-			},
+		spacing = {
+			type = "range",
+			name = "Bar Spacing",
+			order = 10,
+			max = 100,
+			min = 0,
+			step = 1,
 			set = function(info, value)
-				op.outline = value
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				op.spacing = value
+				frame.bar2:ClearAllPoints()
+				frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -value)
+				frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -value)
 			end,
 		},
 		width = {
 			type = "range",
 			name = "Bar Width",
-			order = 7,
+			order = 11,
 			max = 2000,
 			min = 10,
 			step = 1,
@@ -138,7 +176,7 @@ local acOptions = {
 		height = {
 			type = "range",
 			name = "Bar Height",
-			order = 8,
+			order = 12,
 			max = 100,
 			min = 5,
 			step = 1,
@@ -148,16 +186,39 @@ local acOptions = {
 				frame.bar2:SetHeight(value)
 			end,
 		},
-		introduction = {
-			type = "description",
-			name = "\n\nThese options do NOT permanently save yet.",
-			fontSize = "large",
-			order = 9,
-			width = "full",
+		alignZone = {
+			type = "select",
+			name = "Align Zone",
+			order = 13,
+			values = {
+				LEFT = "Left",
+				CENTER = "Center",
+				RIGHT = "Right",
+			},
+			set = function(info, value)
+				op.alignZone = value
+				frame.bar1.candyBarLabel:SetJustifyH(value)
+				frame.bar2.candyBarLabel:SetJustifyH(value)
+			end,
+		},
+		alignTime = {
+			type = "select",
+			name = "Align Time",
+			order = 14,
+			values = {
+				LEFT = "Left",
+				CENTER = "Center",
+				RIGHT = "Right",
+			},
+			set = function(info, value)
+				op.alignTime = value
+				frame.bar1.candyBarDuration:SetJustifyH(value)
+				frame.bar2.candyBarDuration:SetJustifyH(value)
+			end,
 		},
 	},
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 400)
+acd:SetDefaultSize(acOptions.name, 400, 500)
 

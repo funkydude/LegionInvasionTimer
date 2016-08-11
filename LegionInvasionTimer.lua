@@ -28,12 +28,13 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 		if frame.bar2 then frame.bar2:Stop() end
 		frame.bar2 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 		bar = frame.bar2
-		bar:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT")
-		bar:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT")
+		bar:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -frame.optionsTbl.spacing)
+		bar:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -frame.optionsTbl.spacing)
 	end
 
 	bar:SetLabel(zone:match("[^%:]+:(.+)"))
-	bar.candyBarLabel:SetJustifyH("LEFT")
+	bar.candyBarLabel:SetJustifyH(frame.optionsTbl.alignZone)
+	bar.candyBarDuration:SetJustifyH(frame.optionsTbl.alignTime)
 	bar:SetDuration(timeLeft)
 	if IsQuestFlaggedCompleted(rewardQuestID) then
 		bar:SetColor(0,1,0,1)
@@ -45,8 +46,16 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	end
 	bar:SetTimeVisibility(frame.optionsTbl.timeText)
 	bar:SetFill(frame.optionsTbl.fill)
-	bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
-	bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
+	local flags = nil
+	if frame.optionsTbl.monochrome and frame.optionsTbl.outline ~= "NONE" then
+		flags = "MONOCHROME," .. frame.optionsTbl.outline
+	elseif frame.optionsTbl.monochrome then
+		flags = "MONOCHROME"
+	elseif frame.optionsTbl.outline ~= "NONE" then
+		flags = frame.optionsTbl.outline
+	end
+	bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, flags)
+	bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, flags)
 	bar:Start()
 end
 
@@ -89,6 +98,9 @@ frame:SetScript("OnEvent", function(f)
 		height = 20,
 		icon = true,
 		timeText = true,
+		spacing = 0,
+		alignZone = "LEFT",
+		alignTime = "RIGHT",
 	}
 
 	f:Show()
