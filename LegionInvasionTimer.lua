@@ -1,7 +1,13 @@
 
+local weekday, month, day, year = CalendarGetDate()
+if month ~= 8 or year ~= 2016 then
+	return -- Good times come to an end
+end
+
 local name = ...
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
+local Timer = C_Timer.After
 
 local frame = CreateFrame("Frame", name, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
@@ -35,10 +41,12 @@ local header = frame:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 header:SetAllPoints(frame)
 header:SetText(name)
 
+local aboutToStopBar = false
 local function startBar(zone, timeLeft, rewardQuestID, first)
 	local bar
 	if first then
-		if frame.bar1 then frame.bar1:Stop() end
+		header:SetText(name) -- We may have changed the header after the event ended
+		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
 		frame.bar1 = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 		bar = frame.bar1
 		bar:SetPoint("TOP", name, "BOTTOM")
@@ -65,6 +73,7 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	bar:Start()
 end
 
+local count = 0
 local function findTimer()
 	local first = true
 	for i = 1, 20 do
@@ -75,7 +84,21 @@ local function findTimer()
 			first = false
 		end
 	end
+
+	if first then
+		-- XXX Turn this into paused bars
+		count = count + 1
+		header:SetText("Searching ".. (count == 1 and "-" or count == 2 and "\\" or count == 3 and "|" or "/"))
+		if count == 4 then count = 0 end
+		Timer(3, findTimer) -- Start hunting for the next event
+	end
 end
+
+candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
+	if not aboutToStopBar and bar == frame.bar1 then
+		Timer(20, findTimer) -- Start hunting for the next event
+	end
+end)
 
 frame:SetScript("OnEvent", function()
 	frame.optionsTbl = { -- XXX not saving for now
@@ -88,6 +111,5 @@ frame:SetScript("OnEvent", function()
 		icon = true,
 	}
 	findTimer()
-	C_Timer.After(7, findTimer) -- Safety
 end)
 
