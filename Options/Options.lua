@@ -26,7 +26,8 @@ local acOptions = {
 			order = 2,
 			set = function(info, value)
 				op.icon = value
-				frame.bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				frame.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				frame.bar2:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end,
 		},
 		font = {
@@ -44,8 +45,10 @@ local acOptions = {
 				local list = media:List("font")
 				local font = list[value]
 				op.font = font
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
 			end,
 		},
 		fontSize = {
@@ -57,8 +60,10 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				op.fontSize = value
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
 			end,
 		},
 		texture = {
@@ -76,7 +81,8 @@ local acOptions = {
 				local list = media:List("statusbar")
 				local texture = list[value]
 				op.texture = texture
-				frame.bar:SetTexture(media:Fetch("statusbar", texture))
+				frame.bar1:SetTexture(media:Fetch("statusbar", texture))
+				frame.bar2:SetTexture(media:Fetch("statusbar", texture))
 			end,
 		},
 		outline = {
@@ -90,8 +96,10 @@ local acOptions = {
 			},
 			set = function(info, value)
 				op.outline = value
-				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
-				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
 			end,
 		},
 		width = {
@@ -103,7 +111,8 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				op.width = value
-				frame.bar:SetWidth(value)
+				frame.bar1:SetWidth(value)
+				frame.bar2:SetWidth(value)
 			end,
 		},
 		height = {
@@ -115,13 +124,14 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				op.height = value
-				frame.bar:SetHeight(value)
+				frame.bar1:SetHeight(value)
+				frame.bar2:SetHeight(value)
 			end,
 		},
 		introduction = {
 			type = "description",
-			name = "\n\nThese options don't permanently save yet.",
-			fontSize = "medium",
+			name = "\n\nThese options do NOT permanently save yet.",
+			fontSize = "large",
 			order = 9,
 			width = "full",
 		},
