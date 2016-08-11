@@ -43,6 +43,8 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	if frame.optionsTbl.icon then
 		bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 	end
+	bar:SetTimeVisibility(frame.optionsTbl.timeText)
+	bar:SetFill(frame.optionsTbl.fill)
 	bar.candyBarLabel:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
 	bar.candyBarDuration:SetFont(media:Fetch("font", frame.optionsTbl.font), frame.optionsTbl.fontSize, frame.optionsTbl.outline)
 	bar:Start()
@@ -86,6 +88,7 @@ frame:SetScript("OnEvent", function(f)
 		width = 200,
 		height = 20,
 		icon = true,
+		timeText = true,
 	}
 
 	f:Show()

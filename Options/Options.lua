@@ -27,7 +27,27 @@ local acOptions = {
 			set = function(info, value)
 				op.icon = value
 				frame.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-				frame.bar2:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				frame.bar2:SetIcon(value and 236292)
+			end,
+		},
+		timeText = {
+			type = "toggle",
+			name = "Show Time",
+			order = 2.1,
+			set = function(info, value)
+				op.timeText = value
+				frame.bar1:SetTimeVisibility(value)
+				frame.bar2:SetTimeVisibility(value)
+			end,
+		},
+		fill = {
+			type = "toggle",
+			name = "Fill Bar",
+			order = 2.2,
+			set = function(info, value)
+				op.fill = value
+				frame.bar1:SetFill(value)
+				frame.bar2:SetFill(value)
 			end,
 		},
 		font = {
