@@ -46,10 +46,13 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
 	bar:SetDuration(timeLeft)
 	if IsQuestFlaggedCompleted(rewardQuestID) then
-		bar:SetColor(0,1,0,1)
+		bar:SetColor(unpack(legionTimerDB.colorComplete))
+		bar:Set("LegionInvasionTimer:complete", true)
 	else
-		bar:SetColor(1,0,0,1)
+		bar:SetColor(unpack(legionTimerDB.colorIncomplete))
+		bar:Set("LegionInvasionTimer:complete", false)
 	end
+	bar:SetTextColor(unpack(legionTimerDB.colorText))
 	if legionTimerDB.icon then
 		bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 	end
@@ -98,7 +101,7 @@ frame:SetScript("OnEvent", function(f)
 		return -- Good times come to an end
 	end
 
-	if type(legionTimerDB) ~= "table" then
+	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
 		legionTimerDB = {
 			fontSize = 10,
 			texture = "BantoBar",
@@ -111,6 +114,9 @@ frame:SetScript("OnEvent", function(f)
 			spacing = 0,
 			alignZone = "LEFT",
 			alignTime = "RIGHT",
+			colorText = {1,1,1,1},
+			colorComplete = {0,1,0,1},
+			colorIncomplete = {1,0,0,1},
 		}
 	end
 
