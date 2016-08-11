@@ -36,7 +36,6 @@ local acOptions = {
 				local list = media:List("font")
 				local font = list[value]
 				op.font = font
-
 				frame.bar.candyBarLabel:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
 				frame.bar.candyBarDuration:SetFont(media:Fetch("font", font), op.fontSize, op.outline)
 			end,
@@ -50,7 +49,6 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				op.fontSize = value
-
 				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), value, op.outline)
 				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), value, op.outline)
 			end,
@@ -70,7 +68,6 @@ local acOptions = {
 				local list = media:List("statusbar")
 				local texture = list[value]
 				op.texture = texture
-
 				frame.bar:SetTexture(media:Fetch("statusbar", texture))
 			end,
 		},
@@ -85,9 +82,32 @@ local acOptions = {
 			},
 			set = function(info, value)
 				op.outline = value
-
 				frame.bar.candyBarLabel:SetFont(media:Fetch("font", op.font), op.fontSize, value)
 				frame.bar.candyBarDuration:SetFont(media:Fetch("font", op.font), op.fontSize, value)
+			end,
+		},
+		width = {
+			type = "range",
+			name = "Bar Width",
+			order = 6,
+			max = 2000,
+			min = 10,
+			step = 1,
+			set = function(info, value)
+				op.width = value
+				frame.bar:SetWidth(value)
+			end,
+		},
+		height = {
+			type = "range",
+			name = "Bar Height",
+			order = 7,
+			max = 100,
+			min = 5,
+			step = 1,
+			set = function(info, value)
+				op.height = value
+				frame.bar:SetHeight(value)
 			end,
 		},
 	},

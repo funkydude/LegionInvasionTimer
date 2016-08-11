@@ -37,7 +37,7 @@ header:SetText(name)
 
 local function startBar(timeLeft, startedFromDB)
 	if frame.bar then frame.bar:Stop() end
-	frame.bar = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), 200, 30)
+	frame.bar = candy:New(media:Fetch("statusbar", frame.optionsTbl.texture), frame.optionsTbl.width, frame.optionsTbl.height)
 	frame.bar:SetLabel("Invasion")
 	frame.bar.candyBarLabel:SetJustifyH("LEFT")
 	frame.bar:SetDuration(timeLeft)
@@ -80,6 +80,9 @@ frame:SetScript("OnEvent", function()
 		fontSize = 10,
 		texture = "BantoBar",
 		outline = "NONE",
+		font = media:GetDefault("font"),
+		width = 200,
+		height = 30,
 	}
 	runOnLogin()
 	C_Timer.After(7, runOnLogin) -- Safety
