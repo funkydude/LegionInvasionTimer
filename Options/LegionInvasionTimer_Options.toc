@@ -7,8 +7,6 @@
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 ## X-Curse-Project-ID: legioninvasiontimer
 ## X-WoWI-ID: 24128
-## OptionalDeps: Ace3
-## X-Embeds: Ace3
 
 ## LoadOnDemand: 1
 ## Dependencies: LegionInvasionTimer

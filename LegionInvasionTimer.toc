@@ -8,8 +8,8 @@
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
 ## X-Curse-Project-ID: legioninvasiontimer
 ## X-WoWI-ID: 24128
-## OptionalDeps: LibSharedMedia-3.0, LibCandyBar-3.0
-## X-Embeds: LibSharedMedia-3.0, LibCandyBar-3.0
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibCandyBar-3.0, LibDDI-1.0
+## X-Embeds: Ace3, LibSharedMedia-3.0, LibCandyBar-3.0, LibDDI-1.0
 
 embeds.xml
 modules.xml
