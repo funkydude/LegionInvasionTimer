@@ -67,10 +67,12 @@ local function startBar(zone, timeLeft, rewardQuestID, first, pause)
 	end
 	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-	bar:Start()
 	if pause then
+		bar:Start()
 		bar:Pause()
 		bar:SetTimeVisibility(false)
+	else
+		bar:Start(14400) -- 4hrs = 60*4 = 240min = 240*60 = 14,400sec
 	end
 end
 
@@ -86,12 +88,7 @@ local function findTimer()
 	local first = true
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
-		if timeLeftMinutes and timeLeftMinutes > 0 then
-			if timeLeftMinutes > 241 then
-				print(name, "Found a zone >241 min, continue scanning", timeLeftMinutes, rewardQuestID)
-				Timer(3, findTimer)
-				return
-			end
+		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 241 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
@@ -102,7 +99,7 @@ local function findTimer()
 	if first then
 		if not hasPausedBars then
 			hasPausedBars = true
-			startBar("x:Searching...", 7200, 0, true, true)
+			startBar("x:Searching..", 7200, 0, true, true)
 			startBar("x:Searching...", 7200, 0, false, true)
 		end
 		Timer(3, findTimer) -- Start hunting for the next event
