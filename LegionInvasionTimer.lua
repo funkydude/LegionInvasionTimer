@@ -16,10 +16,9 @@ frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 
 local aboutToStopBar = false
-local function startBar(zone, timeLeft, rewardQuestID, first)
+local function startBar(zone, timeLeft, rewardQuestID, first, pause)
 	local bar
 	if first then
-		frame.header:SetText(name) -- We may have changed the header after the event ended
 		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
 		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar1
@@ -69,25 +68,38 @@ local function startBar(zone, timeLeft, rewardQuestID, first)
 	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar:Start()
+	if pause then
+		bar:Pause()
+		bar:SetTimeVisibility(false)
+	end
 end
 
-local count = 0
+local hasPausedBars = false
 local function findTimer()
+	-- 3 Legion Invasion: Northern Barrens 0 43282
+	-- 4 Legion Invasion: Westfall 0 43245
+	-- 5 Legion Invasion: Tanaris 0 43244
+	-- 6 Legion Invasion: Dun Morogh 0 43284
+	-- 7 Legion Invasion: Hillsbrad 0 43285
+	-- 8 Legion Invasion: Azshara 0 43301
+
 	local first = true
-	for i = 1, 20 do
+	for i = 2, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 then
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
+			hasPausedBars = false
 		end
 	end
 
 	if first then
-		-- XXX Turn this into paused bars
-		count = count + 1
-		frame.header:SetText("Searching  ".. (count == 1 and "-" or count == 2 and "\\" or count == 3 and "|" or "/"))
-		if count == 4 then count = 0 end
+		if not hasPausedBars then
+			hasPausedBars = true
+			startBar("x:Searching...", 7200, 0, true, true)
+			startBar("x:Searching...", 7200, 0, false, true)
+		end
 		Timer(3, findTimer) -- Start hunting for the next event
 	end
 end
@@ -145,11 +157,11 @@ frame:SetScript("OnEvent", function(f)
 	local header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 	header:SetAllPoints(f)
 	header:SetText(name)
-	f.header = header
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
 		if not aboutToStopBar and bar == frame.bar1 then
 			Timer(20, findTimer) -- Event over, start hunting for the next event
+			Timer(120, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 		end
 		if bar == frame.bar1 then
 			frame.bar1 = nil
