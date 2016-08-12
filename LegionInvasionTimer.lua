@@ -158,9 +158,17 @@ frame:SetScript("OnEvent", function(f)
 	local bg = f:CreateTexture(nil, "PARENT")
 	bg:SetAllPoints(f)
 	bg:SetColorTexture(0, 1, 0, 0.3)
+	f.bg = bg
 	local header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 	header:SetAllPoints(f)
 	header:SetText(name)
+	f.header = header
+
+	if legionTimerDB.lock then
+		f:EnableMouse(false)
+		f.bg:Hide()
+		f.header:Hide()
+	end
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
 		if not aboutToStopBar and bar == frame.bar1 then

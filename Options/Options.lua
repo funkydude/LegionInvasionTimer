@@ -29,9 +29,20 @@ local acOptions = {
 	args = {
 		lock = {
 			type = "toggle",
-			name = "Lock (Coming soon)",
+			name = "Lock",
 			order = 1,
-			disabled = function() return true end,
+			set = function(info, value)
+				db.lock = value
+				if value then
+					frame:EnableMouse(false)
+					frame.bg:Hide()
+					frame.header:Hide()
+				else
+					frame:EnableMouse(true)
+					frame.bg:Show()
+					frame.header:Show()
+				end
+			end,
 		},
 		icon = {
 			type = "toggle",
