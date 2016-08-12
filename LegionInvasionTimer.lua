@@ -87,6 +87,10 @@ local function findTimer()
 	for i = 2, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 then
+			if timeLeftMinutes > 241 then
+				print(name, "Found a zone >241 min, continue scanning", timeLeftMinutes, rewardQuestID)
+				return
+			end
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
