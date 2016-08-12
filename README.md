@@ -1,5 +1,6 @@
 # LegionInvasionTimer
-Show a timer bar for the next Legion invasion.
+* Show timer bars for each invasion zone with completion coloring.
+* Boss mod to display warnings for final bosses.
 
 ## Configure
 * /lit
