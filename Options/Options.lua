@@ -23,9 +23,6 @@ local acOptions = {
 	get = function(info)
 		return db[info[#info]]
 	end,
-	set = function(info, value)
-		db[info[#info]] = value
-	end,
 	args = {
 		lock = {
 			type = "toggle",

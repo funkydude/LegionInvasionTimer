@@ -23,7 +23,7 @@ function mod:SCENARIO_UPDATE()
 	local _,_,_,_,_,_,_,_,_,rewardQuestID = C_Scenario.GetStepInfo()
 	local _,currentStage = C_Scenario.GetInfo()
 
-	for i = 2, 8 do
+	for i = 3, 8 do
 		local _,_, rewardQuestIDInv = GetInvasionInfo(i)
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register

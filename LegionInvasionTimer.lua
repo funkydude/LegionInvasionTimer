@@ -84,7 +84,7 @@ local function findTimer()
 	-- 8 Legion Invasion: Azshara 0 43301
 
 	local first = true
-	for i = 2, 8 do
+	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 then
 			if timeLeftMinutes > 241 then
