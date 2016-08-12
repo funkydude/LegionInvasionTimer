@@ -89,6 +89,7 @@ local function findTimer()
 		if timeLeftMinutes and timeLeftMinutes > 0 then
 			if timeLeftMinutes > 241 then
 				print(name, "Found a zone >241 min, continue scanning", timeLeftMinutes, rewardQuestID)
+				Timer(3, findTimer)
 				return
 			end
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
