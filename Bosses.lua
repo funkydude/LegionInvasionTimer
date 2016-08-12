@@ -3,7 +3,7 @@ local f = CreateFrame("Frame")
 local name, mod = ...
 local colorTbl = {r=1,g=1,b=1}
 f:SetScript("OnEvent", function(frame, event, ...)
-	mod[event](...)
+	mod[event](mod, ...)
 end)
 f:RegisterEvent("PLAYER_LOGIN")
 
@@ -48,7 +48,7 @@ do
 			[219112] = "|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)", -- Eye of Darkness 45s
 		},
 	}
-	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
+	function mod:COMBAT_LOG_EVENT_UNFILTERED(t, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
 		local msg = text[event] and text[event][spellId]
 		if msg then
 			print("|cFF33FF99LegionInvasionTimer|r:", msg)
