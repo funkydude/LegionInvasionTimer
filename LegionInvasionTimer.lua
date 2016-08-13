@@ -16,7 +16,7 @@ frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 
 local aboutToStopBar = false
-local function startBar(zone, timeLeft, rewardQuestID, first, pause)
+local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 	local bar
 	if first then
 		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
@@ -40,20 +40,22 @@ local function startBar(zone, timeLeft, rewardQuestID, first, pause)
 		end
 	end
 
-	bar:SetLabel(zone:match("[^%:]+:(.+)"))
+	bar:SetLabel(text:match("[^%:]+:(.+)") or text)
 	bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
 	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
 	bar:SetDuration(timeLeft)
-	if IsQuestFlaggedCompleted(rewardQuestID) then
-		bar:SetColor(unpack(legionTimerDB.colorComplete))
-		bar:Set("LegionInvasionTimer:complete", true)
-	else
-		bar:SetColor(unpack(legionTimerDB.colorIncomplete))
-		bar:Set("LegionInvasionTimer:complete", false)
+	if rewardQuestID > 0 then
+		if IsQuestFlaggedCompleted(rewardQuestID) then
+			bar:SetColor(unpack(legionTimerDB.colorComplete))
+			bar:Set("LegionInvasionTimer:complete", 1)
+		else
+			bar:SetColor(unpack(legionTimerDB.colorIncomplete))
+			bar:Set("LegionInvasionTimer:complete", 0)
+		end
 	end
 	bar:SetTextColor(unpack(legionTimerDB.colorText))
 	if legionTimerDB.icon then
-		bar:SetIcon(236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+		bar:SetIcon(icon)
 	end
 	bar:SetTimeVisibility(legionTimerDB.timeText)
 	bar:SetFill(legionTimerDB.fill)
@@ -89,7 +91,7 @@ local function findTimer()
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 241 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			startBar(zone, timeLeftMinutes * 60, rewardQuestID, first)
+			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
 			hasPausedBars = false
@@ -99,8 +101,8 @@ local function findTimer()
 	if first then
 		if not hasPausedBars then
 			hasPausedBars = true
-			startBar("x:Searching..", 7200, 0, true, true)
-			startBar("x:Searching...", 7200, 0, false, true)
+			startBar("Searching..", 7200, 0, 132177, true, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			startBar("Searching...", 7200, 0, 132177, false, true)
 		end
 		Timer(3, findTimer) -- Start hunting for the next event
 	end
@@ -161,6 +163,7 @@ frame:SetScript("OnEvent", function(f)
 	header:SetAllPoints(f)
 	header:SetText(name)
 	f.header = header
+	frame.startBar = startBar
 
 	if legionTimerDB.lock then
 		f:EnableMouse(false)
@@ -169,7 +172,7 @@ frame:SetScript("OnEvent", function(f)
 	end
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
-		if not aboutToStopBar and bar == frame.bar1 then
+		if not aboutToStopBar and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
 			Timer(20, findTimer) -- Event over, start hunting for the next event
 			Timer(120, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 		end

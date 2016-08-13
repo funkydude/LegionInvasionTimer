@@ -3,6 +3,8 @@ local f = CreateFrame("Frame")
 local name, mod = ...
 local colorTbl = {r=1,g=1,b=1}
 local myID = UnitGUID("player")
+local startBar = nil
+local bar1Used, bar2Used = nil, nil
 f:SetScript("OnEvent", function(frame, event, ...)
 	mod[event](mod, ...)
 end)
@@ -16,6 +18,7 @@ function mod:PLAYER_LOGIN()
 		return -- Good times come to an end
 	end
 
+	startBar = LegionInvasionTimer.startBar
 	f:RegisterEvent("SCENARIO_UPDATE")
 	f:RegisterEvent("SCENARIO_COMPLETED")
 end
@@ -28,6 +31,7 @@ function mod:SCENARIO_UPDATE()
 		local _,_, rewardQuestIDInv = GetInvasionInfo(i)
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			myID = UnitGUID("player")
+			bar1Used, bar2Used = nil, nil
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register
 		end
 	end
@@ -37,25 +41,34 @@ do
 	local texString = ":15:15:0:0:64:64:4:60:4:60|t "
 	local text = {
 		SPELL_CAST_START = {
-			[219112] = "|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (RUN TO BOSS)", -- Eye of Darkness 45s
-			[219960] = "|T".. GetSpellTexture(219960) ..texString.. GetSpellInfo(219960).. " (FRONTAL CONE DMG)", -- Breath of Shadows 32s
-			[219957] = "|T".. GetSpellTexture(219957) ..texString.. GetSpellInfo(219957).. " (DEBUFF INC)", -- Mark of Baldrazar 46s
-			[217093] = "|T".. GetSpellTexture(217093) ..texString.. GetSpellInfo(217093).. " (MIND CONTROL INC)", -- Shadow Madness 48s
-			[217098] = "|T".. GetSpellTexture(217098) ..texString.. GetSpellInfo(217098).. " (FRONTAL CONE DMG)", -- Carrion Swarm 16s
-			[217134] = "|T".. GetSpellTexture(217134) ..texString.. GetSpellInfo(217134).. " (FRONTAL CLEAVE)", -- Vampiric Cleave 33s
-			[217040] = "|T".. GetSpellTexture(217040) ..texString.. GetSpellInfo(217040).. " (THREAT WIPE - SPAWN ADD)", -- Shadow Illusion 35s
-			[216916] = "|T".. GetSpellTexture(216916) ..texString.. GetSpellInfo(216916).. " (FRONTAL CONE DMG)", -- Waves of Dread 35s
-			[219469] = "|T".. GetSpellTexture(219469) ..texString.. GetSpellInfo(219469).. " (KILL THEM FAST)", -- Summon Explosive Orbs 42s
+			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (RUN TO BOSS)", 45}, -- Eye of Darkness
+			[219960] = {"|T".. GetSpellTexture(219960) ..texString.. GetSpellInfo(219960).. " (FRONTAL CONE DMG)", 32}, -- Breath of Shadows
+			[219957] = {"|T".. GetSpellTexture(219957) ..texString.. GetSpellInfo(219957).. " (DEBUFF INC)", 46}, -- Mark of Baldrazar
+			[217093] = {"|T".. GetSpellTexture(217093) ..texString.. GetSpellInfo(217093).. " (MIND CONTROL INC)", 48}, -- Shadow Madness
+			[217098] = {"|T".. GetSpellTexture(217098) ..texString.. GetSpellInfo(217098).. " (FRONTAL CONE DMG)", 16}, -- Carrion Swarm
+			[217134] = {"|T".. GetSpellTexture(217134) ..texString.. GetSpellInfo(217134).. " (FRONTAL CLEAVE)", 33}, -- Vampiric Cleave
+			[217040] = {"|T".. GetSpellTexture(217040) ..texString.. GetSpellInfo(217040).. " (THREAT WIPE - SPAWN ADD)", 35}, -- Shadow Illusion
+			[216916] = {"|T".. GetSpellTexture(216916) ..texString.. GetSpellInfo(216916).. " (FRONTAL CONE DMG)", 35}, -- Waves of Dread
+			[219469] = {"|T".. GetSpellTexture(219469) ..texString.. GetSpellInfo(219469).. " (KILL THEM FAST)", 42}, -- Summon Explosive Orbs
 		},
 		SPELL_AURA_REMOVED = {
-			[219112] = "|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)", -- Eye of Darkness 45s
+			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness 45s
 		},
 	}
-	function mod:COMBAT_LOG_EVENT_UNFILTERED(t, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
+	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
 		local msg = text[event] and text[event][spellId]
 		if msg then
-			print("|cFF33FF99LegionInvasionTimer|r:", msg)
-			RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+			print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
+			RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 4)
+			if msg[2] then
+				if not bar1Used or bar1Used == spellId then
+					bar1Used = spellId
+					startBar(spellName, msg[2], 0, GetSpellTexture(spellId), true)
+				elseif not bar2Used or bar2Used == spellId then
+					bar2Used = spellId
+					startBar(spellName, msg[2], 0, GetSpellTexture(spellId), false)
+				end
+			end
 			PlaySound("RaidWarning", "Master")
 		end
 
@@ -85,6 +98,7 @@ end
 function mod:SCENARIO_COMPLETED()
 	local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
+		bar1Used, bar2Used = nil, nil
 		f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss killed, unregister
 	end
 end

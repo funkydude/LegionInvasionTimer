@@ -270,10 +270,10 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				db.colorComplete = {r, g, b, a}
-				if frame.bar1:Get("LegionInvasionTimer:complete") then
+				if frame.bar1:Get("LegionInvasionTimer:complete") == 1 then
 					frame.bar1:SetColor(r, g, b, a)
 				end
-				if frame.bar2:Get("LegionInvasionTimer:complete") then
+				if frame.bar2:Get("LegionInvasionTimer:complete") == 1 then
 					frame.bar2:SetColor(r, g, b, a)
 				end
 			end,
@@ -287,10 +287,10 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				db.colorIncomplete = {r, g, b, a}
-				if not frame.bar1:Get("LegionInvasionTimer:complete") then
+				if frame.bar1:Get("LegionInvasionTimer:complete") == 0 then
 					frame.bar1:SetColor(r, g, b, a)
 				end
-				if not frame.bar2:Get("LegionInvasionTimer:complete") then
+				if frame.bar2:Get("LegionInvasionTimer:complete") == 0 then
 					frame.bar2:SetColor(r, g, b, a)
 				end
 			end,
