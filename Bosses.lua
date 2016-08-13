@@ -81,7 +81,7 @@ do
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 219958 and destGUID == myID then -- Mark of Baldrazar
 				-- 20 sec debuff, explosion on damage taken
-				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, AVOID TAKING DAMAGE)"
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, AVOID DAMAGE)"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")

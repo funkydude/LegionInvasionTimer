@@ -68,12 +68,14 @@ local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 	end
 	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-	if pause then
+	if pause then -- Searching bars
 		bar:Start()
 		bar:Pause()
 		bar:SetTimeVisibility(false)
-	else
+	elseif rewardQuestID > 0 then -- Zone bars
 		bar:Start(14400) -- 4hrs = 60*4 = 240min = 240*60 = 14,400sec
+	else
+		bar:Start() -- Boss bars
 	end
 end
 
