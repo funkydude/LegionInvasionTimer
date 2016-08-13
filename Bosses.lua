@@ -53,7 +53,7 @@ do
 			[219469] = {"|T".. GetSpellTexture(219469) ..texString.. GetSpellInfo(219469).. " (KILL THEM FAST)", 42}, -- Summon Explosive Orbs
 			[217939] = {"|T".. GetSpellTexture(217939) ..texString.. GetSpellInfo(217939).. " (FRONTAL CLEAVE - THREAT WIPE)", 31}, -- Fel Slash
 			[217949] = {"|T".. GetSpellTexture(217949) ..texString.. GetSpellInfo(217949).. " (SHARED CLEAVE - HUG FRONT OF BOSS)", 25}, -- Meteor Slash
-			[217946] = {"|T".. GetSpellTexture(217946) ..texString.. GetSpellInfo(217946).. " (FRONTAL CONE DMG)", 25}, -- Meteor Slash
+			[217946] = {"|T".. GetSpellTexture(217946) ..texString.. GetSpellInfo(217946).. " (FRONTAL CONE DMG)", 25}, -- Fel Breath
 		},
 		SPELL_AURA_REMOVED = {
 			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness 45s

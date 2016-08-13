@@ -91,7 +91,7 @@ local function findTimer()
 	local first = true
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
-		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 241 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
+		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 241 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
@@ -174,7 +174,7 @@ frame:SetScript("OnEvent", function(f)
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar, dontScan)
 		if not dontScan and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
-			Timer(20, findTimer) -- Event over, start hunting for the next event
+			Timer(3, findTimer) -- Event over, start hunting for the next event
 			Timer(120, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 		end
 		if bar == frame.bar1 then
