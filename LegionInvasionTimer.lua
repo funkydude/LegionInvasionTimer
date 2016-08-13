@@ -15,11 +15,10 @@ frame:SetClampedToScreen(true)
 frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 
-local aboutToStopBar = false
 local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 	local bar
 	if first then
-		if frame.bar1 then aboutToStopBar = true frame.bar1:Stop() aboutToStopBar = false end
+		if frame.bar1 then frame.bar1:Stop(true) end
 		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar1
 		if legionTimerDB.growUp then
@@ -171,8 +170,8 @@ frame:SetScript("OnEvent", function(f)
 		f.header:Hide()
 	end
 
-	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
-		if not aboutToStopBar and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
+	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar, dontScan)
+		if not dontScan and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
 			Timer(20, findTimer) -- Event over, start hunting for the next event
 			Timer(120, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 		end
