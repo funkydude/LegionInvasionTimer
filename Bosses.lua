@@ -42,6 +42,7 @@ do
 	local text = {
 		SPELL_CAST_START = {
 			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (RUN TO BOSS)", 45}, -- Eye of Darkness
+			[219110] = {"|T".. GetSpellTexture(219110) ..texString.. GetSpellInfo(219110).. " (RUN AWAY FROM BOSS)", 45}, -- Shadow Nova
 			[219960] = {"|T".. GetSpellTexture(219960) ..texString.. GetSpellInfo(219960).. " (FRONTAL CONE DMG)", 32}, -- Breath of Shadows
 			[219957] = {"|T".. GetSpellTexture(219957) ..texString.. GetSpellInfo(219957).. " (DEBUFF INC)", 46}, -- Mark of Baldrazar
 			[217093] = {"|T".. GetSpellTexture(217093) ..texString.. GetSpellInfo(217093).. " (MIND CONTROL INC)", 48}, -- Shadow Madness
@@ -50,6 +51,9 @@ do
 			[217040] = {"|T".. GetSpellTexture(217040) ..texString.. GetSpellInfo(217040).. " (THREAT WIPE - SPAWN ADD)", 35}, -- Shadow Illusion
 			[216916] = {"|T".. GetSpellTexture(216916) ..texString.. GetSpellInfo(216916).. " (FRONTAL CONE DMG)", 35}, -- Waves of Dread
 			[219469] = {"|T".. GetSpellTexture(219469) ..texString.. GetSpellInfo(219469).. " (KILL THEM FAST)", 42}, -- Summon Explosive Orbs
+			[217939] = {"|T".. GetSpellTexture(217939) ..texString.. GetSpellInfo(217939).. " (FRONTAL CLEAVE - THREAT WIPE)", 31}, -- Fel Slash
+			[217949] = {"|T".. GetSpellTexture(217949) ..texString.. GetSpellInfo(217949).. " (SHARED CLEAVE - HUG FRONT OF BOSS)", 25}, -- Meteor Slash
+			[217946] = {"|T".. GetSpellTexture(217946) ..texString.. GetSpellInfo(217946).. " (FRONTAL CONE DMG)", 25}, -- Meteor Slash
 		},
 		SPELL_AURA_REMOVED = {
 			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness 45s
@@ -85,7 +89,7 @@ do
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
-			elseif (spellId == 219367 or spellId == 207576) and destGUID == myID then -- Rain of Fire / Fel Fire
+			elseif (spellId == 219367 or spellId == 207576 or spellId == 217549) and destGUID == myID then -- Rain of Fire / Fel Fire / Fel Flames
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, GET OUT)"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
