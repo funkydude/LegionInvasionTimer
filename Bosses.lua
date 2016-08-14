@@ -75,13 +75,12 @@ do
 		SPELL_CAST_SUCCESS = {
 			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. GetSpellInfo(218637).. " (DISPEL BOSS)", 15}, -- Pyrogenics
 			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. GetSpellInfo(218311).. " (STAY CLEAR)", 30}, -- Fel Spike
+			[218940] = {false, 12}, -- Fel Lightning
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
 		local msg = text[event] and text[event][spellId]
 		if msg then
-			print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
-			RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 4)
 			if msg[2] then
 				local timer
 				if type(msg[2]) == "table" then
@@ -103,7 +102,11 @@ do
 					startBar(spellName, timer, 0, GetSpellTexture(spellId), false)
 				end
 			end
-			PlaySound("RaidWarning", "Master")
+			if msg[1] then
+				print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			end
 		end
 
 		if event == "SPELL_AURA_APPLIED" then
