@@ -76,6 +76,7 @@ do
 			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. GetSpellInfo(218637).. " (DISPEL BOSS)", 15}, -- Pyrogenics
 			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. GetSpellInfo(218311).. " (STAY CLEAR)", 30}, -- Fel Spike
 			[218940] = {false, 12}, -- Fel Lightning
+			[218659] = {false, 52}, -- Charred Flesh
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
@@ -125,6 +126,12 @@ do
 			elseif spellId == 218350 and destGUID == myID then -- Bound by Fel
 				-- 20 sec debuff, chains you to another player
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, RUN TO OTHER PLAYER)"
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			elseif spellId == 218657 and destGUID == myID then -- Charred Flesh
+				-- 20 sec debuff, chains you to another player
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, HEAL YOURSELF)"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
