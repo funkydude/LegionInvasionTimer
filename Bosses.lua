@@ -41,8 +41,20 @@ do
 	local texString = ":15:15:0:0:64:64:4:60:4:60|t "
 	local text = {
 		SPELL_CAST_START = {
-			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (RUN TO BOSS)", 45}, -- Eye of Darkness
-			[219110] = {"|T".. GetSpellTexture(219110) ..texString.. GetSpellInfo(219110).. " (RUN AWAY FROM BOSS)", 45}, -- Shadow Nova
+			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (RUN TO BOSS)", -- Eye of Darkness
+				{
+					[106891] = 34, -- Darkmagus Drazzok
+					[107122] = 34, -- Harbinger Drel'nathar
+					[107124] = 50, -- Harbinger Faraleth
+				},
+			},
+			[219110] = {"|T".. GetSpellTexture(219110) ..texString.. GetSpellInfo(219110).. " (RUN AWAY FROM BOSS)", -- Shadow Nova
+				{
+					[106891] = 34, -- Darkmagus Drazzok
+					[107122] = 34, -- Harbinger Drel'nathar
+					[107124] = 50, -- Harbinger Faraleth
+				},
+			},
 			[219960] = {"|T".. GetSpellTexture(219960) ..texString.. GetSpellInfo(219960).. " (FRONTAL CONE DMG)", 32}, -- Breath of Shadows
 			[219957] = {"|T".. GetSpellTexture(219957) ..texString.. GetSpellInfo(219957).. " (DEBUFF INC)", 46}, -- Mark of Baldrazar
 			[217093] = {"|T".. GetSpellTexture(217093) ..texString.. GetSpellInfo(217093).. " (MIND CONTROL INC)", 48}, -- Shadow Madness
@@ -54,9 +66,15 @@ do
 			[217939] = {"|T".. GetSpellTexture(217939) ..texString.. GetSpellInfo(217939).. " (FRONTAL CLEAVE - THREAT WIPE)", 31}, -- Fel Slash
 			[217949] = {"|T".. GetSpellTexture(217949) ..texString.. GetSpellInfo(217949).. " (SHARED CLEAVE - HUG FRONT OF BOSS)", 25}, -- Meteor Slash
 			[217946] = {"|T".. GetSpellTexture(217946) ..texString.. GetSpellInfo(217946).. " (FRONTAL CONE DMG)", 25}, -- Fel Breath
+			[219441] = {"|T".. GetSpellTexture(219441) ..texString.. GetSpellInfo(219441).. " (FRONTAL CONE DMG)", 40}, -- Flame Breath
+			[217958] = {"|T".. GetSpellTexture(217958) ..texString.. GetSpellInfo(217958).. " (FRONTAL CONE DMG)", 15}, -- Chaos Wave
 		},
 		SPELL_AURA_REMOVED = {
 			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness 45s
+		},
+		SPELL_CAST_SUCCESS = {
+			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. GetSpellInfo(218637).. " (DISPEL BOSS)", 15}, -- Pyrogenics
+			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. GetSpellInfo(218311).. " (STAY CLEAR)", 30}, -- Fel Spike
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
@@ -65,12 +83,24 @@ do
 			print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
 			RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 4)
 			if msg[2] then
+				local timer
+				if type(msg[2]) == "table" then
+					local _, _, _, _, _, id = strsplit("-", sourceGUID)
+					id = tonumber(id) or 1
+					timer = msg[2][id]
+					if not timer then
+						timer = 45
+						print("|cFF33FF99LegionInvasionTimer|r: No timer for ", spellId, id, sourceName)
+					end
+				else
+					timer = msg[2]
+				end
 				if not bar1Used or bar1Used == spellId then
 					bar1Used = spellId
-					startBar(spellName, msg[2], 0, GetSpellTexture(spellId), true)
+					startBar(spellName, timer, 0, GetSpellTexture(spellId), true)
 				elseif not bar2Used or bar2Used == spellId then
 					bar2Used = spellId
-					startBar(spellName, msg[2], 0, GetSpellTexture(spellId), false)
+					startBar(spellName, timer, 0, GetSpellTexture(spellId), false)
 				end
 			end
 			PlaySound("RaidWarning", "Master")
@@ -86,6 +116,12 @@ do
 			elseif spellId == 219958 and destGUID == myID then -- Mark of Baldrazar
 				-- 20 sec debuff, explosion on damage taken
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, AVOID DAMAGE)"
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			elseif spellId == 218350 and destGUID == myID then -- Bound by Fel
+				-- 20 sec debuff, chains you to another player
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. spellName .." (ON YOU, RUN TO OTHER PLAYER)"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
