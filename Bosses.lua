@@ -74,8 +74,9 @@ do
 		},
 		SPELL_CAST_SUCCESS = {
 			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. GetSpellInfo(218637).. " (DISPEL BOSS)", 15}, -- Pyrogenics
-			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. GetSpellInfo(218311).. " (STAY CLEAR)", 30}, -- Fel Spike
-			[218940] = {false, 12}, -- Fel Lightning
+			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. GetSpellInfo(218311).. " (STAY CLEAR)", 30, 218311}, -- Fel Spike
+			[219048] = {"|T".. GetSpellTexture(219059) ..texString.. GetSpellInfo(219059).. " (STAY CLEAR)", 40, 219059}, -- Flame Fissure
+			[218940] = {false, 11}, -- Fel Lightning
 			[218659] = {false, 52}, -- Charred Flesh
 		},
 	}
@@ -97,10 +98,10 @@ do
 				end
 				if not bar1Used or bar1Used == spellId then
 					bar1Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(spellId), true)
+					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), true)
 				elseif not bar2Used or bar2Used == spellId then
 					bar2Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(spellId), false)
+					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), false)
 				end
 			end
 			if msg[1] then
