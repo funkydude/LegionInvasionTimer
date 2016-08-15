@@ -68,9 +68,11 @@ do
 			[217946] = {"|T".. GetSpellTexture(217946) ..texString.. GetSpellInfo(217946).. " (FRONTAL CONE DMG)", 25}, -- Fel Breath
 			[219441] = {"|T".. GetSpellTexture(219441) ..texString.. GetSpellInfo(219441).. " (FRONTAL CONE DMG)", 40}, -- Flame Breath
 			[217958] = {"|T".. GetSpellTexture(217958) ..texString.. GetSpellInfo(217958).. " (FRONTAL CONE DMG)", 15}, -- Chaos Wave
+			[213890] = {"|T".. GetSpellTexture(213890) ..texString.. GetSpellInfo(213890).. " (RUN AWAY FROM BOSS)", 33}, -- Carrion Storm
 		},
 		SPELL_AURA_REMOVED = {
-			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness 45s
+			[219112] = {"|T".. GetSpellTexture(219112) ..texString.. GetSpellInfo(219112).. " (FINISHED)"}, -- Eye of Darkness
+			[213890] = {"|T".. GetSpellTexture(213890) ..texString.. GetSpellInfo(213890).. " (FINISHED)"}, -- Carrion Storm
 		},
 		SPELL_CAST_SUCCESS = {
 			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. GetSpellInfo(218637).. " (DISPEL BOSS)", 15}, -- Pyrogenics
