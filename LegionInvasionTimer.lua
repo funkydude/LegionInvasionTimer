@@ -1,5 +1,6 @@
 
-local name = ...
+local name, mod = ...
+local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
@@ -99,9 +100,8 @@ local function findTimer()
 				hasPausedBars = false
 				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 				FlashClientIcon()
-				local msg = "|T236292:15:15:0:0:64:64:4:60:4:60|t New invasions available!"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			end
 		end
@@ -159,8 +159,8 @@ frame:SetScript("OnEvent", function(f)
 	f:SetScript("OnEnter", function(f)
 		GameTooltip:SetOwner(f, "ANCHOR_NONE")
 		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		GameTooltip:AddLine("|cffeda55fClick|r to drag and move.", 0.2, 1, 0.2, 1)
-		GameTooltip:AddLine("|cffeda55fRight-Click|r to open options.", 0.2, 1, 0.2, 1)
+		GameTooltip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
+		GameTooltip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
 		GameTooltip:Show()
 	end)
 	f:SetScript("OnLeave", GameTooltip_Hide)

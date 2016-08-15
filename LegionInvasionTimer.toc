@@ -12,5 +12,6 @@
 ## X-Embeds: Ace3, LibSharedMedia-3.0, LibCandyBar-3.0, LibDDI-1.0
 
 embeds.xml
+locales.xml
 modules.xml
 

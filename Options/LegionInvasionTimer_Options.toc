@@ -12,5 +12,6 @@
 ## Dependencies: LegionInvasionTimer
 
 embeds.xml
+locales.xml
 Options.lua
 

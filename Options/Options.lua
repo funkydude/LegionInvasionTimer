@@ -4,6 +4,11 @@ local acd = LibStub("AceConfigDialog-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local frame = LegionInvasionTimer
 local db = legionTimerDB
+local L
+do
+	local _, mod = ...
+	L = mod.L
+end
 
 local function updateFlags()
 	local flags = nil
@@ -26,7 +31,7 @@ local acOptions = {
 	args = {
 		lock = {
 			type = "toggle",
-			name = "Lock",
+			name = L.lock,
 			order = 1,
 			set = function(info, value)
 				db.lock = value
@@ -43,7 +48,7 @@ local acOptions = {
 		},
 		icon = {
 			type = "toggle",
-			name = "Bar Icon",
+			name = L.barIcon,
 			order = 2,
 			set = function(info, value)
 				db.icon = value
@@ -53,7 +58,7 @@ local acOptions = {
 		},
 		timeText = {
 			type = "toggle",
-			name = "Show Time",
+			name = L.showTime,
 			order = 3,
 			set = function(info, value)
 				db.timeText = value
@@ -63,7 +68,7 @@ local acOptions = {
 		},
 		fill = {
 			type = "toggle",
-			name = "Fill Bar",
+			name = L.fillBar,
 			order = 4,
 			set = function(info, value)
 				db.fill = value
@@ -73,7 +78,7 @@ local acOptions = {
 		},
 		font = {
 			type = "select",
-			name = "Font",
+			name = L.font,
 			order = 5,
 			values = media:List("font"),
 			itemControl = "DDI-Font",
@@ -94,7 +99,7 @@ local acOptions = {
 		},
 		fontSize = {
 			type = "range",
-			name = "Font Size",
+			name = L.fontSize,
 			order = 6,
 			max = 40,
 			min = 6,
@@ -109,7 +114,7 @@ local acOptions = {
 		},
 		monochrome = {
 			type = "toggle",
-			name = "Monochrome Text",
+			name = L.monochrome,
 			order = 7,
 			set = function(info, value)
 				db.monochrome = value
@@ -121,12 +126,12 @@ local acOptions = {
 		},
 		outline = {
 			type = "select",
-			name = "Outline",
+			name = L.outline,
 			order = 8,
 			values = {
-				NONE = "None",
-				OUTLINE = "Thin",
-				THICKOUTLINE = "Thick",
+				NONE = L.none,
+				OUTLINE = L.thin,
+				THICKOUTLINE = L.thick,
 			},
 			set = function(info, value)
 				db.outline = value
@@ -138,7 +143,7 @@ local acOptions = {
 		},
 		texture = {
 			type = "select",
-			name = "Texture",
+			name = L.texture,
 			order = 9,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
@@ -157,7 +162,7 @@ local acOptions = {
 		},
 		spacing = {
 			type = "range",
-			name = "Bar Spacing",
+			name = L.barSpacing,
 			order = 10,
 			max = 100,
 			min = 0,
@@ -175,7 +180,7 @@ local acOptions = {
 		},
 		width = {
 			type = "range",
-			name = "Bar Width",
+			name = L.barWidth,
 			order = 11,
 			max = 2000,
 			min = 10,
@@ -188,7 +193,7 @@ local acOptions = {
 		},
 		height = {
 			type = "range",
-			name = "Bar Height",
+			name = L.barHeight,
 			order = 12,
 			max = 100,
 			min = 5,
@@ -201,12 +206,12 @@ local acOptions = {
 		},
 		alignZone = {
 			type = "select",
-			name = "Align Zone",
+			name = L.alignZone,
 			order = 13,
 			values = {
-				LEFT = "Left",
-				CENTER = "Center",
-				RIGHT = "Right",
+				LEFT = L.left,
+				CENTER = L.center,
+				RIGHT = L.right,
 			},
 			set = function(info, value)
 				db.alignZone = value
@@ -216,12 +221,12 @@ local acOptions = {
 		},
 		alignTime = {
 			type = "select",
-			name = "Align Time",
+			name = L.alignTime,
 			order = 14,
 			values = {
-				LEFT = "Left",
-				CENTER = "Center",
-				RIGHT = "Right",
+				LEFT = L.left,
+				CENTER = L.center,
+				RIGHT = L.right,
 			},
 			set = function(info, value)
 				db.alignTime = value
@@ -231,7 +236,7 @@ local acOptions = {
 		},
 		growUp = {
 			type = "toggle",
-			name = "Grow Upwards",
+			name = L.growUpwards,
 			order = 15,
 			set = function(info, value)
 				db.growUp = value
@@ -249,7 +254,7 @@ local acOptions = {
 			end,
 		},
 		colorText = {
-			name = "Text Color",
+			name = L.textColor,
 			type = "color",
 			order = 16,
 			get = function()
@@ -262,7 +267,7 @@ local acOptions = {
 			end,
 		},
 		colorComplete = {
-			name = "Completed Bar",
+			name = L.completedBar,
 			type = "color",
 			order = 17,
 			get = function()
@@ -279,7 +284,7 @@ local acOptions = {
 			end,
 		},
 		colorIncomplete = {
-			name = "Incomplete Bar",
+			name = L.incompleteBar,
 			type = "color",
 			order = 18,
 			get = function()

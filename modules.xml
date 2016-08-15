@@ -3,6 +3,7 @@
 <Script file="LegionInvasionTimer.lua"/>
 <Script file="Bosses.lua"/>
 <!--@debug@-->
+<Include file="Options\locales.xml"/>
 <Script file="Options\Options.lua"/>
 <!--@end-debug@-->
 </Ui>
