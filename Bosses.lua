@@ -2,7 +2,7 @@
 local f = CreateFrame("Frame")
 local name, mod = ...
 local L = mod.L
-local colorTbl = {r=1,g=1,b=1}
+local colorTbl = mod.c
 local myID = UnitGUID("player")
 local startBar = nil
 local bar1Used, bar2Used = nil, nil

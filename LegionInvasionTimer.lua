@@ -4,6 +4,7 @@ local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
+mod.c = {r=1,g=1,b=1}
 
 local frame = CreateFrame("Frame", name, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
@@ -101,7 +102,7 @@ local function findTimer()
 				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 				FlashClientIcon()
 				print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, colorTbl, 4)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c, 4)
 				PlaySound("RaidWarning", "Master")
 			end
 		end
