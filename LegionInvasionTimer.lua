@@ -81,7 +81,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 	end
 end
 
-local hasPausedBars = false
+local hasPausedBars, justLoggedIn = false, true
 local function findTimer()
 	-- 3 Legion Invasion: Northern Barrens 0 43282
 	-- 4 Legion Invasion: Westfall 0 43245
@@ -97,7 +97,7 @@ local function findTimer()
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
-			if hasPausedBars then
+			if hasPausedBars and not justLoggedIn then
 				hasPausedBars = false
 				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 				FlashClientIcon()
@@ -105,6 +105,7 @@ local function findTimer()
 				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c, 4)
 				PlaySound("RaidWarning", "Master")
 			end
+			justLoggedIn = false
 		end
 	end
 

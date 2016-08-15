@@ -140,7 +140,7 @@ local acOptions = {
 				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 			end,
 		},
-		texture = {
+		barTexture = {
 			type = "select",
 			name = L.texture,
 			order = 9,
@@ -154,7 +154,7 @@ local acOptions = {
 			set = function(info, value)
 				local list = media:List("statusbar")
 				local texture = list[value]
-				lit.db.texture = texture
+				lit.db.barTexture = texture
 				lit.bar1:SetTexture(media:Fetch("statusbar", texture))
 				lit.bar2:SetTexture(media:Fetch("statusbar", texture))
 			end,
