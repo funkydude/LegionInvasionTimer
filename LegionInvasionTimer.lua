@@ -21,7 +21,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 	local bar
 	if first then
 		if frame.bar1 then frame.bar1:Stop(true) end
-		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
+		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar1
 		if legionTimerDB.growUp then
 			bar:SetPoint("BOTTOM", name, "TOP")
@@ -30,7 +30,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, first, pause)
 		end
 	else
 		if frame.bar2 then frame.bar2:Stop() end
-		frame.bar2 = candy:New(media:Fetch("statusbar", legionTimerDB.texture), legionTimerDB.width, legionTimerDB.height)
+		frame.bar2 = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bar = frame.bar2
 		if legionTimerDB.growUp then
 			frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, legionTimerDB.spacing)
