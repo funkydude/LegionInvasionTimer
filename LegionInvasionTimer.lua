@@ -130,7 +130,7 @@ frame:SetScript("OnEvent", function(f)
 	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
 		legionTimerDB = {
 			fontSize = 10,
-			texture = "BantoBar",
+			barTexture = "Blizzard Raid Bar",
 			outline = "NONE",
 			font = media:GetDefault("font"),
 			width = 200,
@@ -144,6 +144,14 @@ frame:SetScript("OnEvent", function(f)
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
 		}
+	end
+	if legionTimerDB.texture then -- Cleanup old texture DB entry
+		if legionTimerDB.texture == "BantoBar" then
+			legionTimerDB.barTexture = "Blizzard Raid Bar"
+		else
+			legionTimerDB.barTexture = legionTimerDB.texture
+		end
+		legionTimerDB.texture = nil
 	end
 
 	f:Show()
