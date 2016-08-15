@@ -148,7 +148,7 @@ local acOptions = {
 			itemControl = "DDI-Statusbar",
 			get = function()
 				for i, v in next, media:List("statusbar") do
-					if v == lit.db.texture then return i end
+					if v == lit.db.barTexture then return i end
 				end
 			end,
 			set = function(info, value)
