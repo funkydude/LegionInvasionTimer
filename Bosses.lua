@@ -46,6 +46,7 @@ do
 					[106891] = 34, -- Darkmagus Drazzok
 					[107122] = 34, -- Harbinger Drel'nathar
 					[107124] = 50, -- Harbinger Faraleth
+					[106892] = 45, -- Darkmagus Falo'reth
 				},
 			},
 			[219110] = {"|T".. GetSpellTexture(219110) ..texString.. GetSpellInfo(219110).. " (RUN AWAY FROM BOSS)", -- Shadow Nova
