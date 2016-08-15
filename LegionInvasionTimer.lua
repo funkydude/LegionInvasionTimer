@@ -173,7 +173,8 @@ frame:SetScript("OnEvent", function(f)
 	header:SetAllPoints(f)
 	header:SetText(name)
 	f.header = header
-	frame.startBar = startBar
+	f.startBar = startBar
+	f.db = legionTimerDB
 
 	if legionTimerDB.lock then
 		f:EnableMouse(false)

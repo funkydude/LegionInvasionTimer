@@ -2,8 +2,7 @@
 local acr = LibStub("AceConfigRegistry-3.0")
 local acd = LibStub("AceConfigDialog-3.0")
 local media = LibStub("LibSharedMedia-3.0")
-local frame = LegionInvasionTimer
-local db = legionTimerDB
+local lit = LegionInvasionTimer
 local L
 do
 	local _, mod = ...
@@ -12,12 +11,12 @@ end
 
 local function updateFlags()
 	local flags = nil
-	if db.monochrome and db.outline ~= "NONE" then
-		flags = "MONOCHROME," .. db.outline
-	elseif db.monochrome then
+	if lit.db.monochrome and lit.db.outline ~= "NONE" then
+		flags = "MONOCHROME," .. lit.db.outline
+	elseif lit.db.monochrome then
 		flags = "MONOCHROME"
-	elseif db.outline ~= "NONE" then
-		flags = db.outline
+	elseif lit.db.outline ~= "NONE" then
+		flags = lit.db.outline
 	end
 	return flags
 end
@@ -26,7 +25,7 @@ local acOptions = {
 	type = "group",
 	name = "LegionInvasionTimer",
 	get = function(info)
-		return db[info[#info]]
+		return lit.db[info[#info]]
 	end,
 	args = {
 		lock = {
@@ -34,15 +33,15 @@ local acOptions = {
 			name = L.lock,
 			order = 1,
 			set = function(info, value)
-				db.lock = value
+				lit.db.lock = value
 				if value then
-					frame:EnableMouse(false)
-					frame.bg:Hide()
-					frame.header:Hide()
+					lit:EnableMouse(false)
+					lit.bg:Hide()
+					lit.header:Hide()
 				else
-					frame:EnableMouse(true)
-					frame.bg:Show()
-					frame.header:Show()
+					lit:EnableMouse(true)
+					lit.bg:Show()
+					lit.header:Show()
 				end
 			end,
 		},
@@ -51,9 +50,9 @@ local acOptions = {
 			name = L.barIcon,
 			order = 2,
 			set = function(info, value)
-				db.icon = value
-				frame.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-				frame.bar2:SetIcon(value and 236292)
+				lit.db.icon = value
+				lit.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				lit.bar2:SetIcon(value and 236292)
 			end,
 		},
 		timeText = {
@@ -61,9 +60,9 @@ local acOptions = {
 			name = L.showTime,
 			order = 3,
 			set = function(info, value)
-				db.timeText = value
-				frame.bar1:SetTimeVisibility(value)
-				frame.bar2:SetTimeVisibility(value)
+				lit.db.timeText = value
+				lit.bar1:SetTimeVisibility(value)
+				lit.bar2:SetTimeVisibility(value)
 			end,
 		},
 		fill = {
@@ -71,9 +70,9 @@ local acOptions = {
 			name = L.fillBar,
 			order = 4,
 			set = function(info, value)
-				db.fill = value
-				frame.bar1:SetFill(value)
-				frame.bar2:SetFill(value)
+				lit.db.fill = value
+				lit.bar1:SetFill(value)
+				lit.bar2:SetFill(value)
 			end,
 		},
 		font = {
@@ -84,17 +83,17 @@ local acOptions = {
 			itemControl = "DDI-Font",
 			get = function()
 				for i, v in next, media:List("font") do
-					if v == db.font then return i end
+					if v == lit.db.font then return i end
 				end
 			end,
 			set = function(info, value)
 				local list = media:List("font")
 				local font = list[value]
-				db.font = font
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", font), db.fontSize, updateFlags())
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", font), db.fontSize, updateFlags())
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", font), db.fontSize, updateFlags())
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", font), db.fontSize, updateFlags())
+				lit.db.font = font
+				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		fontSize = {
@@ -105,11 +104,11 @@ local acOptions = {
 			min = 6,
 			step = 1,
 			set = function(info, value)
-				db.fontSize = value
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", db.font), value, updateFlags())
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", db.font), value, updateFlags())
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", db.font), value, updateFlags())
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", db.font), value, updateFlags())
+				lit.db.fontSize = value
+				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 			end,
 		},
 		monochrome = {
@@ -117,11 +116,11 @@ local acOptions = {
 			name = L.monochrome,
 			order = 7,
 			set = function(info, value)
-				db.monochrome = value
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
+				lit.db.monochrome = value
+				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		outline = {
@@ -134,11 +133,11 @@ local acOptions = {
 				THICKOUTLINE = L.thick,
 			},
 			set = function(info, value)
-				db.outline = value
-				frame.bar1.candyBarLabel:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar2.candyBarLabel:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar1.candyBarDuration:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
-				frame.bar2.candyBarDuration:SetFont(media:Fetch("font", db.font), db.fontSize, updateFlags())
+				lit.db.outline = value
+				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		texture = {
@@ -149,15 +148,15 @@ local acOptions = {
 			itemControl = "DDI-Statusbar",
 			get = function()
 				for i, v in next, media:List("statusbar") do
-					if v == db.texture then return i end
+					if v == lit.db.texture then return i end
 				end
 			end,
 			set = function(info, value)
 				local list = media:List("statusbar")
 				local texture = list[value]
-				db.texture = texture
-				frame.bar1:SetTexture(media:Fetch("statusbar", texture))
-				frame.bar2:SetTexture(media:Fetch("statusbar", texture))
+				lit.db.texture = texture
+				lit.bar1:SetTexture(media:Fetch("statusbar", texture))
+				lit.bar2:SetTexture(media:Fetch("statusbar", texture))
 			end,
 		},
 		spacing = {
@@ -168,13 +167,13 @@ local acOptions = {
 			min = 0,
 			step = 1,
 			set = function(info, value)
-				db.spacing = value
-				if db.growUp then
-					frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, value)
-					frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, value)
+				lit.db.spacing = value
+				if lit.db.growUp then
+					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, value)
+					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, value)
 				else
-					frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -value)
-					frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -value)
+					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -value)
+					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -value)
 				end
 			end,
 		},
@@ -186,9 +185,9 @@ local acOptions = {
 			min = 10,
 			step = 1,
 			set = function(info, value)
-				db.width = value
-				frame.bar1:SetWidth(value)
-				frame.bar2:SetWidth(value)
+				lit.db.width = value
+				lit.bar1:SetWidth(value)
+				lit.bar2:SetWidth(value)
 			end,
 		},
 		height = {
@@ -199,9 +198,9 @@ local acOptions = {
 			min = 5,
 			step = 1,
 			set = function(info, value)
-				db.height = value
-				frame.bar1:SetHeight(value)
-				frame.bar2:SetHeight(value)
+				lit.db.height = value
+				lit.bar1:SetHeight(value)
+				lit.bar2:SetHeight(value)
 			end,
 		},
 		alignZone = {
@@ -214,9 +213,9 @@ local acOptions = {
 				RIGHT = L.right,
 			},
 			set = function(info, value)
-				db.alignZone = value
-				frame.bar1.candyBarLabel:SetJustifyH(value)
-				frame.bar2.candyBarLabel:SetJustifyH(value)
+				lit.db.alignZone = value
+				lit.bar1.candyBarLabel:SetJustifyH(value)
+				lit.bar2.candyBarLabel:SetJustifyH(value)
 			end,
 		},
 		alignTime = {
@@ -229,9 +228,9 @@ local acOptions = {
 				RIGHT = L.right,
 			},
 			set = function(info, value)
-				db.alignTime = value
-				frame.bar1.candyBarDuration:SetJustifyH(value)
-				frame.bar2.candyBarDuration:SetJustifyH(value)
+				lit.db.alignTime = value
+				lit.bar1.candyBarDuration:SetJustifyH(value)
+				lit.bar2.candyBarDuration:SetJustifyH(value)
 			end,
 		},
 		growUp = {
@@ -239,17 +238,17 @@ local acOptions = {
 			name = L.growUpwards,
 			order = 15,
 			set = function(info, value)
-				db.growUp = value
-				frame.bar1:ClearAllPoints()
-				frame.bar2:ClearAllPoints()
+				lit.db.growUp = value
+				lit.bar1:ClearAllPoints()
+				lit.bar2:ClearAllPoints()
 				if value then
-					frame.bar1:SetPoint("BOTTOM", frame, "TOP")
-					frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, db.spacing)
-					frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, db.spacing)
+					lit.bar1:SetPoint("BOTTOM", lit, "TOP")
+					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, lit.db.spacing)
+					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, lit.db.spacing)
 				else
-					frame.bar1:SetPoint("TOP", frame, "BOTTOM")
-					frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -db.spacing)
-					frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -db.spacing)
+					lit.bar1:SetPoint("TOP", lit, "BOTTOM")
+					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -lit.db.spacing)
+					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -lit.db.spacing)
 				end
 			end,
 		},
@@ -258,12 +257,12 @@ local acOptions = {
 			type = "color",
 			order = 16,
 			get = function()
-				return unpack(db.colorText)
+				return unpack(lit.db.colorText)
 			end,
 			set = function(info, r, g, b, a)
-				db.colorText = {r, g, b, a}
-				frame.bar1:SetTextColor(r, g, b, a)
-				frame.bar2:SetTextColor(r, g, b, a)
+				lit.db.colorText = {r, g, b, a}
+				lit.bar1:SetTextColor(r, g, b, a)
+				lit.bar2:SetTextColor(r, g, b, a)
 			end,
 		},
 		colorComplete = {
@@ -271,15 +270,15 @@ local acOptions = {
 			type = "color",
 			order = 17,
 			get = function()
-				return unpack(db.colorComplete)
+				return unpack(lit.db.colorComplete)
 			end,
 			set = function(info, r, g, b, a)
-				db.colorComplete = {r, g, b, a}
-				if frame.bar1:Get("LegionInvasionTimer:complete") == 1 then
-					frame.bar1:SetColor(r, g, b, a)
+				lit.db.colorComplete = {r, g, b, a}
+				if lit.bar1:Get("LegionInvasionTimer:complete") == 1 then
+					lit.bar1:SetColor(r, g, b, a)
 				end
-				if frame.bar2:Get("LegionInvasionTimer:complete") == 1 then
-					frame.bar2:SetColor(r, g, b, a)
+				if lit.bar2:Get("LegionInvasionTimer:complete") == 1 then
+					lit.bar2:SetColor(r, g, b, a)
 				end
 			end,
 		},
@@ -288,15 +287,15 @@ local acOptions = {
 			type = "color",
 			order = 18,
 			get = function()
-				return unpack(db.colorIncomplete)
+				return unpack(lit.db.colorIncomplete)
 			end,
 			set = function(info, r, g, b, a)
-				db.colorIncomplete = {r, g, b, a}
-				if frame.bar1:Get("LegionInvasionTimer:complete") == 0 then
-					frame.bar1:SetColor(r, g, b, a)
+				lit.db.colorIncomplete = {r, g, b, a}
+				if lit.bar1:Get("LegionInvasionTimer:complete") == 0 then
+					lit.bar1:SetColor(r, g, b, a)
 				end
-				if frame.bar2:Get("LegionInvasionTimer:complete") == 0 then
-					frame.bar2:SetColor(r, g, b, a)
+				if lit.bar2:Get("LegionInvasionTimer:complete") == 0 then
+					lit.bar2:SetColor(r, g, b, a)
 				end
 			end,
 		},
