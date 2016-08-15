@@ -95,7 +95,15 @@ local function findTimer()
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			if not first then break end -- I'm assuming it's always 2 events
 			first = false
-			hasPausedBars = false
+			if hasPausedBars then
+				hasPausedBars = false
+				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
+				FlashClientIcon()
+				local msg = "|T236292:15:15:0:0:64:64:4:60:4:60|t New invasions available!"
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			end
 		end
 	end
 
@@ -174,8 +182,7 @@ frame:SetScript("OnEvent", function(f)
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar, dontScan)
 		if not dontScan and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
-			Timer(3, findTimer) -- Event over, start hunting for the next event
-			Timer(120, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
+			Timer(1, findTimer) -- Event over, start hunting for the next event
 		end
 		if bar == frame.bar1 then
 			frame.bar1 = nil
