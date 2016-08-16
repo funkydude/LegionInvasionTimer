@@ -7,6 +7,7 @@ local Timer = C_Timer.After
 mod.c = {r=1,g=1,b=1}
 
 local frame = CreateFrame("Frame", name, UIParent)
+mod.f = frame
 frame:SetPoint("CENTER", UIParent, "CENTER")
 frame:SetWidth(180)
 frame:SetHeight(15)

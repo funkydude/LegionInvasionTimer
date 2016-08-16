@@ -25,6 +25,7 @@ function mod:PLAYER_LOGIN()
 end
 
 function mod:SCENARIO_UPDATE()
+	if mod.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,rewardQuestID = C_Scenario.GetStepInfo()
 	local _,currentStage = C_Scenario.GetInfo()
 
@@ -151,6 +152,7 @@ do
 end
 
 function mod:SCENARIO_COMPLETED()
+	if mod.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
 		bar1Used, bar2Used = nil, nil

@@ -299,6 +299,19 @@ local acOptions = {
 				end
 			end,
 		},
+		separator = {
+			type = "header",
+			name = "",
+			order = 18.1,
+		},
+		hideBossWarnings = {
+			type = "toggle",
+			name = L.hideBossWarnings,
+			order = 19,
+			set = function(info, value)
+				lit.db.hideBossWarnings = value
+			end,
+		},
 	},
 }
 
