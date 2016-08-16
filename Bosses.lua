@@ -111,7 +111,7 @@ do
 			end
 			if msg[1] then
 				print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
-				RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 4)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 5)
 				PlaySound("RaidWarning", "Master")
 			end
 		end
@@ -133,7 +133,7 @@ do
 				-- 20 sec debuff, chains you to another player
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runToLink.. " (".. spellName ..")"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 218657 and destGUID == myID then -- Charred Flesh
 				-- 20 sec debuff, chains you to another player
@@ -144,7 +144,7 @@ do
 			elseif (spellId == 219367 or spellId == 207576 or spellId == 217549) and destGUID == myID then -- Rain of Fire / Fel Fire / Fel Flames
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runOut:format(spellName)
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 3)
 				PlaySound("RaidWarning", "Master")
 			end
 		end

@@ -103,7 +103,7 @@ local function findTimer()
 				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
 				FlashClientIcon()
 				print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c, 4)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c)
 				PlaySound("RaidWarning", "Master")
 			end
 			justLoggedIn = false
