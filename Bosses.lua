@@ -118,11 +118,13 @@ do
 
 		if event == "SPELL_AURA_APPLIED" then
 			if spellId == 219176 then -- Secrete Shadows 31-41s
-				-- 10 sec debuff on tank
-				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.changeTank:format(spellName, (gsub(destName, "%-.+", "*")))
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
-				PlaySound("RaidWarning", "Master")
+				local s = GetSpecialization()
+				if s and GetSpecializationRole(s) == "TANK" then-- 10 sec debuff on tank
+					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.changeTank:format(spellName, (gsub(destName, "%-.+", "*")))
+					print("|cFF33FF99LegionInvasionTimer|r:", msg)
+					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+					PlaySound("RaidWarning", "Master")
+				end
 			elseif spellId == 219958 and destGUID == myID then -- Mark of Baldrazar
 				-- 20 sec debuff, explosion on damage taken
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.damageMark.. " (".. spellName ..")"
