@@ -195,5 +195,5 @@ local function frameOnEvent()
 		if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
 			Timer(8, findTimer) -- Update bar color
 		end
-	end)
+	end
 end)
