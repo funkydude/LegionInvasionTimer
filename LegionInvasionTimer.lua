@@ -15,7 +15,7 @@ frame:EnableMouse(true)
 frame:RegisterForDrag("LeftButton")
 frame:SetClampedToScreen(true)
 frame:Hide()
-frame:RegisterEvent("PLAYER_LOGIN")
+frame:RegisterEvent("PLAYER_LOGIN", frameOnEvent)
 frame.bar = {}
 
 local function startBar(bar, text, timeLeft, rewardQuestID, icon)
@@ -99,8 +99,27 @@ local function findTimer()
 	end
 end
 
-frame:SetScript("OnEvent", function(f)
-	f:UnregisterEvent("PLAYER_LOGIN")
+local function frameOnEnter(f)
+	GameTooltip:SetOwner(f, "ANCHOR_NONE")
+	GameTooltip:SetPoint("BOTTOM", f, "TOP")
+	GameTooltip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
+	GameTooltip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
+	GameTooltip:Show()
+end
+
+local function frameOnMouseUp(f, btn)
+	if btn == "RightButton" then
+		SlashCmdList[name]()
+	end
+end
+
+local function slashHandler()
+	LoadAddOn("LegionInvasionTimer_Options")
+	LibStub("AceConfigDialog-3.0"):Open(name)
+end
+
+local function frameOnEvent()
+	frame:UnregisterEvent("PLAYER_LOGIN")
 
 	local weekday, month, day, year = CalendarGetDate()
 	if month ~= 8 or year ~= 2016 then
@@ -140,36 +159,27 @@ frame:SetScript("OnEvent", function(f)
 		setupBar(frame.bar[i], i)
 	end
 
-	f:Show()
-	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
-	f:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
-	SlashCmdList[name] = function() LoadAddOn("LegionInvasionTimer_Options") LibStub("AceConfigDialog-3.0"):Open(name) end
-	SLASH_LegionInvasionTimer1 = "/lit"
-	SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
-	f:SetScript("OnMouseUp", function(f, btn)
-		if btn == "RightButton" then
-			SlashCmdList[name]()
-		end
-	end)
-	f:SetScript("OnEnter", function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		GameTooltip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
-		GameTooltip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-	f.bg = f:CreateTexture(nil, "PARENT")
-	f.bg:SetAllPoints(f)
-	f.bg:SetColorTexture(0, 1, 0, 0.3)
-	f.header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
-	f.header:SetAllPoints(f)
-	f.header:SetText(name)
+	frame:Show()
+	SLASH_LegionInvasionTimer1, SLASH_LegionInvasionTimer2 = "/lit", "/legioninvasiontimer"
+	SlashCmdList[name] = slashHandler
+	frame:SetScript("OnDragStart", frame.StartMoving)
+	frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+	frame:SetScript("OnLeave", GameTooltip_Hide)
+	frame:SetScript("OnEnter", frameOnEnter)
+	frame:SetScript("OnMouseUp", frameOnMouseUp)
+	local bg = frame:CreateTexture(nil, "PARENT")
+	bg:SetAllPoints(frame)
+	bg:SetColorTexture(0, 1, 0, 0.3)
+	frame.bg = bg
+	local header = frame:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
+	header:SetAllPoints(frame)
+	header:SetText(name)
+	frame.header = header
 
 	if legionTimerDB.lock then
-		f:EnableMouse(false)
-		f.bg:Hide()
-		f.header:Hide()
+		frame:EnableMouse(false)
+		frame.bg:Hide()
+		frame.header:Hide()
 	end
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
@@ -179,9 +189,10 @@ frame:SetScript("OnEvent", function(f)
 	end)
 
 	findTimer()
-	f:RegisterEvent("SCENARIO_COMPLETED")
-	f:SetScript("OnEvent", function()
-		if select(10, C_Scenario.GetInfo()) == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
+	frame:RegisterEvent("SCENARIO_COMPLETED")
+	frameOnEvent = function()
+		local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
+		if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
 			Timer(8, findTimer) -- Update bar color
 		end
 	end)
