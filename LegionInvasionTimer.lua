@@ -196,4 +196,4 @@ local function frameOnEvent()
 			Timer(8, findTimer) -- Update bar color
 		end
 	end
-end)
+end
