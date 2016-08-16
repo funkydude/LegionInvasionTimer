@@ -53,6 +53,7 @@ local acOptions = {
 				lit.db.icon = value
 				lit.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				lit.bar2:SetIcon(value and 236292)
+				lit.bar3:SetIcon(value and 236292)
 			end,
 		},
 		timeText = {
@@ -63,6 +64,7 @@ local acOptions = {
 				lit.db.timeText = value
 				lit.bar1:SetTimeVisibility(value)
 				lit.bar2:SetTimeVisibility(value)
+				lit.bar3:SetTimeVisibility(value)
 			end,
 		},
 		fill = {
@@ -73,6 +75,7 @@ local acOptions = {
 				lit.db.fill = value
 				lit.bar1:SetFill(value)
 				lit.bar2:SetFill(value)
+				lit.bar3:SetFill(value)
 			end,
 		},
 		font = {
@@ -92,8 +95,10 @@ local acOptions = {
 				lit.db.font = font
 				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		fontSize = {
@@ -107,8 +112,10 @@ local acOptions = {
 				lit.db.fontSize = value
 				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 			end,
 		},
 		monochrome = {
@@ -119,8 +126,10 @@ local acOptions = {
 				lit.db.monochrome = value
 				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		outline = {
@@ -136,8 +145,10 @@ local acOptions = {
 				lit.db.outline = value
 				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 			end,
 		},
 		barTexture = {
@@ -157,6 +168,7 @@ local acOptions = {
 				lit.db.barTexture = texture
 				lit.bar1:SetTexture(media:Fetch("statusbar", texture))
 				lit.bar2:SetTexture(media:Fetch("statusbar", texture))
+				lit.bar3:SetTexture(media:Fetch("statusbar", texture))
 			end,
 		},
 		spacing = {
@@ -171,9 +183,13 @@ local acOptions = {
 				if lit.db.growUp then
 					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, value)
 					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, value)
+					lit.bar3:SetPoint("BOTTOMLEFT", lit.bar2, "TOPLEFT", 0, value)
+					lit.bar3:SetPoint("BOTTOMRIGHT", lit.bar2, "TOPRIGHT", 0, value)
 				else
 					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -value)
 					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -value)
+					lit.bar3:SetPoint("TOPLEFT", lit.bar2, "BOTTOMLEFT", 0, -value)
+					lit.bar3:SetPoint("TOPRIGHT", lit.bar2, "BOTTOMRIGHT", 0, -value)
 				end
 			end,
 		},
@@ -188,6 +204,7 @@ local acOptions = {
 				lit.db.width = value
 				lit.bar1:SetWidth(value)
 				lit.bar2:SetWidth(value)
+				lit.bar3:SetWidth(value)
 			end,
 		},
 		height = {
@@ -201,6 +218,7 @@ local acOptions = {
 				lit.db.height = value
 				lit.bar1:SetHeight(value)
 				lit.bar2:SetHeight(value)
+				lit.bar3:SetHeight(value)
 			end,
 		},
 		alignZone = {
@@ -216,6 +234,7 @@ local acOptions = {
 				lit.db.alignZone = value
 				lit.bar1.candyBarLabel:SetJustifyH(value)
 				lit.bar2.candyBarLabel:SetJustifyH(value)
+				lit.bar3.candyBarLabel:SetJustifyH(value)
 			end,
 		},
 		alignTime = {
@@ -231,6 +250,7 @@ local acOptions = {
 				lit.db.alignTime = value
 				lit.bar1.candyBarDuration:SetJustifyH(value)
 				lit.bar2.candyBarDuration:SetJustifyH(value)
+				lit.bar3.candyBarDuration:SetJustifyH(value)
 			end,
 		},
 		growUp = {
@@ -241,14 +261,19 @@ local acOptions = {
 				lit.db.growUp = value
 				lit.bar1:ClearAllPoints()
 				lit.bar2:ClearAllPoints()
+				lit.bar3:ClearAllPoints()
 				if value then
 					lit.bar1:SetPoint("BOTTOM", lit, "TOP")
 					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, lit.db.spacing)
 					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, lit.db.spacing)
+					lit.bar3:SetPoint("BOTTOMLEFT", lit.bar2, "TOPLEFT", 0, lit.db.spacing)
+					lit.bar3:SetPoint("BOTTOMRIGHT", lit.bar2, "TOPRIGHT", 0, lit.db.spacing)
 				else
 					lit.bar1:SetPoint("TOP", lit, "BOTTOM")
 					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -lit.db.spacing)
 					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -lit.db.spacing)
+					lit.bar3:SetPoint("TOPLEFT", lit.bar2, "BOTTOMLEFT", 0, -lit.db.spacing)
+					lit.bar3:SetPoint("TOPRIGHT", lit.bar2, "BOTTOMRIGHT", 0, -lit.db.spacing)
 				end
 			end,
 		},
@@ -263,6 +288,7 @@ local acOptions = {
 				lit.db.colorText = {r, g, b, a}
 				lit.bar1:SetTextColor(r, g, b, a)
 				lit.bar2:SetTextColor(r, g, b, a)
+				lit.bar3:SetTextColor(r, g, b, a)
 			end,
 		},
 		colorComplete = {
@@ -280,6 +306,9 @@ local acOptions = {
 				if lit.bar2:Get("LegionInvasionTimer:complete") == 1 then
 					lit.bar2:SetColor(r, g, b, a)
 				end
+				if lit.bar3:Get("LegionInvasionTimer:complete") == 1 then
+					lit.bar3:SetColor(r, g, b, a)
+				end
 			end,
 		},
 		colorIncomplete = {
@@ -296,6 +325,9 @@ local acOptions = {
 				end
 				if lit.bar2:Get("LegionInvasionTimer:complete") == 0 then
 					lit.bar2:SetColor(r, g, b, a)
+				end
+				if lit.bar3:Get("LegionInvasionTimer:complete") == 0 then
+					lit.bar3:SetColor(r, g, b, a)
 				end
 			end,
 		},
