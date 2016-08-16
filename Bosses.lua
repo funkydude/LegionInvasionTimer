@@ -5,7 +5,7 @@ local L = mod.L
 local colorTbl = mod.c
 local myID = UnitGUID("player")
 local startBar = nil
-local bar1Used, bar2Used = nil, nil
+local bar1Used, bar2Used, bar3Used = nil, nil, nil
 f:SetScript("OnEvent", function(frame, event, ...)
 	mod[event](mod, ...)
 end)
@@ -33,7 +33,7 @@ function mod:SCENARIO_UPDATE()
 		local _,_, rewardQuestIDInv = GetInvasionInfo(i)
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			myID = UnitGUID("player")
-			bar1Used, bar2Used = nil, nil
+			bar1Used, bar2Used, bar3Used = nil, nil, nil
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register
 		end
 	end
@@ -103,10 +103,13 @@ do
 				end
 				if not bar1Used or bar1Used == spellId then
 					bar1Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), true)
+					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 1)
 				elseif not bar2Used or bar2Used == spellId then
 					bar2Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), false)
+					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 2)
+				elseif not bar3Used or bar3Used == spellId then
+					bar3Used = spellId
+					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 3)
 				end
 			end
 			if msg[1] then
