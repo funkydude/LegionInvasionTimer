@@ -172,8 +172,8 @@ frame:SetScript("OnEvent", function(f)
 		f.header:Hide()
 	end
 
-	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_ bar)
-		if not dontScan and bar == frame.bar[1] then
+	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
+		if bar == frame.bar[1] then
 			Timer(2, findTimer) -- Event over, start hunting for the next event
 		end
 	end)
