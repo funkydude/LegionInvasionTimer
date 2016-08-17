@@ -223,6 +223,7 @@ frame:SetScript("OnEvent", function(f)
 	end)
 
 	findTimer()
+	Timer(15, function() justLoggedIn = false end) -- We might log in during an event swap and never see the "new event" message, so use a timer here
 	f:RegisterEvent("SCENARIO_COMPLETED")
 	f:SetScript("OnEvent", function()
 		local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
