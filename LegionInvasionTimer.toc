@@ -3,6 +3,7 @@
 ## Author: Funkydude
 ## Notes: Shows the Legion invasion timer.
 ## Notes-zhCN: 显示军团入侵计时器。
+## Notes-zhTW: 顯示軍團入侵計時器。
 ## SavedVariables: legionTimerDB
 ## Version: @project-version@
 ## X-Category: Miscellaneous
