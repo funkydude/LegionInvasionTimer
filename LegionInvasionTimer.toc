@@ -2,6 +2,7 @@
 ## Title: LegionInvasionTimer
 ## Author: Funkydude
 ## Notes: Shows the Legion invasion timer.
+## Notes-zhCN: 显示军团入侵计时器。
 ## SavedVariables: legionTimerDB
 ## Version: @project-version@
 ## X-Category: Miscellaneous

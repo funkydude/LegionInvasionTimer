@@ -2,6 +2,7 @@
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: LegionInvasionTimer Configuration Options
+## Notes-zhCN: LegionInvasionTimer 配置选项
 ## Version: @project-version@
 ## X-Category: Miscellaneous
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
