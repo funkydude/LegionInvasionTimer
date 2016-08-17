@@ -102,7 +102,6 @@ local function findTimer()
 	-- 7 Legion Invasion: Hillsbrad 0 43285
 	-- 8 Legion Invasion: Azshara 0 43301
 
-	local first = true
 	local count = 1
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
@@ -110,13 +109,20 @@ local function findTimer()
 			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, count) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			if count == 3 then break end -- 3 events
 			count = count + 1
-			if hasPausedBars and not justLoggedIn and timeLeftMinutes > 110 then
+			if hasPausedBars then
 				hasPausedBars = false
-				Timer(30, findTimer) -- Sometimes Blizz doesn't reset the quest ID very quickly, do another check to fix colors if so
-				FlashClientIcon()
-				print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c)
-				PlaySound("RaidWarning", "Master")
+				-- Sometimes Blizz doesn't reset the quest ID very quickly after a new event spawns, do another few checks to fix colors if so
+				-- We do multiple checks to try and fix the (potential) issue as fast as possible
+				-- This is cleaner than trying to implement some method of remembering what were saved to, unless 20 sec isn't long enough to compensate...
+				Timer(5, findTimer)
+				Timer(10, findTimer)
+				Timer(20, findTimer)
+				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
+					FlashClientIcon()
+					print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
+					RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c)
+					PlaySound("RaidWarning", "Master")
+				end
 			end
 			justLoggedIn = false
 		end
