@@ -1,3 +1,4 @@
+
 if GetLocale() ~= "esES" and GetLocale() ~= "esMX" then return end
 local _, mod = ...
 local L = mod.L
@@ -29,3 +30,4 @@ L.healYourself = "¡Debuff - Cúrate!"
 L.runOut = "%s en ti, ¡corre!"
 L.keepMoving = "%s en ti, sigue moviendote!"
 L.firePatches = "¡Estás soltando zonas de fuego!"
+L.fireBomb = "Bomb! Keep spread 10 yards!"

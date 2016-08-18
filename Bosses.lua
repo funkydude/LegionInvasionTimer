@@ -85,6 +85,7 @@ do
 			[219411] = {false, 31}, -- Fel Stomp
 			[219310] = {false, 23}, -- Cripple
 			[218637] = {false, 15}, -- Pyrogenics, bar here, warning in APPLIED
+			[225268] = {false, 34}, -- Legion's Flames, bar here, warning in APPLIED
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
@@ -133,7 +134,7 @@ do
 			elseif spellId == 218637 and destGUID:find("Creature", nil, true) then -- Pyrogenics, buff on boss
 				-- Mass Dispel (Priest), Dispel Magic (Priest), Purge (Shaman), Spellsteal (Mage)
 				if IsSpellKnown(32375) or IsSpellKnown(528) or IsSpellKnown(370) or IsSpellKnown(30449) then
-					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.dispelBoss.. " (".. GetSpellInfo(218637).. ")"
+					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.dispelBoss.. " (".. spellName ..")"
 					print("|cFF33FF99LegionInvasionTimer|r:", msg)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 					PlaySound("RaidWarning", "Master")
@@ -165,6 +166,12 @@ do
 			elseif spellId == 217530 and destGUID == myID then -- Fel Burn
 				-- 12 sec debuff, makes you drop fire patches every 3 sec
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.firePatches.. " (".. spellName ..")"
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			elseif spellId == 225269 and destGUID == myID then -- Legion's Flames
+				-- 12 sec debuff, explode allies within 10yd after expiration
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.fireBomb.. " (".. spellName ..")"
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
