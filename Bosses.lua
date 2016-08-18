@@ -82,6 +82,8 @@ do
 			[219048] = {"|T".. GetSpellTexture(219059) ..texString.. L.watchOut:format((GetSpellInfo(219059))), 15, 219059}, -- Flame Fissure, Flame Fissure npc id:110023, Arch Magus Velysra npc id:106893 USC id:219013
 			[218940] = {false, 11}, -- Fel Lightning
 			[218659] = {false, 52}, -- Charred Flesh
+			[219411] = {false, 31}, -- Fel Stomp
+			[219310] = {false, 23}, -- Cripple
 			[218637] = {false, 15}, -- Pyrogenics, bar here, warning in APPLIED
 		},
 	}
