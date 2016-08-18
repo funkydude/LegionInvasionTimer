@@ -100,8 +100,8 @@ do
 					id = tonumber(id) or 1
 					timer = msg[2][id]
 					if not timer then
-						timer = 45
 						print("|cFF33FF99LegionInvasionTimer|r: No timer for ", spellId, id, sourceName)
+						return
 					end
 				else
 					timer = msg[2]
@@ -199,7 +199,6 @@ end
 function mod:ZONE_CHANGED_NEW_AREA()
 	if self.f.db.hideInRaid then
 		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
-		print(instanceId)
 		if instanceId == 1228 or instanceId == 1205 or instanceId == 1448 then -- Highmaul, Blackrock Foundry, Hellfire Citadel
 			self.f:Hide()
 		elseif not self.f:IsShown() then
