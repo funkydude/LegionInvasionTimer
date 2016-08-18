@@ -7,7 +7,7 @@ local L = mod.L
 L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t 新入侵到来！"
 L.tooltipClick = "|cffeda55f点击|r 拖拽并移动。"
 L.tooltipClickOptions = "|cffeda55f右击|r 打开选项。"
-L.searching = "Searching..."
+L.searching = "搜索中…"
 
 -- Bosses
 L.runToBoss = "跑向首领！"
@@ -27,6 +27,6 @@ L.changeTank = "%s 于 %s，换坦克！"
 L.damageMark = "你被标记，开减伤！"
 L.runToLink = "跑向连接玩家！"
 L.healYourself = "减益 - 治疗自己！"
-L.runOut = "%s 对你施放，远离人群！"
-L.keepMoving = "%s on you, keep moving!"
+L.runOut = "%s 对你施放，快跑开！"
+L.keepMoving = "%s 对你施放，保持移动！"
 L.firePatches = "You're dropping fire patches!"
