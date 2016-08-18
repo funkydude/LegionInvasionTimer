@@ -156,6 +156,18 @@ do
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
+			elseif spellId == 217559 and destGUID == myID then -- Creeping Doom
+				-- 15 sec debuff, damages you if you stay still
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.keepMoving:format(spellName)
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			elseif spellId == 217530 and destGUID == myID then -- Fel Burn
+				-- 12 sec debuff, makes you drop fire patches every 3 sec
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.firePatches.. " (".. spellName ..")"
+				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
 			elseif (spellId == 219367 or spellId == 207576 or spellId == 217549) and destGUID == myID then -- Rain of Fire / Fel Fire / Fel Flames
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runOut:format(spellName)
 				print("|cFF33FF99LegionInvasionTimer|r:", msg)
