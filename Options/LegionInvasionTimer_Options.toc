@@ -2,6 +2,8 @@
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: LegionInvasionTimer Configuration Options
+## Notes-esES: Opciones de configuración de LegionInvasionTimer
+## Notes-esMX: Opciones de configuración de LegionInvasionTimer
 ## Notes-zhCN: LegionInvasionTimer 配置选项
 ## Version: @project-version@
 ## X-Category: Miscellaneous
