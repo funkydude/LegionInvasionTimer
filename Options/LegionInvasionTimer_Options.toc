@@ -1,10 +1,17 @@
 ## Interface: 70000
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
-## Notes: LegionInvasionTimer Configuration Options
-## Notes-esES: Opciones de configuración de LegionInvasionTimer
-## Notes-esMX: Opciones de configuración de LegionInvasionTimer
-## Notes-zhCN: LegionInvasionTimer 配置选项
+## Notes: LegionInvasionTimer Configuration Options.
+## Notes-esES: Opciones de configuración de LegionInvasionTimer.
+## Notes-esMX: Opciones de configuración de LegionInvasionTimer.
+## Notes-zhCN: LegionInvasionTimer 配置选项。
+## Notes-zhTW: LegionInvasionTimer Configuration Options.
+## Notes-deDE: LegionInvasionTimer Configuration Options.
+## Notes-frFR: LegionInvasionTimer Configuration Options.
+## Notes-itIT: LegionInvasionTimer Configuration Options.
+## Notes-koKR: LegionInvasionTimer Configuration Options.
+## Notes-ptBR: LegionInvasionTimer Configuration Options.
+## Notes-ruRU: LegionInvasionTimer Configuration Options.
 ## Version: @project-version@
 ## X-Category: Miscellaneous
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
