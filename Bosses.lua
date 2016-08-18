@@ -19,13 +19,15 @@ function mod:PLAYER_LOGIN()
 		return -- Good times come to an end
 	end
 
-	startBar = LegionInvasionTimer.startBar
+	startBar = self.f.startBar
 	f:RegisterEvent("SCENARIO_UPDATE")
 	f:RegisterEvent("SCENARIO_COMPLETED")
+	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	self:ZONE_CHANGED_NEW_AREA()
 end
 
 function mod:SCENARIO_UPDATE()
-	if mod.f.db.hideBossWarnings then return end
+	if self.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,rewardQuestID = C_Scenario.GetStepInfo()
 	local _,currentStage = C_Scenario.GetInfo()
 
@@ -186,7 +188,7 @@ do
 end
 
 function mod:SCENARIO_COMPLETED()
-	if mod.f.db.hideBossWarnings then return end
+	if self.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
 		bar1Used, bar2Used = nil, nil
@@ -194,4 +196,15 @@ function mod:SCENARIO_COMPLETED()
 	end
 end
 
+function mod:ZONE_CHANGED_NEW_AREA()
+	if self.f.db.hideInRaid then
+		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
+		print(instanceId)
+		if instanceId == 1228 or instanceId == 1205 or instanceId == 1448 then -- Highmaul, Blackrock Foundry, Hellfire Citadel
+			self.f:Hide()
+		elseif not self.f:IsShown() then
+			self.f:Show()
+		end
+	end
+end
 

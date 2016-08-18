@@ -53,6 +53,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 		end
 	end
 
+	bar:SetParent(frame)
 	bar:SetLabel(text:match("[^%:]+: ?(.+)") or text) -- Strip out the "Legion Invasion: " part and leave the zone name behind.
 	bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
 	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)

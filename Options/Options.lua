@@ -344,6 +344,14 @@ local acOptions = {
 				lit.db.hideBossWarnings = value
 			end,
 		},
+		hideInRaid = {
+			type = "toggle",
+			name = L.hideInRaid,
+			order = 20,
+			set = function(info, value)
+				lit.db.hideInRaid = value
+			end,
+		},
 	},
 }
 
