@@ -78,11 +78,11 @@ do
 			[213890] = {"|T".. GetSpellTexture(213890) ..texString.. L.finished:format((GetSpellInfo(213890)))}, -- Carrion Storm
 		},
 		SPELL_CAST_SUCCESS = {
-			[218637] = {"|T".. GetSpellTexture(218637) ..texString.. L.dispelBoss.. " (".. GetSpellInfo(218637).. ")", 15}, -- Pyrogenics
 			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. L.watchOut:format((GetSpellInfo(218311))), 30, 218311}, -- Fel Spike
 			[219048] = {"|T".. GetSpellTexture(219059) ..texString.. L.watchOut:format((GetSpellInfo(219059))), 40, 219059}, -- Flame Fissure
 			[218940] = {false, 11}, -- Fel Lightning
 			[218659] = {false, 52}, -- Charred Flesh
+			[218637] = {false, 15}, -- Pyrogenics, bar here, warning in APPLIED
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
@@ -126,6 +126,14 @@ do
 					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.changeTank:format(spellName, (gsub(destName, "%-.+", "*")))
 					print("|cFF33FF99LegionInvasionTimer|r:", msg)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+					PlaySound("RaidWarning", "Master")
+				end
+			elseif spellId == 218637 and destGUID:find("Creature", nil, true) then -- Pyrogenics, buff on boss
+				-- Mass Dispel (Priest), Dispel Magic (Priest), Purge (Shaman), Spellsteal (Mage)
+				if IsSpellKnown(32375) or IsSpellKnown(528) or IsSpellKnown(370) or IsSpellKnown(30449) then
+					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.dispelBoss.. " (".. GetSpellInfo(218637).. ")"
+					print("|cFF33FF99LegionInvasionTimer|r:", msg)
+					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 					PlaySound("RaidWarning", "Master")
 				end
 			elseif spellId == 219958 and destGUID == myID then -- Mark of Baldrazar
