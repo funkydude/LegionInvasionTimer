@@ -331,10 +331,30 @@ local acOptions = {
 				end
 			end,
 		},
+    colorBarBackground = {
+			name = L.barBackGroundColor,
+			type = "color",
+			order = 18.1,
+			get = function()
+				return unpack(lit.db.colorBarBackground)
+			end,
+			set = function(info, r, g, b, a)
+				lit.db.colorBarBackground = {r, g, b, a}
+        if lit.bar1:Get("LegionInvasionTimer:complete") then
+          lit.bar1.candyBarBackground:SetVertexColor(r, g, b, a)
+        end
+        if lit.bar2:Get("LegionInvasionTimer:complete") then
+          lit.bar2.candyBarBackground:SetVertexColor(r, g, b, a)
+        end
+        if lit.bar3:Get("LegionInvasionTimer:complete") then
+          lit.bar3.candyBarBackground:SetVertexColor(r, g, b, a)
+        end        
+			end,
+		},
 		separator = {
 			type = "header",
 			name = "",
-			order = 18.1,
+			order = 18.2,
 		},
 		hideBossWarnings = {
 			type = "toggle",
@@ -357,4 +377,3 @@ local acOptions = {
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
 acd:SetDefaultSize(acOptions.name, 400, 500)
-
