@@ -334,6 +334,7 @@ local acOptions = {
     colorBarBackground = {
 			name = L.barBackGroundColor,
 			type = "color",
+      hasAlpha = true,
 			order = 18.1,
 			get = function()
 				return unpack(lit.db.colorBarBackground)
