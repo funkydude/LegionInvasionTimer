@@ -84,12 +84,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 	end
 	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-  
-  --fuba
-  --bar.candyBarBackground:SetVertexColor(0, 0, 0, 0.75)
-  
-  bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
-  
+  	bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
 	if pause then -- Searching bars
 		bar:Start()
 		bar:Pause()
