@@ -176,10 +176,10 @@ frame:SetScript("OnEvent", function(f)
 		end
 		legionTimerDB.texture = nil
 	end
-  -- add new Bar Background Value to legionTimerDB
-  if not legionTimerDB.colorBarBackground then
-    legionTimerDB.colorBarBackground = {0,0,0,0.75}
-  end
+	-- add new Bar Background Value to legionTimerDB
+	if not legionTimerDB.colorBarBackground then
+		legionTimerDB.colorBarBackground = {0,0,0,0.75}
+	end
 
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
