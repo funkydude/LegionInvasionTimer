@@ -331,8 +331,8 @@ local acOptions = {
 				end
 			end,
 		},
-    		colorBarBackground = {
-			name = L.barBackGroundColor,
+		colorBarBackground = {
+			name = L.barBackground,
 			type = "color",
 			hasAlpha = true,
 			order = 18.1,
@@ -343,7 +343,7 @@ local acOptions = {
 				lit.db.colorBarBackground = {r, g, b, a}
 				if lit.bar1 then
 					lit.bar1.candyBarBackground:SetVertexColor(r, g, b, a)
-        			end
+				end
 				if lit.bar2 then
 					lit.bar2.candyBarBackground:SetVertexColor(r, g, b, a)
 				end
@@ -378,3 +378,4 @@ local acOptions = {
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
 acd:SetDefaultSize(acOptions.name, 400, 500)
+
