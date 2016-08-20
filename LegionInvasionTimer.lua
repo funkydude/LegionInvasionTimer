@@ -18,6 +18,7 @@ frame:SetClampedToScreen(true)
 frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 
+
 local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 	local bar
 	if count == 1 then
@@ -83,6 +84,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 	end
 	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
+  	bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
 	if pause then -- Searching bars
 		bar:Start()
 		bar:Pause()
@@ -163,6 +165,7 @@ frame:SetScript("OnEvent", function(f)
 			colorText = {1,1,1,1},
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
+      colorBarBackground = {0,0,0,0.75},
 		}
 	end
 	if legionTimerDB.texture then -- Cleanup old texture DB entry
@@ -173,7 +176,9 @@ frame:SetScript("OnEvent", function(f)
 		end
 		legionTimerDB.texture = nil
 	end
-
+	if not legionTimerDB.colorBarBackground then -- add new Bar Background Value to legionTimerDB
+		legionTimerDB.colorBarBackground = {0,0,0,0.75}
+	end
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
 	f:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
@@ -233,4 +238,3 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 end)
-
