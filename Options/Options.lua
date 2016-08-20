@@ -377,5 +377,5 @@ local acOptions = {
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 500)
+acd:SetDefaultSize(acOptions.name, 400, 520)
 
