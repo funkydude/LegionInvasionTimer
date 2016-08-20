@@ -6,6 +6,7 @@ local colorTbl = mod.c
 local myID = UnitGUID("player")
 local startBar = nil
 local bar1Used, bar2Used, bar3Used = nil, nil, nil
+local flameFissureTime = 15
 f:SetScript("OnEvent", function(frame, event, ...)
 	mod[event](mod, ...)
 end)
@@ -36,6 +37,7 @@ function mod:SCENARIO_UPDATE()
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			myID = UnitGUID("player")
 			bar1Used, bar2Used, bar3Used = nil, nil, nil
+			flameFissureTime = 15
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register
 		end
 	end
@@ -81,7 +83,7 @@ do
 		},
 		SPELL_CAST_SUCCESS = {
 			[218146] = {"|T".. GetSpellTexture(218311) ..texString.. L.watchOut:format((GetSpellInfo(218311))), 30, 218311}, -- Fel Spike
-			[219048] = {"|T".. GetSpellTexture(219059) ..texString.. L.watchOut:format((GetSpellInfo(219059))), 15, 219059}, -- Flame Fissure, Flame Fissure npc id:110023, Arch Magus Velysra npc id:106893 USC id:219013
+			[219048] = {"|T".. GetSpellTexture(219059) ..texString.. L.watchOut:format((GetSpellInfo(219059))), -1, 219059}, -- Flame Fissure spell, casted by NPC "Flame Fissure", but the timer changes depending on what boss summoned that NPC.
 			[218940] = {false, 11}, -- Fel Lightning
 			[218659] = {false, 52}, -- Charred Flesh
 			[219411] = {false, 31}, -- Fel Stomp
@@ -95,9 +97,18 @@ do
 		if msg then
 			if msg[2] then
 				local timer
+				local _, _, _, _, _, id = strsplit("-", sourceGUID)
+				id = tonumber(id) or 1
+
+				if id == 107115 then
+					-- There's no SPELL_SUMMON we can use :(
+					-- If any spell is casted by Flameweaver Verathix (107115) then
+					-- save the ID and use it to set the timer for Flame Fissure.
+					-- Coding for WoW bosses has never been the cleanest experience.
+					flameFissureTime = 40
+				end
+
 				if type(msg[2]) == "table" then
-					local _, _, _, _, _, id = strsplit("-", sourceGUID)
-					id = tonumber(id) or 1
 					timer = msg[2][id]
 					if not timer then
 						print("|cFF33FF99LegionInvasionTimer|r: No timer for ", spellId, id, sourceName)
@@ -105,7 +116,13 @@ do
 					end
 				else
 					timer = msg[2]
+					if timer == -1 then -- Flame Fissure
+						-- If summoned by Arch Magus Velysra, NPC ID 106893, then 15 sec (default)
+						-- If summoned by Flameweaver Verathix, NPC ID 107115, then 40 sec (changed earlier)
+						timer = flameFissureTime
+					end
 				end
+
 				if not bar1Used or bar1Used == spellId then
 					bar1Used = spellId
 					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 1)
@@ -197,7 +214,8 @@ function mod:SCENARIO_COMPLETED()
 	if self.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
-		bar1Used, bar2Used = nil, nil
+		bar1Used, bar2Used, bar3Used = nil, nil, nil
+		flameFissureTime = 15
 		f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss killed, unregister
 	end
 end
