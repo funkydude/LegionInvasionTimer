@@ -341,15 +341,15 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				lit.db.colorBarBackground = {r, g, b, a}
-				if lit.bar1:Get("LegionInvasionTimer:complete") then
+				if lit.bar1 then
 					lit.bar1.candyBarBackground:SetVertexColor(r, g, b, a)
         			end
-				if lit.bar2:Get("LegionInvasionTimer:complete") then
+				if lit.bar2 then
 					lit.bar2.candyBarBackground:SetVertexColor(r, g, b, a)
 				end
-				if lit.bar3:Get("LegionInvasionTimer:complete") then
+				if lit.bar3 then
 					lit.bar3.candyBarBackground:SetVertexColor(r, g, b, a)
-				end        
+				end
 			end,
 		},
 		separator = {
