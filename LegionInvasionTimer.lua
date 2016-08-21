@@ -18,6 +18,34 @@ frame:SetClampedToScreen(true)
 frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 
+local OnEnter
+do
+	local id = 11201 -- Defender of Azeroth: Legion Invasions
+	local GameTooltip = GameTooltip
+	local SHORTDATE = SHORTDATE -- "%2$d/%1$02d/%3$02d" month / day / year for English EU clients O.o
+	OnEnter = function(f)
+		GameTooltip:SetOwner(f, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOM", f, "TOP")
+		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
+		if wasEarnedByMe then
+			GameTooltip:AddDoubleLine(name, SHORTDATE:format(day, month, year), nil, nil, nil, .5, .5, .5)
+		else
+			GameTooltip:AddLine(name, nil, nil, nil, .5, .5, .5)
+		end
+		GameTooltip:AddLine(description, 1, 1, 1, true)
+		for i = 1, GetAchievementNumCriteria(id) do
+			local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
+			if completed == false then
+				criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
+			else
+				criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
+			end
+			GameTooltip:AddLine(criteriaString)
+		end
+		GameTooltip:Show()
+	end
+end
+
 local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 	local bar
 	if count == 1 then
@@ -53,28 +81,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 		end
 	end
 
-	bar:SetScript("OnEnter", function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		local id = 11201 -- Defender of Azeroth: Legion Invasions
-		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
-		if wasEarnedByMe then
-			GameTooltip:AddDoubleLine(name, _G.SHORTDATE:format(day, month, year), nil, nil, nil, .5, .5, .5)
-		else
-			GameTooltip:AddLine(name, nil, nil, nil, .5, .5, .5)
-		end
-		GameTooltip:AddLine(description, 1, 1, 1, true)
-		for i = 1, GetAchievementNumCriteria(id) do
-			local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
-			if completed == false then
-				criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
-			else
-				criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
-			end
-			GameTooltip:AddLine(criteriaString)
-		end
-		GameTooltip:Show()
-	end)
+	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
 	bar:SetParent(frame)
 	bar:SetLabel(text:match("[^%:]+: ?(.+)") or text) -- Strip out the "Legion Invasion: " part and leave the zone name behind.
