@@ -7,6 +7,7 @@ local myID = UnitGUID("player")
 local startBar = nil
 local bar1Used, bar2Used, bar3Used = nil, nil, nil
 local flameFissureTime = 15
+local printLit = "|cFF33FF99LegionInvasionTimer|r:"
 f:SetScript("OnEvent", function(frame, event, ...)
 	mod[event](mod, ...)
 end)
@@ -23,6 +24,7 @@ function mod:PLAYER_LOGIN()
 	startBar = self.f.startBar
 	f:RegisterEvent("SCENARIO_UPDATE")
 	f:RegisterEvent("SCENARIO_COMPLETED")
+	f:RegisterEvent("CHAT_MSG_CURRENCY")
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:ZONE_CHANGED_NEW_AREA()
 end
@@ -135,7 +137,7 @@ do
 				end
 			end
 			if msg[1] then
-				print("|cFF33FF99LegionInvasionTimer|r:", msg[1])
+				print(printLit, msg[1])
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg[1], colorTbl, 5)
 				PlaySound("RaidWarning", "Master")
 			end
@@ -146,7 +148,7 @@ do
 				local s = GetSpecialization()
 				if s and GetSpecializationRole(s) == "TANK" then-- 10 sec debuff on tank
 					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.changeTank:format(spellName, (gsub(destName, "%-.+", "*")))
-					print("|cFF33FF99LegionInvasionTimer|r:", msg)
+					print(printLit, msg)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 					PlaySound("RaidWarning", "Master")
 				end
@@ -154,55 +156,55 @@ do
 				-- Mass Dispel (Priest), Dispel Magic (Priest), Purge (Shaman), Spellsteal (Mage)
 				if IsSpellKnown(32375) or IsSpellKnown(528) or IsSpellKnown(370) or IsSpellKnown(30449) then
 					local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.dispelBoss.. " (".. spellName ..")"
-					print("|cFF33FF99LegionInvasionTimer|r:", msg)
+					print(printLit, msg)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 					PlaySound("RaidWarning", "Master")
 				end
 			elseif spellId == 219958 and destGUID == myID then -- Mark of Baldrazar
 				-- 20 sec debuff, explosion on damage taken
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.damageMark.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 218350 and destGUID == myID then -- Bound by Fel
 				-- 20 sec debuff, chains you to another player
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runToLink.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 218657 and destGUID == myID then -- Charred Flesh
 				-- 20 sec debuff, chains you to another player
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.healYourself.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 217559 and destGUID == myID then -- Creeping Doom
 				-- 15 sec debuff, damages you if you stay still
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.keepMoving:format(spellName)
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 217530 and destGUID == myID then -- Fel Burn
 				-- 12 sec debuff, makes you drop fire patches every 3 sec
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.firePatches.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 225269 and destGUID == myID then -- Legion's Flames
 				-- 12 sec debuff, explode allies within 10yd after expiration
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.fireBomb.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif spellId == 218368 and destGUID == myID then -- Fixated
 				-- 15 sec debuff, the ball (Fragment of Argus) chases the player and explodes on impact
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.ballOnYou.. " (".. spellName ..")"
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
 				PlaySound("RaidWarning", "Master")
 			elseif (spellId == 219367 or spellId == 207576 or spellId == 217549) and destGUID == myID then -- Rain of Fire / Fel Fire / Fel Flames
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runOut:format(spellName)
-				print("|cFF33FF99LegionInvasionTimer|r:", msg)
+				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 3)
 				PlaySound("RaidWarning", "Master")
 			end
@@ -227,6 +229,15 @@ function mod:ZONE_CHANGED_NEW_AREA()
 			self.f:Hide()
 		elseif not self.f:IsShown() then
 			self.f:Show()
+		end
+	end
+end
+
+function mod:CHAT_MSG_CURRENCY(msg)
+	if msg:find("|Hcurrency:1226|h", nil, true) then -- Wish there was a cleaner way to detect gaining Nethershards
+		local cName, amount = GetCurrencyInfo(1226) -- Nethershard
+		if amount > 1900 then
+			print(printLit, ("|T132775:15:15:0:0:64:64:4:60:4:60|t |cFFFF0000%d/2000|r"):format(amount))
 		end
 	end
 end
