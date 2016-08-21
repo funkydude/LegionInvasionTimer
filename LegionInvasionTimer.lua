@@ -42,6 +42,12 @@ do
 			end
 			GameTooltip:AddLine(criteriaString)
 		end
+		GameTooltip:AddLine(" ")
+
+		local cName, amount = GetCurrencyInfo(1226) -- Nethershard
+		-- Icon 132775 = Interface\\Icons\\INV_DataCrystal01
+		-- Color text red if > 1900
+		GameTooltip:AddDoubleLine(cName, ("|T132775:15:15:0:0:64:64:4:60:4:60|t %d/2000"):format(amount), 1, 1, 1, 1, amount > 600 and 0 or 1, amount > 600 and 0 or 1)
 		GameTooltip:Show()
 	end
 end
