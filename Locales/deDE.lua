@@ -4,15 +4,15 @@ local _, mod = ...
 local L = mod.L
 
 -- Core
-L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Neue Invasionen verf\195\188gbar!"
-L.tooltipClick = "|cffeda55fClick|r zum ziehen und bewegen."
-L.tooltipClickOptions = "|cffeda55fRight-Click|r um Optionen zu öffnen."
+L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Neue Invasionen verfügbar!"
+L.tooltipClick = "|cffeda55fKlick|r zum ziehen und bewegen."
+L.tooltipClickOptions = "|cffeda55fRechts-Klick|r um Optionen zu öffnen."
 L.searching = "Suche..."
 
 -- Bosses
 L.runToBoss = "Renne zum Boss!"
 L.runAwayFromBoss = "Lauf weg vom Boss!"
-L.frontConeDmg = "Kegelf\195\182rmiger Frontalschaden!"
+L.frontConeDmg = "Kegelförmiger Frontalschaden!"
 L.frontalCleave = "Frontales Spalten!"
 L.frontalCleaveWipe = "Frontales Spalten - Bedrohung schwindet!"
 L.debuffInc = "wirkt Debuff !"
@@ -29,6 +29,6 @@ L.runToLink = "Renne zum verbundenem Mitspieler!"
 L.healYourself = "Debuff - heil dich selbst!"
 L.runOut = "%s auf dir,Renn weg!"
 L.keepMoving = "%s auf dir, in Bewegung bleiben!"
-L.firePatches = "Du lässt Feuerfl\195\164chen Fallen!"
+L.firePatches = "Du lässt Feuerflächen Fallen!"
 L.fireBomb = "Bombe! halte 10 m Abstand zu anderen!"
 L.ballOnYou = "Kugel verfolgt dich! Lauf!"
