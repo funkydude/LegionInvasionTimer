@@ -6,7 +6,7 @@
 ## Notes-esMX: Opciones de configuración de LegionInvasionTimer.
 ## Notes-zhCN: LegionInvasionTimer 配置选项。
 ## Notes-zhTW: LegionInvasionTimer 配置選項。
-## Notes-deDE: LegionInvasionTimer Configuration Options.
+## Notes-deDE: LegionInvasionTimer Einstellungen.
 ## Notes-frFR: LegionInvasionTimer Configuration Options.
 ## Notes-itIT: LegionInvasionTimer Configuration Options.
 ## Notes-koKR: LegionInvasionTimer Configuration Options.
