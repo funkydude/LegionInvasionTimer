@@ -27,6 +27,7 @@ function mod:PLAYER_LOGIN()
 	f:RegisterEvent("CHAT_MSG_CURRENCY")
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:ZONE_CHANGED_NEW_AREA()
+	self:SCENARIO_UPDATE()
 end
 
 function mod:SCENARIO_UPDATE()
