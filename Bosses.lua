@@ -124,7 +124,7 @@ do
 					end
 				end
 
-				startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId))
+				startBar(spellName, timer, 0, (GetSpellTexture(msg[3] or spellId)))
 			end
 			if msg[1] then
 				print(printLit, msg[1])
