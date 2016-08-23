@@ -5,7 +5,7 @@ local L = mod.L
 
 -- Options
 L.lock = "Vérouiller"
-L.barIcon = "Icon sur la barre "
+L.barIcon = "Icône sur la barre "
 L.showTime = "Afficher le temps"
 L.fillBar = "Remplissage des barres"
 L.font = "Police d'écriture"
