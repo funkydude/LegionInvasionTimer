@@ -6,6 +6,7 @@ local colorTbl = mod.c
 local myID = UnitGUID("player")
 local startBar, stopBar = mod.startBar, mod.stopBar
 local flameFissureTime = 15
+local hasStoppedBars = false
 local printLit = "|cFF33FF99LegionInvasionTimer|r:"
 f:SetScript("OnEvent", function(frame, event, ...)
 	mod[event](mod, ...)
@@ -38,8 +39,8 @@ function mod:SCENARIO_UPDATE()
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			myID = UnitGUID("player")
 			flameFissureTime = 15
+			hasStoppedBars = false
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register
-			stopBar(nil, true)
 		end
 	end
 end
@@ -124,6 +125,10 @@ do
 					end
 				end
 
+				if not hasStoppedBars then
+					hasStoppedBars = true
+					stopBar(nil, true)
+				end
 				startBar(spellName, timer, 0, (GetSpellTexture(msg[3] or spellId)))
 			end
 			if msg[1] then
@@ -208,6 +213,7 @@ function mod:SCENARIO_COMPLETED()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
 		flameFissureTime = 15
 		f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss killed, unregister
+		hasStoppedBars = false
 		stopBar(nil, true)
 	end
 end
