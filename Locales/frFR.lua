@@ -4,13 +4,13 @@ local _, mod = ...
 local L = mod.L
 
 -- Core
-L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t New invasions available!"
-L.tooltipClick = "|cffeda55fClick|r to drag and move."
-L.tooltipClickOptions = "|cffeda55fRight-Click|r to open options."
-L.searching = "Searching..."
+L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Nouvelles invasions disponibles !"
+L.tooltipClick = "|cffeda55fClick|r pour glisser et déplacer."
+L.tooltipClickOptions = "|cffeda55fRight-Click|r pour ouvrir les options."
+L.searching = "En cours de recherche..."
 
 -- Bosses
-L.runToBoss = "Run to boss!"
+L.runToBoss = "Courrez vers le boss !"
 L.runAwayFromBoss = "Run away from boss!"
 L.frontConeDmg = "Frontal cone damage!"
 L.frontalCleave = "Frontal Cleave!"
