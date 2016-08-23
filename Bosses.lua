@@ -4,8 +4,7 @@ local name, mod = ...
 local L = mod.L
 local colorTbl = mod.c
 local myID = UnitGUID("player")
-local startBar = nil
-local bar1Used, bar2Used, bar3Used = nil, nil, nil
+local startBar, stopBar = mod.startBar, mod.stopBar
 local flameFissureTime = 15
 local printLit = "|cFF33FF99LegionInvasionTimer|r:"
 f:SetScript("OnEvent", function(frame, event, ...)
@@ -21,7 +20,6 @@ function mod:PLAYER_LOGIN()
 		return -- Good times come to an end
 	end
 
-	startBar = self.f.startBar
 	f:RegisterEvent("SCENARIO_UPDATE")
 	f:RegisterEvent("SCENARIO_COMPLETED")
 	f:RegisterEvent("CHAT_MSG_CURRENCY")
@@ -39,9 +37,9 @@ function mod:SCENARIO_UPDATE()
 		local _,_, rewardQuestIDInv = GetInvasionInfo(i)
 		if rewardQuestID == rewardQuestIDInv and currentStage == 4 then
 			myID = UnitGUID("player")
-			bar1Used, bar2Used, bar3Used = nil, nil, nil
 			flameFissureTime = 15
 			f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss is coming up, register
+			stopBar(nil, true)
 		end
 	end
 end
@@ -126,16 +124,7 @@ do
 					end
 				end
 
-				if not bar1Used or bar1Used == spellId then
-					bar1Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 1)
-				elseif not bar2Used or bar2Used == spellId then
-					bar2Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 2)
-				elseif not bar3Used or bar3Used == spellId then
-					bar3Used = spellId
-					startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId), 3)
-				end
+				startBar(spellName, timer, 0, GetSpellTexture(msg[3] or spellId))
 			end
 			if msg[1] then
 				print(printLit, msg[1])
@@ -217,9 +206,9 @@ function mod:SCENARIO_COMPLETED()
 	if self.f.db.hideBossWarnings then return end
 	local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 	if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
-		bar1Used, bar2Used, bar3Used = nil, nil, nil
 		flameFissureTime = 15
 		f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED") -- Boss killed, unregister
+		stopBar(nil, true)
 	end
 end
 

@@ -51,9 +51,9 @@ local acOptions = {
 			order = 2,
 			set = function(info, value)
 				lit.db.icon = value
-				lit.bar1:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-				lit.bar2:SetIcon(value and 236292)
-				lit.bar3:SetIcon(value and 236292)
+				for bar in next, lit.bars do
+					bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				end
 			end,
 		},
 		timeText = {
@@ -62,9 +62,9 @@ local acOptions = {
 			order = 3,
 			set = function(info, value)
 				lit.db.timeText = value
-				lit.bar1:SetTimeVisibility(value)
-				lit.bar2:SetTimeVisibility(value)
-				lit.bar3:SetTimeVisibility(value)
+				for bar in next, lit.bars do
+					bar:SetTimeVisibility(value)
+				end
 			end,
 		},
 		fill = {
@@ -73,9 +73,9 @@ local acOptions = {
 			order = 4,
 			set = function(info, value)
 				lit.db.fill = value
-				lit.bar1:SetFill(value)
-				lit.bar2:SetFill(value)
-				lit.bar3:SetFill(value)
+				for bar in next, lit.bars do
+					bar:SetFill(value)
+				end
 			end,
 		},
 		font = {
@@ -93,12 +93,10 @@ local acOptions = {
 				local list = media:List("font")
 				local font = list[value]
 				lit.db.font = font
-				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				for bar in next, lit.bars do
+					bar.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+				end
 			end,
 		},
 		fontSize = {
@@ -110,12 +108,10 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				lit.db.fontSize = value
-				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				for bar in next, lit.bars do
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+				end
 			end,
 		},
 		monochrome = {
@@ -124,12 +120,10 @@ local acOptions = {
 			order = 7,
 			set = function(info, value)
 				lit.db.monochrome = value
-				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				for bar in next, lit.bars do
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				end
 			end,
 		},
 		outline = {
@@ -143,12 +137,10 @@ local acOptions = {
 			},
 			set = function(info, value)
 				lit.db.outline = value
-				lit.bar1.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar1.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar2.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-				lit.bar3.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				for bar in next, lit.bars do
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+				end
 			end,
 		},
 		barTexture = {
@@ -166,9 +158,9 @@ local acOptions = {
 				local list = media:List("statusbar")
 				local texture = list[value]
 				lit.db.barTexture = texture
-				lit.bar1:SetTexture(media:Fetch("statusbar", texture))
-				lit.bar2:SetTexture(media:Fetch("statusbar", texture))
-				lit.bar3:SetTexture(media:Fetch("statusbar", texture))
+				for bar in next, lit.bars do
+					bar:SetTexture(media:Fetch("statusbar", texture))
+				end
 			end,
 		},
 		spacing = {
@@ -180,17 +172,7 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				lit.db.spacing = value
-				if lit.db.growUp then
-					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, value)
-					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, value)
-					lit.bar3:SetPoint("BOTTOMLEFT", lit.bar2, "TOPLEFT", 0, value)
-					lit.bar3:SetPoint("BOTTOMRIGHT", lit.bar2, "TOPRIGHT", 0, value)
-				else
-					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -value)
-					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -value)
-					lit.bar3:SetPoint("TOPLEFT", lit.bar2, "BOTTOMLEFT", 0, -value)
-					lit.bar3:SetPoint("TOPRIGHT", lit.bar2, "BOTTOMRIGHT", 0, -value)
-				end
+				lit.rearrangeBars()
 			end,
 		},
 		width = {
@@ -202,9 +184,9 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				lit.db.width = value
-				lit.bar1:SetWidth(value)
-				lit.bar2:SetWidth(value)
-				lit.bar3:SetWidth(value)
+				for bar in next, lit.bars do
+					bar:SetWidth(value)
+				end
 			end,
 		},
 		height = {
@@ -216,9 +198,9 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				lit.db.height = value
-				lit.bar1:SetHeight(value)
-				lit.bar2:SetHeight(value)
-				lit.bar3:SetHeight(value)
+				for bar in next, lit.bars do
+					bar:SetHeight(value)
+				end
 			end,
 		},
 		alignZone = {
@@ -232,9 +214,9 @@ local acOptions = {
 			},
 			set = function(info, value)
 				lit.db.alignZone = value
-				lit.bar1.candyBarLabel:SetJustifyH(value)
-				lit.bar2.candyBarLabel:SetJustifyH(value)
-				lit.bar3.candyBarLabel:SetJustifyH(value)
+				for bar in next, lit.bars do
+					bar.candyBarLabel:SetJustifyH(value)
+				end
 			end,
 		},
 		alignTime = {
@@ -248,9 +230,9 @@ local acOptions = {
 			},
 			set = function(info, value)
 				lit.db.alignTime = value
-				lit.bar1.candyBarDuration:SetJustifyH(value)
-				lit.bar2.candyBarDuration:SetJustifyH(value)
-				lit.bar3.candyBarDuration:SetJustifyH(value)
+				for bar in next, lit.bars do
+					bar.candyBarDuration:SetJustifyH(value)
+				end
 			end,
 		},
 		growUp = {
@@ -259,22 +241,7 @@ local acOptions = {
 			order = 15,
 			set = function(info, value)
 				lit.db.growUp = value
-				lit.bar1:ClearAllPoints()
-				lit.bar2:ClearAllPoints()
-				lit.bar3:ClearAllPoints()
-				if value then
-					lit.bar1:SetPoint("BOTTOM", lit, "TOP")
-					lit.bar2:SetPoint("BOTTOMLEFT", lit.bar1, "TOPLEFT", 0, lit.db.spacing)
-					lit.bar2:SetPoint("BOTTOMRIGHT", lit.bar1, "TOPRIGHT", 0, lit.db.spacing)
-					lit.bar3:SetPoint("BOTTOMLEFT", lit.bar2, "TOPLEFT", 0, lit.db.spacing)
-					lit.bar3:SetPoint("BOTTOMRIGHT", lit.bar2, "TOPRIGHT", 0, lit.db.spacing)
-				else
-					lit.bar1:SetPoint("TOP", lit, "BOTTOM")
-					lit.bar2:SetPoint("TOPLEFT", lit.bar1, "BOTTOMLEFT", 0, -lit.db.spacing)
-					lit.bar2:SetPoint("TOPRIGHT", lit.bar1, "BOTTOMRIGHT", 0, -lit.db.spacing)
-					lit.bar3:SetPoint("TOPLEFT", lit.bar2, "BOTTOMLEFT", 0, -lit.db.spacing)
-					lit.bar3:SetPoint("TOPRIGHT", lit.bar2, "BOTTOMRIGHT", 0, -lit.db.spacing)
-				end
+				lit.rearrangeBars()
 			end,
 		},
 		colorText = {
@@ -286,9 +253,9 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				lit.db.colorText = {r, g, b, a}
-				lit.bar1:SetTextColor(r, g, b, a)
-				lit.bar2:SetTextColor(r, g, b, a)
-				lit.bar3:SetTextColor(r, g, b, a)
+				for bar in next, lit.bars do
+					bar:SetTextColor(r, g, b, a)
+				end
 			end,
 		},
 		colorComplete = {
@@ -300,14 +267,10 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				lit.db.colorComplete = {r, g, b, a}
-				if lit.bar1:Get("LegionInvasionTimer:complete") == 1 then
-					lit.bar1:SetColor(r, g, b, a)
-				end
-				if lit.bar2:Get("LegionInvasionTimer:complete") == 1 then
-					lit.bar2:SetColor(r, g, b, a)
-				end
-				if lit.bar3:Get("LegionInvasionTimer:complete") == 1 then
-					lit.bar3:SetColor(r, g, b, a)
+				for bar in next, lit.bars do
+					if bar:Get("LegionInvasionTimer:complete") == 1 then
+						bar:SetColor(r, g, b, a)
+					end
 				end
 			end,
 		},
@@ -320,14 +283,10 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				lit.db.colorIncomplete = {r, g, b, a}
-				if lit.bar1:Get("LegionInvasionTimer:complete") == 0 then
-					lit.bar1:SetColor(r, g, b, a)
-				end
-				if lit.bar2:Get("LegionInvasionTimer:complete") == 0 then
-					lit.bar2:SetColor(r, g, b, a)
-				end
-				if lit.bar3:Get("LegionInvasionTimer:complete") == 0 then
-					lit.bar3:SetColor(r, g, b, a)
+				for bar in next, lit.bars do
+					if bar:Get("LegionInvasionTimer:complete") == 0 then
+						bar:SetColor(r, g, b, a)
+					end
 				end
 			end,
 		},
@@ -341,14 +300,10 @@ local acOptions = {
 			end,
 			set = function(info, r, g, b, a)
 				lit.db.colorBarBackground = {r, g, b, a}
-				if lit.bar1 then
-					lit.bar1.candyBarBackground:SetVertexColor(r, g, b, a)
-				end
-				if lit.bar2 then
-					lit.bar2.candyBarBackground:SetVertexColor(r, g, b, a)
-				end
-				if lit.bar3 then
-					lit.bar3.candyBarBackground:SetVertexColor(r, g, b, a)
+				for bar in next, lit.bars do
+					if bar then
+						bar.candyBarBackground:SetVertexColor(r, g, b, a)
+					end
 				end
 			end,
 		},

@@ -5,6 +5,7 @@ local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
 mod.c = {r=1,g=1,b=1}
+local bars = {}
 
 local frame = CreateFrame("Frame", name, UIParent)
 mod.f = frame
@@ -17,6 +18,7 @@ frame:RegisterForDrag("LeftButton")
 frame:SetClampedToScreen(true)
 frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
+frame.bars = bars
 
 local OnEnter
 do
@@ -52,40 +54,61 @@ do
 	end
 end
 
-local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
-	local bar
-	if count == 1 then
-		if frame.bar1 then frame.bar1:Stop(true) end
-		frame.bar1 = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
-		bar = frame.bar1
-		if legionTimerDB.growUp then
-			bar:SetPoint("BOTTOM", name, "TOP")
-		else
-			bar:SetPoint("TOP", name, "BOTTOM")
+local rearrangeBars
+do
+	-- Ripped from BigWigs bar sorter
+	local function barSorter(a, b)
+		return a.remaining < b.remaining and true or false
+	end
+	local tmp = {}
+	rearrangeBars = function()
+		wipe(tmp)
+		for bar in next, bars do
+			tmp[#tmp + 1] = bar
 		end
-	elseif count == 2 then
-		if frame.bar2 then frame.bar2:Stop() end
-		frame.bar2 = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
-		bar = frame.bar2
-		if legionTimerDB.growUp then
-			frame.bar2:SetPoint("BOTTOMLEFT", frame.bar1, "TOPLEFT", 0, legionTimerDB.spacing)
-			frame.bar2:SetPoint("BOTTOMRIGHT", frame.bar1, "TOPRIGHT", 0, legionTimerDB.spacing)
-		else
-			frame.bar2:SetPoint("TOPLEFT", frame.bar1, "BOTTOMLEFT", 0, -legionTimerDB.spacing)
-			frame.bar2:SetPoint("TOPRIGHT", frame.bar1, "BOTTOMRIGHT", 0, -legionTimerDB.spacing)
-		end
-	else
-		if frame.bar3 then frame.bar3:Stop() end
-		frame.bar3 = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
-		bar = frame.bar3
-		if legionTimerDB.growUp then
-			frame.bar3:SetPoint("BOTTOMLEFT", frame.bar2, "TOPLEFT", 0, legionTimerDB.spacing)
-			frame.bar3:SetPoint("BOTTOMRIGHT", frame.bar2, "TOPRIGHT", 0, legionTimerDB.spacing)
-		else
-			frame.bar3:SetPoint("TOPLEFT", frame.bar2, "BOTTOMLEFT", 0, -legionTimerDB.spacing)
-			frame.bar3:SetPoint("TOPRIGHT", frame.bar2, "BOTTOMRIGHT", 0, -legionTimerDB.spacing)
+		table.sort(tmp, barSorter)
+		local lastBar = nil
+		local up = legionTimerDB.growUp
+		for i, bar in next, tmp do
+			local spacing = legionTimerDB.spacing
+			bar:ClearAllPoints()
+			if up then
+				if lastBar then -- Growing from a bar
+					bar:SetPoint("BOTTOMLEFT", lastBar, "TOPLEFT", 0, spacing)
+					bar:SetPoint("BOTTOMRIGHT", lastBar, "TOPRIGHT", 0, spacing)
+				else -- Growing from the anchor
+					bar:SetPoint("BOTTOM", frame, "TOP")
+				end
+				lastBar = bar
+			else
+				if lastBar then -- Growing from a bar
+					bar:SetPoint("TOPLEFT", lastBar, "BOTTOMLEFT", 0, -spacing)
+					bar:SetPoint("TOPRIGHT", lastBar, "BOTTOMRIGHT", 0, -spacing)
+				else -- Growing from the anchor
+					bar:SetPoint("TOP", frame, "BOTTOM")
+				end
+				lastBar = bar
+			end
 		end
 	end
+	frame.rearrangeBars = rearrangeBars
+end
+
+local function stopBar(text, stopAll)
+	for bar in next, bars do
+		if stopAll then
+			bar:Stop(true)
+		elseif bar:GetLabel() == text then
+			bar:Stop(true)
+		end
+	end
+end
+mod.stopBar = stopBar
+
+local function startBar(text, timeLeft, rewardQuestID, icon, pause, first)
+	stopBar(text)
+	local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
+	bars[bar] = true
 
 	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
@@ -102,6 +125,9 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 			bar:SetColor(unpack(legionTimerDB.colorIncomplete))
 			bar:Set("LegionInvasionTimer:complete", 0)
 		end
+	end
+	if first then
+		bar:Set("LegionInvasionTimer:first", true)
 	end
 	bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
 	bar:SetTextColor(unpack(legionTimerDB.colorText))
@@ -129,7 +155,9 @@ local function startBar(text, timeLeft, rewardQuestID, icon, count, pause)
 	else
 		bar:Start() -- Boss bars
 	end
+	rearrangeBars()
 end
+mod.startBar = startBar
 
 local hasPausedBars, justLoggedIn = false, true
 local function findTimer()
@@ -144,8 +172,8 @@ local function findTimer()
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 121 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, count) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-			if count == 3 then break end -- 3 events
+			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, nil, count == 1) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			if count == 3 then break end -- 3 events, this will increase over time, we limit it on purpose for now.
 			count = count + 1
 			if hasPausedBars then
 				hasPausedBars = false
@@ -169,7 +197,7 @@ local function findTimer()
 	if count == 1 then
 		if not hasPausedBars then
 			hasPausedBars = true
-			startBar(L.searching, 7200, 0, 132177, count, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			startBar(L.searching, 7200, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 		end
 		Timer(3, findTimer) -- Start hunting for the next event
 	end
@@ -242,7 +270,6 @@ frame:SetScript("OnEvent", function(f)
 	header:SetAllPoints(f)
 	header:SetText(name)
 	f.header = header
-	f.startBar = startBar
 	f.db = legionTimerDB
 
 	if legionTimerDB.lock then
@@ -252,15 +279,12 @@ frame:SetScript("OnEvent", function(f)
 	end
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar, dontScan)
-		if not dontScan and bar == frame.bar1 and bar:Get("LegionInvasionTimer:complete") then
-			Timer(2, findTimer) -- Event over, start hunting for the next event
-		end
-		if bar == frame.bar1 then
-			frame.bar1 = nil
-		elseif bar == frame.bar2 then
-			frame.bar2 = nil
-		elseif bar == frame.bar3 then
-			frame.bar3 = nil
+		if bars[bar] then
+			bars[bar] = nil
+			if not dontScan and bar:Get("LegionInvasionTimer:first") then
+				Timer(2, findTimer) -- Event over, start hunting for the next event
+			end
+			rearrangeBars()
 		end
 	end)
 
@@ -270,7 +294,7 @@ frame:SetScript("OnEvent", function(f)
 	f:SetScript("OnEvent", function()
 		local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
 		if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
-			Timer(8, findTimer) -- Update bar color
+			Timer(4, findTimer) -- Update bar color
 		end
 	end)
 end)
