@@ -105,7 +105,8 @@ local function stopBar(text, stopAll)
 end
 mod.stopBar = stopBar
 
-local function startBar(text, timeLeft, rewardQuestID, icon, pause, first)
+local function startBar(eventName, timeLeft, rewardQuestID, icon, pause, first)
+	local text = eventName:match("[^%:]+: ?(.+)") or eventName -- Strip out the "Legion Invasion: " part and leave the zone name behind.
 	stopBar(text)
 	local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 	bars[bar] = true
@@ -113,7 +114,7 @@ local function startBar(text, timeLeft, rewardQuestID, icon, pause, first)
 	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
 	bar:SetParent(frame)
-	bar:SetLabel(text:match("[^%:]+: ?(.+)") or text) -- Strip out the "Legion Invasion: " part and leave the zone name behind.
+	bar:SetLabel(text)
 	bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
 	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
 	bar:SetDuration(timeLeft)
@@ -177,6 +178,7 @@ local function findTimer()
 			count = count + 1
 			if hasPausedBars then
 				hasPausedBars = false
+				stopBar(L.searching)
 				-- Sometimes Blizz doesn't reset the quest ID very quickly after a new event spawns, do another few checks to fix colors if so
 				-- We do multiple checks to try and fix the (potential) issue as fast as possible
 				-- This is cleaner than trying to implement some method of remembering what were saved to, unless 20 sec isn't long enough to compensate...
