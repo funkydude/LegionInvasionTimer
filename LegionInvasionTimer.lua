@@ -169,13 +169,12 @@ local function findTimer()
 	-- 7 Legion Invasion: Hillsbrad 0 43285
 	-- 8 Legion Invasion: Azshara 0 43301
 
-	local count = 1
+	local first = true
 	for i = 3, 8 do
 		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
 		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 121 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, nil, count == 1) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-			if count == 3 then break end -- 3 events, this will increase over time, we limit it on purpose for now.
-			count = count + 1
+			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			first = false
 			if hasPausedBars then
 				hasPausedBars = false
 				stopBar(L.searching)
@@ -196,7 +195,7 @@ local function findTimer()
 		end
 	end
 
-	if count == 1 then
+	if first then
 		if not hasPausedBars then
 			hasPausedBars = true
 			startBar(L.searching, 7200, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
