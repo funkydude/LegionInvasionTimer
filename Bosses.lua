@@ -92,6 +92,7 @@ do
 			[219310] = {false, 23}, -- Cripple
 			[218637] = {false, 15}, -- Pyrogenics, bar here, warning in APPLIED
 			[225268] = {false, 34}, -- Legion's Flames, bar here, warning in APPLIED
+			[219940] = {false, 51}, -- Shadow Meteor, bar here, warning in APPLIED
 		},
 	}
 	function mod:COMBAT_LOG_EVENT_UNFILTERED(_, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
@@ -196,6 +197,12 @@ do
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.ballOnYou.. " (".. spellName ..")"
 				print(printLit, msg)
 				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 4)
+				PlaySound("RaidWarning", "Master")
+			elseif spellId == 219940 and destGUID == myID then -- Shadow Meteor
+				-- 6 sec debuff, split damage after expiration
+				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.soakMeteor.. " (".. spellName.. ")"
+				print(printLit, msg)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, msg, colorTbl, 5)
 				PlaySound("RaidWarning", "Master")
 			elseif (spellId == 219367 or spellId == 207576 or spellId == 217549) and destGUID == myID then -- Rain of Fire / Fel Fire / Fel Flames
 				local msg = "|T".. GetSpellTexture(spellId) ..texString.. L.runOut:format(spellName)
