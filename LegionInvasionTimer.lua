@@ -105,60 +105,68 @@ local function stopBar(text, stopAll)
 end
 mod.stopBar = stopBar
 
-local function startBar(eventName, timeLeft, rewardQuestID, icon, pause, first)
-	local text = eventName:match("[^%:]+: ?(.+)") or eventName -- Strip out the "Legion Invasion: " part and leave the zone name behind.
-	stopBar(text)
-	local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
-	bars[bar] = true
+local startBar
+do
+	local L = GetLocale()
+	local pattern = "[^:]+: ?(.+)"
+	if L == "zhCN" or L == "zhTW" then
+		pattern = "[^：]+： ?(.+)" -- Different colon on Chinese clients
+	end
+	startBar = function(eventName, timeLeft, rewardQuestID, icon, pause, first)
+		local text = eventName:match(pattern) or eventName -- Strip out the "Legion Invasion: " part and leave the zone name behind.
+		stopBar(text)
+		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
+		bars[bar] = true
 
-	bar:SetScript("OnEnter", OnEnter)
-	bar:SetScript("OnLeave", GameTooltip_Hide)
-	bar:SetParent(frame)
-	bar:SetLabel(text)
-	bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
-	bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
-	bar:SetDuration(timeLeft)
-	if rewardQuestID > 0 then
-		if IsQuestFlaggedCompleted(rewardQuestID) then
-			bar:SetColor(unpack(legionTimerDB.colorComplete))
-			bar:Set("LegionInvasionTimer:complete", 1)
-		else
-			bar:SetColor(unpack(legionTimerDB.colorIncomplete))
-			bar:Set("LegionInvasionTimer:complete", 0)
+		bar:SetScript("OnEnter", OnEnter)
+		bar:SetScript("OnLeave", GameTooltip_Hide)
+		bar:SetParent(frame)
+		bar:SetLabel(text)
+		bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
+		bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
+		bar:SetDuration(timeLeft)
+		if rewardQuestID > 0 then
+			if IsQuestFlaggedCompleted(rewardQuestID) then
+				bar:SetColor(unpack(legionTimerDB.colorComplete))
+				bar:Set("LegionInvasionTimer:complete", 1)
+			else
+				bar:SetColor(unpack(legionTimerDB.colorIncomplete))
+				bar:Set("LegionInvasionTimer:complete", 0)
+			end
 		end
+		if first then
+			bar:Set("LegionInvasionTimer:first", true)
+		end
+		bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
+		bar:SetTextColor(unpack(legionTimerDB.colorText))
+		if legionTimerDB.icon then
+			bar:SetIcon(icon)
+		end
+		bar:SetTimeVisibility(legionTimerDB.timeText)
+		bar:SetFill(legionTimerDB.fill)
+		local flags = nil
+		if legionTimerDB.monochrome and legionTimerDB.outline ~= "NONE" then
+			flags = "MONOCHROME," .. legionTimerDB.outline
+		elseif legionTimerDB.monochrome then
+			flags = "MONOCHROME"
+		elseif legionTimerDB.outline ~= "NONE" then
+			flags = legionTimerDB.outline
+		end
+		bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
+		bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
+		if pause then -- Searching bars
+			bar:Start()
+			bar:Pause()
+			bar:SetTimeVisibility(false)
+		elseif rewardQuestID > 0 then -- Zone bars
+			bar:Start(7200) -- 2hrs = 60*2 = 120min = 120*60 = 7,200sec
+		else
+			bar:Start() -- Boss bars
+		end
+		rearrangeBars()
 	end
-	if first then
-		bar:Set("LegionInvasionTimer:first", true)
-	end
-	bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
-	bar:SetTextColor(unpack(legionTimerDB.colorText))
-	if legionTimerDB.icon then
-		bar:SetIcon(icon)
-	end
-	bar:SetTimeVisibility(legionTimerDB.timeText)
-	bar:SetFill(legionTimerDB.fill)
-	local flags = nil
-	if legionTimerDB.monochrome and legionTimerDB.outline ~= "NONE" then
-		flags = "MONOCHROME," .. legionTimerDB.outline
-	elseif legionTimerDB.monochrome then
-		flags = "MONOCHROME"
-	elseif legionTimerDB.outline ~= "NONE" then
-		flags = legionTimerDB.outline
-	end
-	bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-	bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-	if pause then -- Searching bars
-		bar:Start()
-		bar:Pause()
-		bar:SetTimeVisibility(false)
-	elseif rewardQuestID > 0 then -- Zone bars
-		bar:Start(7200) -- 2hrs = 60*2 = 120min = 120*60 = 7,200sec
-	else
-		bar:Start() -- Boss bars
-	end
-	rearrangeBars()
+	mod.startBar = startBar
 end
-mod.startBar = startBar
 
 local hasPausedBars, justLoggedIn = false, true
 local function findTimer()
