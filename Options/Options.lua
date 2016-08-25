@@ -307,9 +307,9 @@ local acOptions = {
 				end
 			end,
 		},
-		separator1 = {
+		headerBossSettings = {
 			type = "header",
-			name = "Boss Settings",
+			name = L.headerBossSettings,
 			order = 19,
 		},
 		hideBossWarnings = {
@@ -320,9 +320,9 @@ local acOptions = {
 				lit.db.hideBossWarnings = value
 			end,
 		},
-		separator2 = {
+		headerBarVilibility = {
 			type = "header",
-			name = "Bar Visibility",
+			name = L.headerBarVilibility,
 			order = 20,
 		},
 		hideInRaid = {
