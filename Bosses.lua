@@ -229,10 +229,11 @@ do
 	local hidden = false -- Use our own var instead of IsShown to allow players to hide it manually at will
 	function mod:ZONE_CHANGED_NEW_AREA()
 		if	(self.f.db.hideInRaid and (select(2, GetInstanceInfo()) == "raid")) or
-				(self.f.db.hideInInstance and (select(2, GetInstanceInfo()) == "party")) or
-				(self.f.db.hideInArena and (select(2, GetInstanceInfo()) == "arena")) or
-				(self.f.db.hideInBattleground and (select(2, GetInstanceInfo()) == "pvp")) or
-				(self.f.db.hideInScenario and (select(2, GetInstanceInfo()) == "scenario")) then
+			(self.f.db.hideInInstance and (select(2, GetInstanceInfo()) == "party")) or
+			(self.f.db.hideInArena and (select(2, GetInstanceInfo()) == "arena")) or
+			(self.f.db.hideInBattleground and (select(2, GetInstanceInfo()) == "pvp")) or
+			(self.f.db.hideInScenario and (select(2, GetInstanceInfo()) == "scenario"))
+		then
 			hidden = true
 			self.f:Hide()
 		elseif hidden then
