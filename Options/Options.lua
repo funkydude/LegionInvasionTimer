@@ -307,30 +307,91 @@ local acOptions = {
 				end
 			end,
 		},
-		separator = {
+		separator1 = {
 			type = "header",
-			name = "",
-			order = 18.2,
+			name = "Boss Settings",
+			order = 19,
 		},
 		hideBossWarnings = {
 			type = "toggle",
 			name = L.hideBossWarnings,
-			order = 19,
+			order = 19.1,
 			set = function(info, value)
 				lit.db.hideBossWarnings = value
 			end,
 		},
+		separator2 = {
+			type = "header",
+			name = "Bar Visibility",
+			order = 20,
+		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 20,
+			order = 20.1,
 			set = function(info, value)
 				lit.db.hideInRaid = value
+				if (value) and (select(2, GetInstanceInfo()) == "raid") then
+					lit:Hide();
+				elseif (not value) and (select(2, GetInstanceInfo()) == "raid") then
+					lit:Show();
+				end
+			end,
+		},
+		hideInInstance = {
+			type = "toggle",
+			name = L.hideInInstance,
+			order = 20.2,
+			set = function(info, value)
+				lit.db.hideInInstance = value
+				if (value) and (select(2, GetInstanceInfo()) == "party") then
+					lit:Hide();
+				elseif (not value) and (select(2, GetInstanceInfo()) == "party") then
+					lit:Show();
+				end
+			end,
+		},
+		hideInArena = {
+			type = "toggle",
+			name = L.hideInArena,
+			order = 20.3,
+			set = function(info, value)
+				lit.db.hideInArena = value
+				if (value) and (select(2, GetInstanceInfo()) == "arena") then
+					lit:Hide();
+				elseif (not value) and (select(2, GetInstanceInfo()) == "arena") then
+					lit:Show();
+				end
+			end,
+		},
+		hideInBattleground = {
+			type = "toggle",
+			name = L.hideInBattleground,
+			order = 20.4,
+			set = function(info, value)
+				lit.db.hideInBattleground = value
+				if (value) and (select(2, GetInstanceInfo()) == "pvp") then
+					lit:Hide();
+				elseif (not value) and (select(2, GetInstanceInfo()) == "pvp") then
+					lit:Show();
+				end
+			end,
+		},
+		hideInScenario  = {
+			type = "toggle",
+			name = L.hideInScenario,
+			order = 20.5,
+			set = function(info, value)
+				lit.db.hideInScenario = value
+				if (value) and (select(2, GetInstanceInfo()) == "scenario") then
+					lit:Hide();
+				elseif (not value) and (select(2, GetInstanceInfo()) == "scenario") then
+					lit:Show();
+				end
 			end,
 		},
 	},
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 520)
-
+acd:SetDefaultSize(acOptions.name, 400, 605)
