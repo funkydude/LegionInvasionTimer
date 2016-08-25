@@ -221,6 +221,11 @@ frame:SetScript("OnEvent", function(f)
 		return -- Good times come to an end
 	end
 
+	local L = GetLocale()
+	if L == "itIT" or L == "ruRU" or L == "koKR" or L == "ptBR" then
+		Timer(5, function() print("|cFF33FF99LegionInvasionTimer|r: I need to be translated into '"..L.."' see the GitHub page for more info.") end)
+	end
+
 	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
 		legionTimerDB = {
 			fontSize = 10,
