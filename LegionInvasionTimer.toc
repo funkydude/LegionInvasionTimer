@@ -10,7 +10,7 @@
 ## Notes-frFR: Affiche les timers des invasions de la Légion.
 ## Notes-itIT: Shows the Legion invasion timer.
 ## Notes-koKR: Shows the Legion invasion timer.
-## Notes-ptBR: Shows the Legion invasion timer.
+## Notes-ptBR: Mostra o timer da invasão da legião.
 ## Notes-ruRU: Shows the Legion invasion timer.
 ## SavedVariables: legionTimerDB
 ## Version: @project-version@
