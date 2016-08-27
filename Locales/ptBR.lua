@@ -12,7 +12,7 @@ L.searching = "Procurando..."
 -- Bosses
 L.runToBoss = "Corra para o chefe!"
 L.runAwayFromBoss = "Fuja do Chefe!"
-L.frontConeDmg = "Dano cone frontal!"
+L.frontConeDmg = "Ondas de Medo!"
 L.frontalCleave = "Cleave frontal!"
 L.frontalCleaveWipe = "Frontal Cleave - Threat wipe!"
 L.debuffInc = "Debuff chegando!"
