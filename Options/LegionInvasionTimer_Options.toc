@@ -10,7 +10,7 @@
 ## Notes-frFR: Options de configuration de LegionInvasionTimer.
 ## Notes-itIT: LegionInvasionTimer Configuration Options.
 ## Notes-koKR: LegionInvasionTimer Configuration Options.
-## Notes-ptBR: LegionInvasionTimer Configuration Options.
+## Notes-ptBR: LegionInvasionTimer Opções de Configuração.
 ## Notes-ruRU: LegionInvasionTimer Configuration Options.
 ## Version: @project-version@
 ## X-Category: Miscellaneous
