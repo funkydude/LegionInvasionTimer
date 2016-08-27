@@ -225,13 +225,18 @@ function mod:SCENARIO_COMPLETED()
 	end
 end
 
-function mod:ZONE_CHANGED_NEW_AREA()
-	if self.f.db.hideInRaid then
-		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
-		if instanceId == 1228 or instanceId == 1205 or instanceId == 1448 then -- Highmaul, Blackrock Foundry, Hellfire Citadel
-			self.f:Hide()
-		elseif not self.f:IsShown() then
-			self.f:Show()
+do
+	local hidden = false -- Use our own var instead of IsShown to allow players to hide it manually at will
+	function mod:ZONE_CHANGED_NEW_AREA()
+		if self.f.db.hideInRaid then
+			local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
+			if instanceId == 1228 or instanceId == 1205 or instanceId == 1448 then -- Highmaul, Blackrock Foundry, Hellfire Citadel
+				hidden = true
+				self.f:Hide()
+			elseif hidden then
+				hidden = false
+				self.f:Show()
+			end
 		end
 	end
 end
