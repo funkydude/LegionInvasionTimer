@@ -5,8 +5,8 @@ local L = mod.L
 
 -- Core
 L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Новое вторжение доступно!"
-L.tooltipClick = "|cffeda55fClick|r преподнимите и переместите."
-L.tooltipClickOptions = "|cffeda55fRight-Click|r открыть настройки."
+L.tooltipClick = "|cffeda55fЛКМ|r преподнимите и переместите."
+L.tooltipClickOptions = "|cffeda55fПКМ|r открыть настройки."
 L.searching = "Поиск вторжений..."
 
 -- Bosses
