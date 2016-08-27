@@ -5,8 +5,8 @@ local L = mod.L
 
 -- Core
 L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Novas invasões disponíveis!"
-L.tooltipClick = "|cffeda55fClick|r para segurar e mover."
-L.tooltipClickOptions = "|cffeda55fRight-Click|r para abrir as opções."
+L.tooltipClick = "|cffeda55fClique|r para segurar e mover."
+L.tooltipClickOptions = "|cffeda55fClique-Direito|r para abrir as opções."
 L.searching = "Procurando..."
 
 -- Bosses
