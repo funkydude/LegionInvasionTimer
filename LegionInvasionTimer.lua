@@ -222,7 +222,7 @@ frame:SetScript("OnEvent", function(f)
 	end
 
 	local L = GetLocale()
-	if L == "itIT" or L == "ruRU" or L == "koKR" or L == "ptBR" then
+	if L == "itIT" or L == "koKR" then
 		Timer(5, function() print("|cFF33FF99LegionInvasionTimer|r: I need to be translated into '"..L.."' see the GitHub page for more info.") end)
 	end
 
