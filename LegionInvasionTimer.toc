@@ -11,7 +11,7 @@
 ## Notes-itIT: Shows the Legion invasion timer.
 ## Notes-koKR: Shows the Legion invasion timer.
 ## Notes-ptBR: Mostra o timer da invasão da legião.
-## Notes-ruRU: Shows the Legion invasion timer.
+## Notes-ruRU: Показывает время и место вторжений Легиона.
 ## SavedVariables: legionTimerDB
 ## Version: @project-version@
 ## X-Category: Miscellaneous
