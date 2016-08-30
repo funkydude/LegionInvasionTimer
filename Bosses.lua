@@ -15,7 +15,7 @@ f:RegisterEvent("PLAYER_LOGIN")
 
 function mod:PLAYER_LOGIN()
 	local weekday, month, day, year = CalendarGetDate()
-	if month ~= 8 or year ~= 2016 then
+	if month ~= 8 or year ~= 2016 or day > 29 then
 		f:SetScript("OnEvent", nil)
 		mod = nil
 		return -- Good times come to an end

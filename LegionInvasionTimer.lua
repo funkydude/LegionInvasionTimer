@@ -216,14 +216,9 @@ frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
 
 	local weekday, month, day, year = CalendarGetDate()
-	if month ~= 8 or year ~= 2016 then
+	if month ~= 8 or year ~= 2016 or day > 29 then
 		f:SetScript("OnEvent", nil)
 		return -- Good times come to an end
-	end
-
-	local L = GetLocale()
-	if L == "itIT" or L == "koKR" then
-		Timer(5, function() print("|cFF33FF99LegionInvasionTimer|r: I need to be translated into '"..L.."' see the GitHub page for more info.") end)
 	end
 
 	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
