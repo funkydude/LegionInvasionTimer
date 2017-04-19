@@ -238,6 +238,11 @@ frame:SetScript("OnEvent", function(f)
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
 			colorBarBackground = {0,0,0,0.75},
+			hideInRaid = true,
+			hideInInstance = true,
+			hideInArena = true,
+			hideInBattleground = true,
+			hideInScenario = true,
 		}
 	end
 	if legionTimerDB.texture then -- Cleanup old texture DB entry
@@ -307,4 +312,3 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 end)
-
