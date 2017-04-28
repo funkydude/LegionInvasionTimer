@@ -22,7 +22,7 @@ frame.bars = bars
 
 local OnEnter
 do
-	local id = 11201 -- Defender of Azeroth: Legion Invasions
+	local id = 11544 -- Defender of the Broken Isles
 	local GameTooltip = GameTooltip
 	local SHORTDATE = SHORTDATE -- "%2$d/%1$02d/%3$02d" month / day / year for English EU clients O.o
 	OnEnter = function(f)
@@ -49,7 +49,7 @@ do
 		local cName, amount = GetCurrencyInfo(1226) -- Nethershard
 		-- Icon 132775 = Interface\\Icons\\INV_DataCrystal01
 		-- Color text red if > 1900
-		GameTooltip:AddDoubleLine(cName, ("|T132775:15:15:0:0:64:64:4:60:4:60|t %d/2000"):format(amount), 1, 1, 1, 1, amount > 1900 and 0 or 1, amount > 1900 and 0 or 1)
+		GameTooltip:AddDoubleLine(cName, ("|T132775:15:15:0:0:64:64:4:60:4:60|t %d"):format(amount), 1, 1, 1, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end
@@ -107,13 +107,7 @@ mod.stopBar = stopBar
 
 local startBar
 do
-	local L = GetLocale()
-	local pattern = "[^:]+: ?(.+)"
-	if L == "zhCN" or L == "zhTW" then
-		pattern = "[^：]+： ?(.+)" -- Different colon on Chinese clients
-	end
-	startBar = function(eventName, timeLeft, rewardQuestID, icon, pause, first)
-		local text = eventName:match(pattern) or eventName -- Strip out the "Legion Invasion: " part and leave the zone name behind.
+	startBar = function(text, timeLeft, rewardQuestID, icon, pause, first)
 		stopBar(text)
 		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bars[bar] = true
@@ -169,19 +163,22 @@ do
 end
 
 local hasPausedBars, justLoggedIn = false, true
+local zonePOIIds = {5177, 5178, 5210, 5175}
+local zoneNames = {1024, 1017, 1018, 1015}
+local questIds = {45840, 45839, 45812, 45838}
 local function findTimer()
-	-- 3 Legion Invasion: Northern Barrens 0 43282
-	-- 4 Legion Invasion: Westfall 0 43245
-	-- 5 Legion Invasion: Tanaris 0 43244
-	-- 6 Legion Invasion: Dun Morogh 0 43284
-	-- 7 Legion Invasion: Hillsbrad 0 43285
-	-- 8 Legion Invasion: Azshara 0 43301
+	--1h 58min max
+	-- 5177 Highmountain 1024 45840
+	-- 5178 Stormheim 1017 45839
+	-- 5210 Val'Sharah 1018 45812
+	-- 5175 Azsuna 1015 45838
+	--C_WorldMap.GetAreaPOITimeLeft(self.poiID)
 
 	local first = true
-	for i = 3, 8 do
-		local zone, timeLeftMinutes, rewardQuestID = GetInvasionInfo(i)
-		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 121 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			startBar(zone, timeLeftMinutes * 60, rewardQuestID, 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+	for i = 1, #zonePOIIds do
+		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
+			startBar(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			first = false
 			if hasPausedBars then
 				hasPausedBars = false
@@ -214,12 +211,6 @@ end
 
 frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
-
-	local weekday, month, day, year = CalendarGetDate()
-	if month ~= 8 or year ~= 2016 or day > 29 then
-		f:SetScript("OnEvent", nil)
-		return -- Good times come to an end
-	end
 
 	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
 		legionTimerDB = {
