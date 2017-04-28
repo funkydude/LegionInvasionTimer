@@ -46,10 +46,10 @@ do
 		end
 		GameTooltip:AddLine(" ")
 
-		local cName, amount = GetCurrencyInfo(1226) -- Nethershard
-		-- Icon 132775 = Interface\\Icons\\INV_DataCrystal01
-		-- Color text red if > 1900
-		GameTooltip:AddDoubleLine(cName, ("|T132775:15:15:0:0:64:64:4:60:4:60|t %d"):format(amount), 1, 1, 1, 1, 1, 1)
+		local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
+		local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
+		GameTooltip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end
