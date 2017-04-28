@@ -24,13 +24,13 @@ local OnEnter
 do
 	local id = 11544 -- Defender of the Broken Isles
 	local GameTooltip = GameTooltip
-	local SHORTDATE = SHORTDATE -- "%2$d/%1$02d/%3$02d" month / day / year for English EU clients O.o
+	local FormatShortDate = FormatShortDate
 	OnEnter = function(f)
 		GameTooltip:SetOwner(f, "ANCHOR_NONE")
 		GameTooltip:SetPoint("BOTTOM", f, "TOP")
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
 		if wasEarnedByMe then
-			GameTooltip:AddDoubleLine(name, SHORTDATE:format(day, month, year), nil, nil, nil, .5, .5, .5)
+			GameTooltip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
 		else
 			GameTooltip:AddLine(name, nil, nil, nil, .5, .5, .5)
 		end
@@ -153,7 +153,7 @@ do
 			bar:Pause()
 			bar:SetTimeVisibility(false)
 		elseif rewardQuestID > 0 then -- Zone bars
-			bar:Start(7200) -- 2hrs = 60*2 = 120min = 120*60 = 7,200sec
+			bar:Start(21600) -- 6hrs = 60*6 = 360min = 360*60 = 21,600sec
 		else
 			bar:Start() -- Boss bars
 		end
@@ -167,7 +167,6 @@ local zonePOIIds = {5177, 5178, 5210, 5175}
 local zoneNames = {1024, 1017, 1018, 1015}
 local questIds = {45840, 45839, 45812, 45838}
 local function findTimer()
-	--1h 58min max
 	-- 5177 Highmountain 1024 45840
 	-- 5178 Stormheim 1017 45839
 	-- 5210 Val'Sharah 1018 45812
@@ -177,18 +176,12 @@ local function findTimer()
 	local first = true
 	for i = 1, #zonePOIIds do
 		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
-		if timeLeftMinutes and timeLeftMinutes > 1 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
+		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
 			startBar(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			first = false
 			if hasPausedBars then
 				hasPausedBars = false
-				stopBar(L.searching)
-				-- Sometimes Blizz doesn't reset the quest ID very quickly after a new event spawns, do another few checks to fix colors if so
-				-- We do multiple checks to try and fix the (potential) issue as fast as possible
-				-- This is cleaner than trying to implement some method of remembering what were saved to, unless 20 sec isn't long enough to compensate...
-				Timer(5, findTimer)
-				Timer(10, findTimer)
-				Timer(20, findTimer)
+				stopBar(NEXT)
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
 					FlashClientIcon()
 					print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
@@ -197,15 +190,21 @@ local function findTimer()
 				end
 			end
 			justLoggedIn = false
+
+			local t = time()
+			local elapsed = 360-timeLeftMinutes
+			t = t - (elapsed * 60)
+			legionTimerDB.prev = t
 		end
 	end
 
-	if first then
-		if not hasPausedBars then
-			hasPausedBars = true
-			--startBar(L.searching, 7200, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+	if first and legionTimerDB.prev then
+		-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
+		local elapsed = time() - legionTimerDB.prev
+		while elapsed > 66600 do
+			elapsed = elapsed - 66600
 		end
-		Timer(3, findTimer) -- Start hunting for the next event
+		startBar(NEXT, 66600-elapsed, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 	end
 end
 
@@ -290,12 +289,6 @@ frame:SetScript("OnEvent", function(f)
 
 	findTimer()
 	Timer(15, function() justLoggedIn = false end) -- We might log in during an event swap and never see the "new event" message, so use a timer here
-	f:RegisterEvent("SCENARIO_COMPLETED")
-	f:SetScript("OnEvent", function()
-		local _,_,_,_,_,_,_,_,_,scenarioType = C_Scenario.GetInfo()
-		if scenarioType == 4 then -- LE_SCENARIO_TYPE_LEGION_INVASION = 4
-			Timer(4, findTimer) -- Update bar color
-		end
-	end)
+	f:SetScript("OnEvent", nil)
 end)
 
