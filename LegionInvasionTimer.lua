@@ -203,7 +203,7 @@ local function findTimer()
 	if first then
 		if not hasPausedBars then
 			hasPausedBars = true
-			startBar(L.searching, 7200, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			--startBar(L.searching, 7200, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 		end
 		Timer(3, findTimer) -- Start hunting for the next event
 	end
