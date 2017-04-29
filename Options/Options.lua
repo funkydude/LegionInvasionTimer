@@ -21,6 +21,10 @@ local function updateFlags()
 	return flags
 end
 
+local function disabled()
+	return lit.db.mode ~= 1
+end
+
 local acOptions = {
 	type = "group",
 	name = "LegionInvasionTimer",
@@ -44,6 +48,7 @@ local acOptions = {
 					lit.header:Show()
 				end
 			end,
+			disabled = disabled,
 		},
 		icon = {
 			type = "toggle",
@@ -55,6 +60,7 @@ local acOptions = {
 					bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				end
 			end,
+			disabled = disabled,
 		},
 		timeText = {
 			type = "toggle",
@@ -66,6 +72,7 @@ local acOptions = {
 					bar:SetTimeVisibility(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		fill = {
 			type = "toggle",
@@ -77,6 +84,7 @@ local acOptions = {
 					bar:SetFill(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		font = {
 			type = "select",
@@ -98,6 +106,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		fontSize = {
 			type = "range",
@@ -113,6 +122,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		monochrome = {
 			type = "toggle",
@@ -125,6 +135,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		outline = {
 			type = "select",
@@ -142,6 +153,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		barTexture = {
 			type = "select",
@@ -162,6 +174,7 @@ local acOptions = {
 					bar:SetTexture(media:Fetch("statusbar", texture))
 				end
 			end,
+			disabled = disabled,
 		},
 		spacing = {
 			type = "range",
@@ -174,6 +187,7 @@ local acOptions = {
 				lit.db.spacing = value
 				lit.rearrangeBars()
 			end,
+			disabled = disabled,
 		},
 		width = {
 			type = "range",
@@ -188,6 +202,7 @@ local acOptions = {
 					bar:SetWidth(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		height = {
 			type = "range",
@@ -202,6 +217,7 @@ local acOptions = {
 					bar:SetHeight(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		alignZone = {
 			type = "select",
@@ -218,6 +234,7 @@ local acOptions = {
 					bar.candyBarLabel:SetJustifyH(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		alignTime = {
 			type = "select",
@@ -234,6 +251,7 @@ local acOptions = {
 					bar.candyBarDuration:SetJustifyH(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		growUp = {
 			type = "toggle",
@@ -243,6 +261,7 @@ local acOptions = {
 				lit.db.growUp = value
 				lit.rearrangeBars()
 			end,
+			disabled = disabled,
 		},
 		colorText = {
 			name = L.textColor,
@@ -257,6 +276,7 @@ local acOptions = {
 					bar:SetTextColor(r, g, b, a)
 				end
 			end,
+			disabled = disabled,
 		},
 		colorComplete = {
 			name = L.completedBar,
@@ -273,6 +293,7 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
 		},
 		colorIncomplete = {
 			name = L.incompleteBar,
@@ -289,6 +310,7 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
 		},
 		colorBarBackground = {
 			name = L.barBackground,
@@ -306,6 +328,7 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
 		},
 		separator = {
 			type = "header",
@@ -319,6 +342,7 @@ local acOptions = {
 			set = function(info, value)
 				lit.db.hideInRaid = value
 			end,
+			disabled = disabled,
 		},
 		mode = {
 			type = "select",
@@ -330,11 +354,17 @@ local acOptions = {
 			},
 			set = function(info, value)
 				lit.db.mode = value
+				if value ~= 1 then
+					lit.db.lock = true
+					lit:EnableMouse(false)
+					lit.bg:Hide()
+					lit.header:Hide()
+				end
 			end,
 		},
 	},
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 520)
+acd:SetDefaultSize(acOptions.name, 400, 530)
 
