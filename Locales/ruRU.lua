@@ -7,6 +7,3 @@ local L = mod.L
 L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Новое вторжение доступно!"
 L.tooltipClick = "|cffeda55fЛКМ|r преподнимите и переместите."
 L.tooltipClickOptions = "|cffeda55fПКМ|r открыть настройки."
---L.mode = "Mode"
---L.modeBar = "Bar"
---L.modeBroker = "Data Broker"
