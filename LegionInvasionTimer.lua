@@ -108,9 +108,9 @@ local function stopBar(text, stopAll)
 end
 mod.stopBar = stopBar
 
-local startBar, startBroker, stopBroker
+local startBar, startBroker
 do
-	startBar = function(text, timeLeft, rewardQuestID, icon, pause, first)
+	startBar = function(text, timeLeft, rewardQuestID, icon)
 		stopBar(text)
 		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bars[bar] = true
@@ -131,9 +131,6 @@ do
 				bar:Set("LegionInvasionTimer:complete", 0)
 			end
 		end
-		if first then
-			bar:Set("LegionInvasionTimer:first", true)
-		end
 		bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
 		bar:SetTextColor(unpack(legionTimerDB.colorText))
 		if legionTimerDB.icon then
@@ -151,14 +148,10 @@ do
 		end
 		bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 		bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-		if pause then -- Searching bars
-			bar:Start()
-			bar:Pause()
-			bar:SetTimeVisibility(false)
-		elseif rewardQuestID > 0 then -- Zone bars
+		if rewardQuestID > 0 then -- Invasion duration bars
 			bar:Start(21600) -- 6hrs = 60*6 = 360min = 360*60 = 21,600sec
-		else
-			bar:Start() -- Boss bars
+		else -- Next invasion bars
+			bar:Start()
 		end
 		rearrangeBars()
 	end
@@ -167,17 +160,14 @@ end
 
 do
 	local obj
-	local prevTime, label = 0, ""
+	local prevTime, label, repeater = 0, "", false
 	local function update()
 		prevTime = prevTime - 60
-		if prevTime > 0 then
-			obj.text = label..": ".. SecondsToTime(prevTime, true)
-			Timer(60, update)
-		end
+		obj.text = label..": ".. SecondsToTime(prevTime, true)
 	end
 	startBroker = function(text, timeLeft, icon)
 		if not obj then
-			local ls = LibStub("LibDataBroker-1.1")
+			local ls = LibStub("LibDataBroker-1.1", true)
 			if ls then
 				obj = ls:NewDataObject("LegionInvasionTimer", {type = "data source", icon = icon, text = text..": ".. SecondsToTime(timeLeft, true)})
 				function obj.OnTooltipShow(tooltip)
@@ -191,20 +181,17 @@ do
 			obj.text = text..": ".. SecondsToTime(timeLeft, true)
 			prevTime = timeLeft
 			label = text
-			Timer(60, update)
+			if repeater then repeater:Cancel() end
+			repeater = C_Timer.NewTicker(60, update)
 		end
-	end
-	stopBroker = function()
-		prevTime = 0
-		obj.text = label..": ".. SecondsToTime(prevTime, true)
 	end
 end
 
-local hasPausedBars, justLoggedIn = false, true
+local justLoggedIn = true
 local zonePOIIds = {5177, 5178, 5210, 5175}
 local zoneNames = {1024, 1017, 1018, 1015}
 local questIds = {45840, 45839, 45812, 45838}
-local function findTimer()
+local function FindInvasion()
 	-- 5177 Highmountain 1024 45840
 	-- 5178 Stormheim 1017 45839
 	-- 5210 Val'Sharah 1018 45812
@@ -216,21 +203,20 @@ local function findTimer()
 	for i = 1, #zonePOIIds do
 		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
+			stopBar(NEXT)
+			local t = timeLeftMinutes * 60
 			if mode == 1 then
-				startBar(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			else
-				startBroker(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end
+			Timer(t+60, FindInvasion)
 			first = false
-			if hasPausedBars then
-				hasPausedBars = false
-				stopBar(NEXT)
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
-					FlashClientIcon()
-					print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
-					RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c)
-					PlaySound("RaidWarning", "Master")
-				end
+			if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
+				FlashClientIcon()
+				print("|cFF33FF99LegionInvasionTimer|r:", L.invasionsAvailable)
+				RaidNotice_AddMessage(RaidBossEmoteFrame, L.invasionsAvailable, mod.c)
+				PlaySound("RaidWarning", "Master")
 			end
 			justLoggedIn = false
 
@@ -241,16 +227,22 @@ local function findTimer()
 		end
 	end
 
-	if first and legionTimerDB.prev then
-		-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-		local elapsed = time() - legionTimerDB.prev
-		while elapsed > 66600 do
-			elapsed = elapsed - 66600
-		end
-		if mode == 1 then
-			startBar(NEXT, 66600-elapsed, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+	if first then
+		if legionTimerDB.prev then
+			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
+			local elapsed = time() - legionTimerDB.prev
+			while elapsed > 66600 do
+				elapsed = elapsed - 66600
+			end
+			local t = 66600-elapsed
+			if mode == 1 then
+				startBar(NEXT, t, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			else
+				startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			end
+			Timer(t + 60, FindInvasion)
 		else
-			startBroker(NEXT, 66600-elapsed, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			Timer(60, FindInvasion)
 		end
 	end
 end
@@ -329,17 +321,14 @@ frame:SetScript("OnEvent", function(f)
 		f.header:Hide()
 	end
 
-	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar, dontScan)
+	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
 		if bars[bar] then
 			bars[bar] = nil
-			if not dontScan and bar:Get("LegionInvasionTimer:first") then
-				Timer(2, findTimer) -- Event over, start hunting for the next event
-			end
 			rearrangeBars()
 		end
 	end)
 
-	findTimer()
+	FindInvasion()
 	Timer(15, function()
 		justLoggedIn = false
 		if not legionTimerDB.prev then
