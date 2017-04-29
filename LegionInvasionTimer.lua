@@ -339,7 +339,12 @@ frame:SetScript("OnEvent", function(f)
 	end)
 
 	findTimer()
-	Timer(15, function() justLoggedIn = false end) -- We might log in during an event swap and never see the "new event" message, so use a timer here
+	Timer(15, function()
+		justLoggedIn = false
+		if not legionTimerDB.prev then
+			print("|cFF33FF99LegionInvasionTimer|r:", L.firstRunWarning)
+		end
+	end)
 	f:SetScript("OnEvent", nil)
 end)
 
