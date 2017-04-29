@@ -330,11 +330,11 @@ local acOptions = {
 		},
 		mode = {
 			type = "select",
-			name = "mode",
+			name = L.mode,
 			order = 21,
 			values = {
-				[1] = "Bar",
-				[2] = "Broker",
+				[1] = L.modeBar,
+				[2] = L.modeBroker,
 			},
 			set = function(info, value)
 				lit.db.mode = value

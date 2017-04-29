@@ -7,7 +7,9 @@ local L = mod.L
 L.invasionsAvailable = "|T236292:15:15:0:0:64:64:4:60:4:60|t Neue Invasionen verfügbar!"
 L.tooltipClick = "|cffeda55fKlick|r zum ziehen und bewegen."
 L.tooltipClickOptions = "|cffeda55fRechts-Klick|r um Optionen zu öffnen."
-L.searching = "Suche..."
+--L.mode = "Mode"
+--L.modeBar = "Bar"
+--L.modeBroker = "Data Broker"
 
 -- Bosses
 L.runToBoss = "Renne zum Boss!"
