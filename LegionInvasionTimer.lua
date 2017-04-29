@@ -210,6 +210,7 @@ do
 	end
 end
 
+local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
 local justLoggedIn, isWaiting = true, false
 local zonePOIIds = {5177, 5178, 5210, 5175}
 local zoneNames = {1024, 1017, 1018, 1015}
@@ -223,7 +224,7 @@ local function FindInvasion()
 	local found = false
 
 	for i = 1, #zonePOIIds do
-		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+		local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
 			stopBar(NEXT)
 			stopBar(L.waiting)
@@ -261,6 +262,8 @@ local function FindInvasion()
 			local t = 66600-elapsed
 
 			if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
+				-- If it's longer than 45k then an invasion is currently active.
+				-- Loop every second until GetAreaPOITimeLeft responds with valid results.
 				Timer(1, FindInvasion)
 				if not isWaiting then
 					isWaiting = true
@@ -395,7 +398,7 @@ frame:SetScript("OnEvent", function(f)
 	-- Force an update, needed for the very first login
 	local function update()
 		for i = 1, #zonePOIIds do
-			C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+			GetAreaPOITimeLeft(zonePOIIds[i])
 		end
 	end
 	Timer(1, FindInvasion)
