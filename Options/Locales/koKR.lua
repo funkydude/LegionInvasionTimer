@@ -29,7 +29,6 @@ local L = mod.L
 --L.completedBar = "Completed Bar"
 --L.incompleteBar = "Incomplete Bar"
 --L.barBackground = "Bar Background"
---L.hideBossWarnings = "Hide Boss Warnings"
 --L.hideInRaid = "Hide In Raid"
 --L.mode = "Mode"
 --L.modeBar = "Bar"

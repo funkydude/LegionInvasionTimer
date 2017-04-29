@@ -292,6 +292,7 @@ frame:SetScript("OnEvent", function(f)
 	if not legionTimerDB.mode then
 		legionTimerDB.mode = 1
 	end
+	legionTimerDB.hideBossWarnings = nil
 
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)

@@ -294,7 +294,7 @@ local acOptions = {
 			name = L.barBackground,
 			type = "color",
 			hasAlpha = true,
-			order = 18.1,
+			order = 19,
 			get = function()
 				return unpack(lit.db.colorBarBackground)
 			end,
@@ -310,20 +310,12 @@ local acOptions = {
 		separator = {
 			type = "header",
 			name = "",
-			order = 18.2,
-		},
-		hideBossWarnings = {
-			type = "toggle",
-			name = L.hideBossWarnings,
-			order = 19,
-			set = function(info, value)
-				lit.db.hideBossWarnings = value
-			end,
+			order = 20,
 		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 20,
+			order = 21,
 			set = function(info, value)
 				lit.db.hideInRaid = value
 			end,
@@ -331,7 +323,7 @@ local acOptions = {
 		mode = {
 			type = "select",
 			name = L.mode,
-			order = 21,
+			order = 22,
 			values = {
 				[1] = L.modeBar,
 				[2] = L.modeBroker,
