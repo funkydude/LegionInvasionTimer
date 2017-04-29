@@ -328,6 +328,18 @@ local acOptions = {
 				lit.db.hideInRaid = value
 			end,
 		},
+		mode = {
+			type = "select",
+			name = "mode",
+			order = 21,
+			values = {
+				[1] = "Bar",
+				[2] = "Broker",
+			},
+			set = function(info, value)
+				lit.db.mode = value
+			end,
+		},
 	},
 }
 

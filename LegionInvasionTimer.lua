@@ -20,21 +20,19 @@ frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 frame.bars = bars
 
-local OnEnter
+local OnEnter, ShowTip
 do
 	local id = 11544 -- Defender of the Broken Isles
 	local GameTooltip = GameTooltip
 	local FormatShortDate = FormatShortDate
-	OnEnter = function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
+	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
 		if wasEarnedByMe then
-			GameTooltip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
+			tip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
 		else
-			GameTooltip:AddLine(name, nil, nil, nil, .5, .5, .5)
+			tip:AddLine(name, nil, nil, nil, .5, .5, .5)
 		end
-		GameTooltip:AddLine(description, 1, 1, 1, true)
+		tip:AddLine(description, 1, 1, 1, true)
 		for i = 1, GetAchievementNumCriteria(id) do
 			local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
 			if completed == false then
@@ -42,14 +40,19 @@ do
 			else
 				criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
 			end
-			GameTooltip:AddLine(criteriaString)
+			tip:AddLine(criteriaString)
 		end
-		GameTooltip:AddLine(" ")
+		tip:AddLine(" ")
 
 		local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
 		local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
-		GameTooltip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
-		GameTooltip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+		tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
+		tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+	end
+	OnEnter = function(f)
+		GameTooltip:SetOwner(f, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOM", f, "TOP")
+		ShowTip(GameTooltip)
 		GameTooltip:Show()
 	end
 end
@@ -105,7 +108,7 @@ local function stopBar(text, stopAll)
 end
 mod.stopBar = stopBar
 
-local startBar
+local startBar, startBroker, stopBroker
 do
 	startBar = function(text, timeLeft, rewardQuestID, icon, pause, first)
 		stopBar(text)
@@ -162,6 +165,41 @@ do
 	mod.startBar = startBar
 end
 
+do
+	local obj
+	local prevTime, label = 0, ""
+	local function update()
+		prevTime = prevTime - 60
+		if prevTime > 0 then
+			obj.text = label..": ".. SecondsToTime(prevTime, true)
+			Timer(60, update)
+		end
+	end
+	startBroker = function(text, timeLeft, icon)
+		if not obj then
+			local ls = LibStub("LibDataBroker-1.1")
+			if ls then
+				obj = ls:NewDataObject("LegionInvasionTimer", {type = "data source", icon = icon, text = text..": ".. SecondsToTime(timeLeft, true)})
+				function obj.OnTooltipShow(tooltip)
+					if not tooltip or not tooltip.AddLine or not tooltip.AddDoubleLine then return end
+					ShowTip(tooltip)
+				end
+			end
+		end
+		if obj then
+			obj.icon = icon
+			obj.text = text..": ".. SecondsToTime(timeLeft, true)
+			prevTime = timeLeft
+			label = text
+			Timer(60, update)
+		end
+	end
+	stopBroker = function()
+		prevTime = 0
+		obj.text = label..": ".. SecondsToTime(prevTime, true)
+	end
+end
+
 local hasPausedBars, justLoggedIn = false, true
 local zonePOIIds = {5177, 5178, 5210, 5175}
 local zoneNames = {1024, 1017, 1018, 1015}
@@ -173,11 +211,16 @@ local function findTimer()
 	-- 5175 Azsuna 1015 45838
 	--C_WorldMap.GetAreaPOITimeLeft(self.poiID)
 
+	local mode = legionTimerDB.mode
 	local first = true
 	for i = 1, #zonePOIIds do
 		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			startBar(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			if mode == 1 then
+				startBar(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			else
+				startBroker(GetMapNameByID(zoneNames[i]), timeLeftMinutes * 60, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			end
 			first = false
 			if hasPausedBars then
 				hasPausedBars = false
@@ -204,7 +247,11 @@ local function findTimer()
 		while elapsed > 66600 do
 			elapsed = elapsed - 66600
 		end
-		startBar(NEXT, 66600-elapsed, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+		if mode == 1 then
+			startBar(NEXT, 66600-elapsed, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+		else
+			startBroker(NEXT, 66600-elapsed, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+		end
 	end
 end
 
@@ -228,6 +275,7 @@ frame:SetScript("OnEvent", function(f)
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
 			colorBarBackground = {0,0,0,0.75},
+			mode = 1,
 		}
 	end
 	if legionTimerDB.texture then -- Cleanup old texture DB entry
@@ -240,6 +288,9 @@ frame:SetScript("OnEvent", function(f)
 	end
 	if not legionTimerDB.colorBarBackground then -- add new Bar Background Value to legionTimerDB
 		legionTimerDB.colorBarBackground = {0,0,0,0.75}
+	end
+	if not legionTimerDB.mode then
+		legionTimerDB.mode = 1
 	end
 
 	f:Show()
