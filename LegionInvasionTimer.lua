@@ -364,10 +364,15 @@ frame:SetScript("OnEvent", function(f)
 	end)
 
 	-- Force an update, needed for the very first login
-	for i = 1, #zonePOIIds do
-		C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+	local function update()
+		for i = 1, #zonePOIIds do
+			C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+		end
 	end
-	Timer(1, FindInvasion)
+	-- Still rare cases of data not being available fast enough, update again!
+	Timer(0.5, update)
+	Timer(1, update)
+	Timer(2, FindInvasion)
 
 	Timer(15, function()
 		justLoggedIn = false
