@@ -7,4 +7,5 @@ local L = mod.L
 --L.underAttack = "|T236292:15:15:0:0:64:64:4:60:4:60|t %s is under attack!"
 L.tooltipClick = "|cffeda55fKlick|r zum ziehen und bewegen."
 L.tooltipClickOptions = "|cffeda55fRechts-Klick|r um Optionen zu öffnen."
---L.nextInvasion = "Next Invasion"
+--L.nextInvasions = "Next Invasions"
+--L.next = "Next"

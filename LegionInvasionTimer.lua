@@ -56,7 +56,13 @@ do
 			elapsed = elapsed - 66600
 		end
 		local t = 66600-elapsed
-		tip:AddDoubleLine(L.nextInvasion, date("%A %H:%M", t+time()), 1, 1, 1, 1, 1, 1)
+		t = t+time()
+		tip:AddLine(L.nextInvasions)
+		tip:AddDoubleLine(date("%A %H:%M", t), date("%A %H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+		for i = 1, 3 do
+			t = t + 66600 + 66600
+			tip:AddDoubleLine(date("%A %H:%M", t), date("%A %H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+		end
 	end
 	OnEnter = function(f)
 		GameTooltip:SetOwner(f, "ANCHOR_NONE")
