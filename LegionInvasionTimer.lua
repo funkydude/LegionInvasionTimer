@@ -109,6 +109,7 @@ end
 mod.stopBar = stopBar
 
 local startBar, startBroker
+local hiddenBars = false
 do
 	startBar = function(text, timeLeft, rewardQuestID, icon)
 		stopBar(text)
@@ -154,6 +155,9 @@ do
 			bar:Start()
 		end
 		rearrangeBars()
+		if hiddenBars then
+			bar:Hide()
+		end
 	end
 	mod.startBar = startBar
 end
@@ -335,6 +339,27 @@ frame:SetScript("OnEvent", function(f)
 			print("|cFF33FF99LegionInvasionTimer|r:", L.firstRunWarning)
 		end
 	end)
-	f:SetScript("OnEvent", nil)
+
+	f:SetScript("OnEvent", function()
+		if legionTimerDB.hideInRaid then
+			local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
+			if instanceId == 1676 or instanceId == 1530 or instanceId == 1648 or instanceId == 1520 then -- Tomb of Sargeras, Nighthold, Trial of Valor, Emerald Nightmare
+				hiddenBars = true
+				for bar in next, bars do
+					if bar then
+						bar:Hide()
+					end
+				end
+			elseif hiddenBars then
+				hiddenBars = false
+				for bar in next, bars do
+					if bar then
+						bar:Show()
+					end
+				end
+			end
+		end
+	end)
+	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end)
 
