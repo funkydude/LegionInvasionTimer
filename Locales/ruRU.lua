@@ -9,3 +9,4 @@ L.tooltipClick = "|cffeda55fЛКМ|r преподнимите и перемес�
 L.tooltipClickOptions = "|cffeda55fПКМ|r открыть настройки."
 --L.nextInvasions = "Next Invasions"
 --L.next = "Next"
+--L.waiting = "Waiting"

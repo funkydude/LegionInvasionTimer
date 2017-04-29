@@ -126,7 +126,7 @@ mod.stopBar = stopBar
 local startBar, startBroker
 local hiddenBars = false
 do
-	startBar = function(text, timeLeft, rewardQuestID, icon)
+	startBar = function(text, timeLeft, rewardQuestID, icon, paused)
 		stopBar(text)
 		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bars[bar] = true
@@ -164,7 +164,11 @@ do
 		end
 		bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
 		bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-		if rewardQuestID > 0 then -- Invasion duration bars
+		if paused then -- Searching bars
+			bar:Start()
+			bar:Pause()
+			bar:SetTimeVisibility(false)
+		elseif rewardQuestID > 0 then -- Invasion duration bars
 			bar:Start(21600) -- 6hrs = 60*6 = 360min = 360*60 = 21,600sec
 		else -- Next invasion bars
 			bar:Start()
@@ -206,23 +210,23 @@ do
 	end
 end
 
-local justLoggedIn = true
+local justLoggedIn, isWaiting = true, false
 local zonePOIIds = {5177, 5178, 5210, 5175}
 local zoneNames = {1024, 1017, 1018, 1015}
 local questIds = {45840, 45839, 45812, 45838}
+-- 5177 Highmountain 1024 45840
+-- 5178 Stormheim 1017 45839
+-- 5210 Val'Sharah 1018 45812
+-- 5175 Azsuna 1015 45838
 local function FindInvasion()
-	-- 5177 Highmountain 1024 45840
-	-- 5178 Stormheim 1017 45839
-	-- 5210 Val'Sharah 1018 45812
-	-- 5175 Azsuna 1015 45838
-	--C_WorldMap.GetAreaPOITimeLeft(self.poiID)
-
 	local mode = legionTimerDB.mode
-	local first = true
+	local found = false
+
 	for i = 1, #zonePOIIds do
 		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
 			stopBar(NEXT)
+			stopBar(L.waiting)
 			local t = timeLeftMinutes * 60
 			if mode == 1 then
 				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
@@ -230,7 +234,7 @@ local function FindInvasion()
 				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end
 			Timer(t+60, FindInvasion)
-			first = false
+			found = true
 			if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
 				FlashClientIcon()
 				local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
@@ -247,7 +251,7 @@ local function FindInvasion()
 		end
 	end
 
-	if first then
+	if not found then
 		if legionTimerDB.prev then
 			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
 			local elapsed = time() - legionTimerDB.prev
@@ -255,15 +259,34 @@ local function FindInvasion()
 				elapsed = elapsed - 66600
 			end
 			local t = 66600-elapsed
+
+			if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
+				Timer(1, FindInvasion)
+				if not isWaiting then
+					isWaiting = true
+					if mode == 1 then
+						startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					else
+						startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					end
+				end
+				return
+			end
+
 			if mode == 1 then
 				startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 			else
 				startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 			end
-			Timer(t + 60, FindInvasion)
+
+			Timer(t + 5, FindInvasion)
 		else
 			Timer(60, FindInvasion)
 		end
+	end
+
+	if isWaiting then
+		isWaiting = false
 	end
 end
 
@@ -375,10 +398,7 @@ frame:SetScript("OnEvent", function(f)
 			C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
 		end
 	end
-	-- Still rare cases of data not being available fast enough, update again!
-	Timer(0.5, update)
-	Timer(1, update)
-	Timer(2, FindInvasion)
+	Timer(1, FindInvasion)
 
 	Timer(15, function()
 		justLoggedIn = false

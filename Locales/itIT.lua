@@ -9,3 +9,4 @@ local L = mod.L
 --L.tooltipClickOptions = "|cffeda55fRight-Click|r to open options."
 --L.nextInvasions = "Next Invasions"
 --L.next = "Next"
+--L.waiting = "Waiting"
