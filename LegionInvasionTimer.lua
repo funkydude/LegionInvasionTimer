@@ -48,6 +48,15 @@ do
 		local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
 		tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+		tip:AddLine(" ")
+
+		-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
+		local elapsed = time() - legionTimerDB.prev
+		while elapsed > 66600 do
+			elapsed = elapsed - 66600
+		end
+		local t = 66600-elapsed
+		tip:AddDoubleLine(L.nextInvasion, date("%A %H:%M", t+time()), 1, 1, 1, 1, 1, 1)
 	end
 	OnEnter = function(f)
 		GameTooltip:SetOwner(f, "ANCHOR_NONE")
