@@ -210,7 +210,7 @@ local function FindInvasion()
 			stopBar(NEXT)
 			local t = timeLeftMinutes * 60
 			if mode == 1 then
-				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292, nil, first) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			else
 				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end
@@ -241,13 +241,34 @@ local function FindInvasion()
 			end
 			local t = 66600-elapsed
 			if mode == 1 then
-				startBar(NEXT, t, 0, 132177, nil, first) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 			else
 				startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 			end
 			Timer(t + 60, FindInvasion)
 		else
 			Timer(60, FindInvasion)
+		end
+	end
+end
+
+local function CheckIfInRaid()
+	if legionTimerDB.hideInRaid then
+		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
+		if instanceId == 1676 or instanceId == 1530 or instanceId == 1648 or instanceId == 1520 then -- Tomb of Sargeras, Nighthold, Trial of Valor, Emerald Nightmare
+			hiddenBars = true
+			for bar in next, bars do
+				if bar then
+					bar:Hide()
+				end
+			end
+		elseif hiddenBars then
+			hiddenBars = false
+			for bar in next, bars do
+				if bar then
+					bar:Show()
+				end
+			end
 		end
 	end
 end
@@ -333,7 +354,12 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 
-	FindInvasion()
+	-- Force an update, needed for the very first login
+	for i = 1, #zonePOIIds do
+		C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+	end
+	Timer(1, FindInvasion)
+
 	Timer(15, function()
 		justLoggedIn = false
 		if not legionTimerDB.prev then
@@ -341,26 +367,8 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 
-	f:SetScript("OnEvent", function()
-		if legionTimerDB.hideInRaid then
-			local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
-			if instanceId == 1676 or instanceId == 1530 or instanceId == 1648 or instanceId == 1520 then -- Tomb of Sargeras, Nighthold, Trial of Valor, Emerald Nightmare
-				hiddenBars = true
-				for bar in next, bars do
-					if bar then
-						bar:Hide()
-					end
-				end
-			elseif hiddenBars then
-				hiddenBars = false
-				for bar in next, bars do
-					if bar then
-						bar:Show()
-					end
-				end
-			end
-		end
-	end)
+	CheckIfInRaid()
+	f:SetScript("OnEvent", CheckIfInRaid)
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end)
 
