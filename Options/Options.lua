@@ -356,10 +356,8 @@ local acOptions = {
 				lit.db.mode = value
 				if value ~= 1 then
 					lit.db.lock = true
-					lit:EnableMouse(false)
-					lit.bg:Hide()
-					lit.header:Hide()
 				end
+				ReloadUI()
 			end,
 		},
 	},
