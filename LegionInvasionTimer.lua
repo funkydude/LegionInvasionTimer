@@ -123,6 +123,29 @@ local function stopBar(text, stopAll)
 end
 mod.stopBar = stopBar
 
+local ChangeBarColor
+do
+	-- We use different quest ids here.
+	-- The invasion is split into 2 quests. The quest to complete 4 world quests, and the quest to complete the scenario.
+	-- These are the ids for the scenario, because we don't want to mark the bar green until that is done.
+	-- We use the other ids when creating the bar/login/reload ui/etc because these ids don't seem to reset, they stay marked as completed.
+	-- So if we did use these ids for bar creation, they would always show up as green.
+	local quests = {
+		[46182] = true, -- Highmountain
+		[46110] = true, -- Stormheim
+		[45856] = true, -- Val'Sharah
+		[46199] = true, -- Azsuna
+	}
+	ChangeBarColor = function(id)
+		if quests[id] then
+			for bar in next, bars do
+				bar:Set("LegionInvasionTimer:complete", 1)
+				bar:SetColor(unpack(legionTimerDB.colorComplete))
+			end
+		end
+	end
+end
+
 local startBar, startBroker
 local hiddenBars = false
 do
@@ -231,6 +254,7 @@ local function FindInvasion()
 			local t = timeLeftMinutes * 60
 			if mode == 1 then
 				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				frame:RegisterEvent("QUEST_TURNED_IN")
 			else
 				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end
@@ -411,7 +435,13 @@ frame:SetScript("OnEvent", function(f)
 	end)
 
 	CheckIfInRaid()
-	f:SetScript("OnEvent", CheckIfInRaid)
+	f:SetScript("OnEvent", function(_, event, id)
+		if event == "QUEST_TURNED_IN" then
+			ChangeBarColor(id)
+		else
+			CheckIfInRaid()
+		end
+	end)
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end)
 
