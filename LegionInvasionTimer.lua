@@ -378,6 +378,10 @@ frame:SetScript("OnEvent", function(f)
 			mode = 1,
 		}
 	end
+	-- START COMPAT --
+	if not legionTimerDB.colorText then
+		legionTimerDB.colorText = {1,1,1,1}
+	end
 	if legionTimerDB.texture then -- Cleanup old texture DB entry
 		if legionTimerDB.texture == "BantoBar" then
 			legionTimerDB.barTexture = "Blizzard Raid Bar"
@@ -396,6 +400,7 @@ frame:SetScript("OnEvent", function(f)
 	if not legionTimerDB.colorNext then
 		legionTimerDB.colorNext = {0.25,0.33,0.68,1}
 	end
+	-- END COMPAT --
 
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
