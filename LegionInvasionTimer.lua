@@ -59,14 +59,23 @@ do
 			local t = 66600-elapsed
 			t = t+time()
 			tip:AddLine(L.nextInvasions)
+			local upper, date = string.upper, date
 			local check = date("%M", t)
 			if check == "29" or check == "59" then
 				t = t + 60 -- Round up to 00min/30min if we're at 29min/59min
 			end
-			tip:AddDoubleLine(_G["WEEKDAY_"..string.upper(date("%A", t))].." "..date("%H:%M", t), _G["WEEKDAY_"..string.upper(date("%A", t+66600))].." "..date("%H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+			tip:AddDoubleLine(
+				_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
+				_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
+				1, 1, 1, 1, 1, 1
+			)
 			for i = 1, 3 do
 				t = t + 66600 + 66600
-				tip:AddDoubleLine(_G["WEEKDAY_"..string.upper(date("%A", t))].." "..date("%H:%M", t), _G["WEEKDAY_"..string.upper(date("%A", t+66600))].." "..date("%H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+				tip:AddDoubleLine(
+					_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
+					_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
+					1, 1, 1, 1, 1, 1
+				)
 			end
 		end
 	end
