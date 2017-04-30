@@ -313,6 +313,14 @@ local function FindInvasion()
 			Timer(t + 5, FindInvasion)
 		else
 			Timer(60, FindInvasion)
+			if not isWaiting then
+				isWaiting = true
+				if mode == 1 then
+					startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				else
+					startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				end
+			end
 		end
 	end
 
