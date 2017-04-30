@@ -312,11 +312,29 @@ local acOptions = {
 			end,
 			disabled = disabled,
 		},
+		colorNext = {
+			name = L.nextBar,
+			type = "color",
+			order = 19,
+			get = function()
+				return unpack(lit.db.colorNext)
+			end,
+			set = function(info, r, g, b, a)
+				lit.db.colorNext = {r, g, b, a}
+				for bar in next, lit.bars do
+					local tag = bar:Get("LegionInvasionTimer:complete")
+					if tag ~= 0 and tag ~= 1 then
+						bar:SetColor(r, g, b, a)
+					end
+				end
+			end,
+			disabled = disabled,
+		},
 		colorBarBackground = {
 			name = L.barBackground,
 			type = "color",
 			hasAlpha = true,
-			order = 19,
+			order = 20,
 			get = function()
 				return unpack(lit.db.colorBarBackground)
 			end,
@@ -333,12 +351,12 @@ local acOptions = {
 		separator = {
 			type = "header",
 			name = "",
-			order = 20,
+			order = 21,
 		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 21,
+			order = 22,
 			set = function(info, value)
 				lit.db.hideInRaid = value
 			end,
@@ -347,7 +365,7 @@ local acOptions = {
 		mode = {
 			type = "select",
 			name = L.mode,
-			order = 22,
+			order = 23,
 			values = {
 				[1] = L.modeBar,
 				[2] = L.modeBroker,

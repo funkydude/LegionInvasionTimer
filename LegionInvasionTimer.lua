@@ -175,6 +175,8 @@ do
 				bar:SetColor(unpack(legionTimerDB.colorIncomplete))
 				bar:Set("LegionInvasionTimer:complete", 0)
 			end
+		else
+			bar:SetColor(unpack(legionTimerDB.colorNext))
 		end
 		bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
 		bar:SetTextColor(unpack(legionTimerDB.colorText))
@@ -355,7 +357,7 @@ end
 frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
 
-	if type(legionTimerDB) ~= "table" or not legionTimerDB.colorText then
+	if type(legionTimerDB) ~= "table" then
 		legionTimerDB = {
 			fontSize = 10,
 			barTexture = "Blizzard Raid Bar",
@@ -371,6 +373,7 @@ frame:SetScript("OnEvent", function(f)
 			colorText = {1,1,1,1},
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
+			colorNext = {0.25,0.33,0.68,1},
 			colorBarBackground = {0,0,0,0.75},
 			mode = 1,
 		}
@@ -390,6 +393,9 @@ frame:SetScript("OnEvent", function(f)
 		legionTimerDB.mode = 1
 	end
 	legionTimerDB.hideBossWarnings = nil
+	if not legionTimerDB.colorNext then
+		legionTimerDB.colorNext = {0.25,0.33,0.68,1}
+	end
 
 	f:Show()
 	f:SetScript("OnDragStart", function(f) f:StartMoving() end)

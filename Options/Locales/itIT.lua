@@ -28,6 +28,7 @@ local L = mod.L
 --L.textColor = "Text Color"
 --L.completedBar = "Completed Bar"
 --L.incompleteBar = "Incomplete Bar"
+--L.nextBar = "Next Bar"
 --L.barBackground = "Bar Background"
 --L.hideInRaid = "Hide In Raid"
 --L.mode = "Mode"
