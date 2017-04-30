@@ -1,4 +1,4 @@
-## Interface: 70000
+## Interface: 70200
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: LegionInvasionTimer Configuration Options.
@@ -15,7 +15,7 @@
 ## Version: @project-version@
 ## X-Category: Miscellaneous
 ## X-License: All Rights Reserved: You are free to fork and modify on GitHub, please ask us about anything else.
-## X-Curse-Project-ID: legioninvasiontimer
+## X-Curse-Project-ID: 101625
 ## X-WoWI-ID: 24128
 
 ## LoadOnDemand: 1
