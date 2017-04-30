@@ -9,7 +9,7 @@
 ## Notes-deDE: Zeigt den Legion Invasions Timer.
 ## Notes-frFR: Affiche les timers des invasions de la Légion.
 ## Notes-itIT: Shows the Legion invasion timer.
-## Notes-koKR: Shows the Legion invasion timer.
+## Notes-koKR: 군단 침공 타이머를 표시합니다.
 ## Notes-ptBR: Mostra o timer da invasão da legião.
 ## Notes-ruRU: Показывает время и место вторжений Легиона.
 ## SavedVariables: legionTimerDB
