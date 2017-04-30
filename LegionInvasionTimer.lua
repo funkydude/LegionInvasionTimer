@@ -48,24 +48,26 @@ do
 		local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
 		tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
-		tip:AddLine(" ")
 
-		-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-		local elapsed = time() - legionTimerDB.prev
-		while elapsed > 66600 do
-			elapsed = elapsed - 66600
-		end
-		local t = 66600-elapsed
-		t = t+time()
-		tip:AddLine(L.nextInvasions)
-		local check = date("%M", t)
-		if check == "29" or check == "59" then
-			t = t + 60 -- Round up to 00min/30min if we're at 29min/59min
-		end
-		tip:AddDoubleLine(_G["WEEKDAY_"..string.upper(date("%A", t))].." "..date("%H:%M", t), _G["WEEKDAY_"..string.upper(date("%A", t+66600))].." "..date("%H:%M", t+66600), 1, 1, 1, 1, 1, 1)
-		for i = 1, 3 do
-			t = t + 66600 + 66600
+		if legionTimerDB.prev then -- Have we seen our first invasion?
+			tip:AddLine(" ")
+			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
+			local elapsed = time() - legionTimerDB.prev
+			while elapsed > 66600 do
+				elapsed = elapsed - 66600
+			end
+			local t = 66600-elapsed
+			t = t+time()
+			tip:AddLine(L.nextInvasions)
+			local check = date("%M", t)
+			if check == "29" or check == "59" then
+				t = t + 60 -- Round up to 00min/30min if we're at 29min/59min
+			end
 			tip:AddDoubleLine(_G["WEEKDAY_"..string.upper(date("%A", t))].." "..date("%H:%M", t), _G["WEEKDAY_"..string.upper(date("%A", t+66600))].." "..date("%H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+			for i = 1, 3 do
+				t = t + 66600 + 66600
+				tip:AddDoubleLine(_G["WEEKDAY_"..string.upper(date("%A", t))].." "..date("%H:%M", t), _G["WEEKDAY_"..string.upper(date("%A", t+66600))].." "..date("%H:%M", t+66600), 1, 1, 1, 1, 1, 1)
+			end
 		end
 	end
 	OnEnter = function(f)
