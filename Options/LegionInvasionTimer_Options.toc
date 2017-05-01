@@ -9,7 +9,7 @@
 ## Notes-deDE: LegionInvasionTimer Einstellungen.
 ## Notes-frFR: Options de configuration de LegionInvasionTimer.
 ## Notes-itIT: LegionInvasionTimer Configuration Options.
-## Notes-koKR: LegionInvasionTimer Configuration Options.
+## Notes-koKR: LegionInvasionTimer|1을;를; 설정하는 옵션입니다.
 ## Notes-ptBR: LegionInvasionTimer Opções de Configuração.
 ## Notes-ruRU: LegionInvasionTimer параметры настроек.
 ## Version: @project-version@
