@@ -4,7 +4,7 @@ local _, mod = ...
 local L = mod.L
 
 -- Options
-L.lock = "Fenster Sperren"
+L.lock = "Fenster fixieren"
 L.barIcon = "Leistensymbol"
 L.showTime = "Zeit anzeigen"
 L.fillBar = "Leiste füllen"
