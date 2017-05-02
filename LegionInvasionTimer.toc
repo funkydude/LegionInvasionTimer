@@ -6,7 +6,7 @@
 ## Notes-esMX: Muestra el temporizador de las invasiones de la Legion.
 ## Notes-zhCN: 显示军团入侵计时器。
 ## Notes-zhTW: 顯示軍團入侵計時器。
-## Notes-deDE: Zeigt den Legion Invasions Timer.
+## Notes-deDE: Zeigt Timer für die Invasionen der Legion.
 ## Notes-frFR: Affiche les timers des invasions de la Légion.
 ## Notes-itIT: Shows the Legion invasion timer.
 ## Notes-koKR: 군단 침공 타이머를 표시합니다.
