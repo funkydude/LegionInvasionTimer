@@ -266,6 +266,7 @@ local acOptions = {
 		colorText = {
 			name = L.textColor,
 			type = "color",
+			hasAlpha = true,
 			order = 16,
 			get = function()
 				return unpack(lit.db.colorText)
@@ -281,6 +282,7 @@ local acOptions = {
 		colorComplete = {
 			name = L.completedBar,
 			type = "color",
+			hasAlpha = true,
 			order = 17,
 			get = function()
 				return unpack(lit.db.colorComplete)
@@ -298,6 +300,7 @@ local acOptions = {
 		colorIncomplete = {
 			name = L.incompleteBar,
 			type = "color",
+			hasAlpha = true,
 			order = 18,
 			get = function()
 				return unpack(lit.db.colorIncomplete)
@@ -315,6 +318,7 @@ local acOptions = {
 		colorNext = {
 			name = L.nextBar,
 			type = "color",
+			hasAlpha = true,
 			order = 19,
 			get = function()
 				return unpack(lit.db.colorNext)
