@@ -22,7 +22,7 @@ local function updateFlags()
 end
 
 local function disabled()
-	return lit.db.mode ~= 1
+	return lit.db.mode == 2
 end
 
 local acOptions = {
@@ -369,10 +369,11 @@ local acOptions = {
 			values = {
 				[1] = L.modeBar,
 				[2] = L.modeBroker,
+				[3] = L.modeBarOnMap,
 			},
 			set = function(info, value)
 				lit.db.mode = value
-				if value ~= 1 then
+				if value == 2 then
 					lit.db.lock = true
 				end
 				ReloadUI()

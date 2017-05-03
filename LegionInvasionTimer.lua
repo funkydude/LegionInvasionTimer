@@ -20,10 +20,10 @@ frame:Hide()
 frame:RegisterEvent("PLAYER_LOGIN")
 frame.bars = bars
 
-local OnEnter, ShowTip
+local OnEnter, ShowTip, HideTip
 do
 	local id = 11544 -- Defender of the Broken Isles
-	local GameTooltip = GameTooltip
+	local GameTooltip, WorldMapTooltip = GameTooltip, WorldMapTooltip
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
@@ -79,11 +79,19 @@ do
 			end
 		end
 	end
+	HideTip = function()
+		if legionTimerDB.mode == 3 then
+			WorldMapTooltip:Hide()
+		else
+			GameTooltip:Hide()
+		end
+	end
 	OnEnter = function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		ShowTip(GameTooltip)
-		GameTooltip:Show()
+		local tip = legionTimerDB.mode == 3 and WorldMapTooltip or GameTooltip
+		tip:SetOwner(f, "ANCHOR_NONE")
+		tip:SetPoint("BOTTOM", f, "TOP")
+		ShowTip(tip)
+		tip:Show()
 	end
 end
 
@@ -170,7 +178,7 @@ do
 		bars[bar] = true
 
 		bar:SetScript("OnEnter", OnEnter)
-		bar:SetScript("OnLeave", GameTooltip_Hide)
+		bar:SetScript("OnLeave", HideTip)
 		bar:SetParent(frame)
 		bar:SetLabel(text)
 		bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
@@ -266,11 +274,11 @@ local function FindInvasion()
 			stopBar(NEXT)
 			stopBar(L.waiting)
 			local t = timeLeftMinutes * 60
-			if mode == 1 then
+			if mode == 2 then
+				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+			else
 				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				frame:RegisterEvent("QUEST_TURNED_IN")
-			else
-				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 			end
 			Timer(t+60, FindInvasion)
 			found = true
@@ -305,19 +313,19 @@ local function FindInvasion()
 				Timer(1, FindInvasion)
 				if not isWaiting then
 					isWaiting = true
-					if mode == 1 then
-						startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-					else
+					if mode == 2 then
 						startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					else
+						startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					end
 				end
 				return
 			end
 
-			if mode == 1 then
-				startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-			else
+			if mode == 2 then
 				startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+			else
+				startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 			end
 
 			Timer(t + 5, FindInvasion)
@@ -325,10 +333,10 @@ local function FindInvasion()
 			Timer(60, FindInvasion)
 			if not isWaiting then
 				isWaiting = true
-				if mode == 1 then
-					startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-				else
+				if mode == 2 then
 					startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				else
+					startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				end
 			end
 		end
@@ -420,13 +428,14 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 	f:SetScript("OnEnter", function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		GameTooltip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
-		GameTooltip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
-		GameTooltip:Show()
+		local tip = legionTimerDB.mode == 3 and WorldMapTooltip or GameTooltip
+		tip:SetOwner(f, "ANCHOR_NONE")
+		tip:SetPoint("BOTTOM", f, "TOP")
+		tip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
+		tip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
+		tip:Show()
 	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
+	f:SetScript("OnLeave", HideTip)
 	local bg = f:CreateTexture(nil, "PARENT")
 	bg:SetAllPoints(f)
 	bg:SetColorTexture(0, 1, 0, 0.3)
@@ -441,6 +450,12 @@ frame:SetScript("OnEvent", function(f)
 		f:EnableMouse(false)
 		f.bg:Hide()
 		f.header:Hide()
+	end
+
+	if legionTimerDB.mode == 3 then
+		f:SetParent(WorldMapFrame)
+		f:SetFrameStrata("FULLSCREEN")
+		f:SetFrameLevel(10)
 	end
 
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
