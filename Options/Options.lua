@@ -21,6 +21,10 @@ local function updateFlags()
 	return flags
 end
 
+local function disabled()
+	return lit.db.mode == 2
+end
+
 local acOptions = {
 	type = "group",
 	name = "LegionInvasionTimer",
@@ -44,6 +48,7 @@ local acOptions = {
 					lit.header:Show()
 				end
 			end,
+			disabled = disabled,
 		},
 		icon = {
 			type = "toggle",
@@ -55,6 +60,7 @@ local acOptions = {
 					bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				end
 			end,
+			disabled = disabled,
 		},
 		timeText = {
 			type = "toggle",
@@ -66,6 +72,7 @@ local acOptions = {
 					bar:SetTimeVisibility(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		fill = {
 			type = "toggle",
@@ -77,6 +84,7 @@ local acOptions = {
 					bar:SetFill(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		font = {
 			type = "select",
@@ -98,13 +106,14 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		fontSize = {
 			type = "range",
 			name = L.fontSize,
 			order = 6,
-			max = 40,
-			min = 6,
+			max = 200,
+			min = 1,
 			step = 1,
 			set = function(info, value)
 				lit.db.fontSize = value
@@ -113,6 +122,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		monochrome = {
 			type = "toggle",
@@ -125,6 +135,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		outline = {
 			type = "select",
@@ -142,6 +153,7 @@ local acOptions = {
 					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
 				end
 			end,
+			disabled = disabled,
 		},
 		barTexture = {
 			type = "select",
@@ -162,6 +174,7 @@ local acOptions = {
 					bar:SetTexture(media:Fetch("statusbar", texture))
 				end
 			end,
+			disabled = disabled,
 		},
 		spacing = {
 			type = "range",
@@ -174,6 +187,7 @@ local acOptions = {
 				lit.db.spacing = value
 				lit.rearrangeBars()
 			end,
+			disabled = disabled,
 		},
 		width = {
 			type = "range",
@@ -188,6 +202,7 @@ local acOptions = {
 					bar:SetWidth(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		height = {
 			type = "range",
@@ -202,6 +217,7 @@ local acOptions = {
 					bar:SetHeight(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		alignZone = {
 			type = "select",
@@ -218,6 +234,7 @@ local acOptions = {
 					bar.candyBarLabel:SetJustifyH(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		alignTime = {
 			type = "select",
@@ -234,6 +251,7 @@ local acOptions = {
 					bar.candyBarDuration:SetJustifyH(value)
 				end
 			end,
+			disabled = disabled,
 		},
 		growUp = {
 			type = "toggle",
@@ -243,10 +261,12 @@ local acOptions = {
 				lit.db.growUp = value
 				lit.rearrangeBars()
 			end,
+			disabled = disabled,
 		},
 		colorText = {
 			name = L.textColor,
 			type = "color",
+			hasAlpha = true,
 			order = 16,
 			get = function()
 				return unpack(lit.db.colorText)
@@ -257,10 +277,12 @@ local acOptions = {
 					bar:SetTextColor(r, g, b, a)
 				end
 			end,
+			disabled = disabled,
 		},
 		colorComplete = {
 			name = L.completedBar,
 			type = "color",
+			hasAlpha = true,
 			order = 17,
 			get = function()
 				return unpack(lit.db.colorComplete)
@@ -273,10 +295,12 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
 		},
 		colorIncomplete = {
 			name = L.incompleteBar,
 			type = "color",
+			hasAlpha = true,
 			order = 18,
 			get = function()
 				return unpack(lit.db.colorIncomplete)
@@ -289,12 +313,32 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
+		},
+		colorNext = {
+			name = L.nextBar,
+			type = "color",
+			hasAlpha = true,
+			order = 19,
+			get = function()
+				return unpack(lit.db.colorNext)
+			end,
+			set = function(info, r, g, b, a)
+				lit.db.colorNext = {r, g, b, a}
+				for bar in next, lit.bars do
+					local tag = bar:Get("LegionInvasionTimer:complete")
+					if tag ~= 0 and tag ~= 1 then
+						bar:SetColor(r, g, b, a)
+					end
+				end
+			end,
+			disabled = disabled,
 		},
 		colorBarBackground = {
 			name = L.barBackground,
 			type = "color",
 			hasAlpha = true,
-			order = 18.1,
+			order = 20,
 			get = function()
 				return unpack(lit.db.colorBarBackground)
 			end,
@@ -306,31 +350,42 @@ local acOptions = {
 					end
 				end
 			end,
+			disabled = disabled,
 		},
 		separator = {
 			type = "header",
 			name = "",
-			order = 18.2,
-		},
-		hideBossWarnings = {
-			type = "toggle",
-			name = L.hideBossWarnings,
-			order = 19,
-			set = function(info, value)
-				lit.db.hideBossWarnings = value
-			end,
+			order = 21,
 		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 20,
+			order = 22,
 			set = function(info, value)
 				lit.db.hideInRaid = value
+			end,
+			disabled = disabled,
+		},
+		mode = {
+			type = "select",
+			name = L.mode,
+			order = 23,
+			values = {
+				[1] = L.modeBar,
+				[2] = L.modeBroker,
+				[3] = L.modeBarOnMap,
+			},
+			set = function(info, value)
+				lit.db.mode = value
+				if value == 2 then
+					lit.db.lock = true
+				end
+				ReloadUI()
 			end,
 		},
 	},
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 520)
+acd:SetDefaultSize(acOptions.name, 400, 530)
 

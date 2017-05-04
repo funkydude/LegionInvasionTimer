@@ -1,8 +1,11 @@
 # LegionInvasionTimer
-* Show timer bars for each invasion zone with completion coloring.
-* Boss mod to display warnings for final bosses.
-* Bar tooltip, mousing over the bars will show your achievement status and Nethershard count.
-* Nethershard warnings will start printing in chat if over 1900, to alert you that you're near the 2000 cap.
+* Show timers for the next invasion and the current invasion duration.
+* Completion coloring: Red bar for incomplete, green bar for complete.
+* Ability to swap between using a bar and using a data broker.
+* Tooltip, mousing over the bar or the data broker will show your achievement status and more.
+
+## Warning
+* This addon will not work until you encounter your first invasion with it enabled.
 
 ## Configure
 * /lit
