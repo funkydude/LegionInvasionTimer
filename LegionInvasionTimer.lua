@@ -255,95 +255,99 @@ do
 	end
 end
 
-local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
-local justLoggedIn, isWaiting = true, false
-local zonePOIIds = {5177, 5178, 5210, 5175}
-local zoneNames = {1024, 1017, 1018, 1015}
-local questIds = {45840, 45839, 45812, 45838}
--- 5177 Highmountain 1024 45840
--- 5178 Stormheim 1017 45839
--- 5210 Val'Sharah 1018 45812
--- 5175 Azsuna 1015 45838
-local function FindInvasion()
-	local mode = legionTimerDB.mode
-	local found = false
+local FindInvasion
+local justLoggedIn = true
+do
+	local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
+	local isWaiting = false
+	local zonePOIIds = {5177, 5178, 5210, 5175}
+	local zoneNames = {1024, 1017, 1018, 1015}
+	local questIds = {45840, 45839, 45812, 45838}
+	-- 5177 Highmountain 1024 45840
+	-- 5178 Stormheim 1017 45839
+	-- 5210 Val'Sharah 1018 45812
+	-- 5175 Azsuna 1015 45838
+	FindInvasion = function()
+		local mode = legionTimerDB.mode
+		local found = false
 
-	for i = 1, #zonePOIIds do
-		local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
-		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-			stopBar(NEXT)
-			stopBar(L.waiting)
-			local t = timeLeftMinutes * 60
-			if mode == 2 then
-				startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-			else
-				startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-				frame:RegisterEvent("QUEST_TURNED_IN")
-			end
-			Timer(t+60, FindInvasion)
-			found = true
-			if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
-				FlashClientIcon()
-				local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
-				print("|cFF33FF99LegionInvasionTimer|r:", text)
-				RaidNotice_AddMessage(RaidBossEmoteFrame, text, mod.c)
-				PlaySoundFile("Sound\\Interface\\RaidWarning.ogg", "Master")
-			end
-			justLoggedIn = false
+		for i = 1, #zonePOIIds do
+			local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
+			if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
+				stopBar(NEXT)
+				stopBar(L.waiting)
+				local t = timeLeftMinutes * 60
+				if mode == 2 then
+					startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+				else
+					startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					frame:RegisterEvent("QUEST_TURNED_IN")
+				end
+				Timer(t+60, FindInvasion)
+				found = true
+				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
+					FlashClientIcon()
+					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
+					print("|cFF33FF99LegionInvasionTimer|r:", text)
+					RaidNotice_AddMessage(RaidBossEmoteFrame, text, mod.c)
+					PlaySoundFile("Sound\\Interface\\RaidWarning.ogg", "Master")
+				end
+				justLoggedIn = false
 
-			local t = time()
-			local elapsed = 360-timeLeftMinutes
-			t = t - (elapsed * 60)
-			legionTimerDB.prev = t
+				local t = time()
+				local elapsed = 360-timeLeftMinutes
+				t = t - (elapsed * 60)
+				legionTimerDB.prev = t
+			end
 		end
-	end
 
-	if not found then
-		if legionTimerDB.prev then
-			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-			local elapsed = time() - legionTimerDB.prev
-			while elapsed > 66600 do
-				elapsed = elapsed - 66600
-			end
-			local t = 66600-elapsed
+		if not found then
+			if legionTimerDB.prev then
+				-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
+				local elapsed = time() - legionTimerDB.prev
+				while elapsed > 66600 do
+					elapsed = elapsed - 66600
+				end
+				local t = 66600-elapsed
 
-			if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
-				-- If it's longer than 45k then an invasion is currently active.
-				-- Loop every second until GetAreaPOITimeLeft responds with valid results.
-				Timer(1, FindInvasion)
+				if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
+					-- If it's longer than 45k then an invasion is currently active.
+					-- Loop every second until GetAreaPOITimeLeft responds with valid results.
+					Timer(1, FindInvasion)
+					if not isWaiting then
+						isWaiting = true
+						if mode == 2 then
+							startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+						else
+							startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+						end
+					end
+					return
+				end
+
+				if mode == 2 then
+					startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				else
+					startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+				end
+
+				Timer(t + 5, FindInvasion)
+			else
+				Timer(60, FindInvasion)
 				if not isWaiting then
 					isWaiting = true
 					if mode == 2 then
 						startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					else
-						startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+						startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					end
-				end
-				return
-			end
-
-			if mode == 2 then
-				startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-			else
-				startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-			end
-
-			Timer(t + 5, FindInvasion)
-		else
-			Timer(60, FindInvasion)
-			if not isWaiting then
-				isWaiting = true
-				if mode == 2 then
-					startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-				else
-					startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				end
 			end
 		end
-	end
 
-	if isWaiting then
-		isWaiting = false
+		if isWaiting then
+			isWaiting = false
+		end
 	end
 end
 
@@ -465,13 +469,7 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 
-	-- Force an update, needed for the very first login
-	local function update()
-		for i = 1, #zonePOIIds do
-			GetAreaPOITimeLeft(zonePOIIds[i])
-		end
-	end
-	Timer(1, FindInvasion)
+	FindInvasion()
 
 	Timer(15, function()
 		justLoggedIn = false
