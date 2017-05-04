@@ -49,8 +49,9 @@ do
 		tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
 
+		tip:AddLine(" ")
+		tip:AddLine(L.nextInvasions)
 		if legionTimerDB.prev then -- Have we seen our first invasion?
-			tip:AddLine(" ")
 			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
 			local elapsed = time() - legionTimerDB.prev
 			while elapsed > 66600 do
@@ -58,7 +59,6 @@ do
 			end
 			local t = 66600-elapsed
 			t = t+time()
-			tip:AddLine(L.nextInvasions)
 			local upper, date = string.upper, date
 			local check = date("%M", t)
 			if check == "29" or check == "59" then
@@ -77,6 +77,8 @@ do
 					1, 1, 1, 1, 1, 1
 				)
 			end
+		else
+			tip:AddLine(L.waiting, 1, 1, 1)
 		end
 	end
 	HideTip = function()
