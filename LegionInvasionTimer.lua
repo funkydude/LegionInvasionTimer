@@ -240,11 +240,15 @@ do
 	end
 	startBroker = function(text, timeLeft, icon)
 		if not obj then
-			obj = LibStub("LibDataBroker-1.1"):NewDataObject("LegionInvasionTimer", {type = "data source", icon = icon, text = text..": ".. SecondsToTime(timeLeft, true)})
-			function obj.OnTooltipShow(tooltip)
-				if not tooltip or not tooltip.AddLine or not tooltip.AddDoubleLine then return end
-				ShowTip(tooltip)
-			end
+			obj = LibStub("LibDataBroker-1.1"):NewDataObject("LegionInvasionTimer", {
+				type = "data source",
+				icon = icon,
+				text = text..": ".. SecondsToTime(timeLeft, true),
+				OnTooltipShow = function(tooltip)
+					if not tooltip or not tooltip.AddLine or not tooltip.AddDoubleLine then return end
+					ShowTip(tooltip)
+				end
+			})
 		end
 		if obj then
 			obj.icon = icon
