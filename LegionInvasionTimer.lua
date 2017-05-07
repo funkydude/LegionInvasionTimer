@@ -27,29 +27,41 @@ do
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
-		if wasEarnedByMe then
-			tip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
-		else
-			tip:AddLine(name, nil, nil, nil, .5, .5, .5)
-		end
-		tip:AddLine(description, 1, 1, 1, true)
-		for i = 1, GetAchievementNumCriteria(id) do
-			local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
-			if completed == false then
-				criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
+		if not wasEarnedByMe or not legionTimerDB.tooltipHideAchiev then
+			if wasEarnedByMe then
+				tip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
 			else
-				criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
+				tip:AddLine(name, nil, nil, nil, .5, .5, .5)
 			end
-			tip:AddLine(criteriaString)
+			tip:AddLine(description, 1, 1, 1, true)
+			for i = 1, GetAchievementNumCriteria(id) do
+				local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
+				if completed == false then
+					criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
+				else
+					criteriaString = "|CFF00FF00 - " .. criteriaString .. "|r"
+				end
+				tip:AddLine(criteriaString)
+			end
+			tip:AddLine(" ")
 		end
-		tip:AddLine(" ")
 
-		local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
-		local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
-		tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
-		tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+		local splitLine = false
+		if not legionTimerDB.tooltipHideNethershard then
+			splitLine = true
+			local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
+			tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
+		end
+		if not legionTimerDB.tooltipSupplies then
+			splitLine = true
+			local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
+			tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+		end
 
-		tip:AddLine(" ")
+		if splitLine then
+			tip:AddLine(" ")
+		end
+
 		tip:AddLine(L.nextInvasions)
 		if legionTimerDB.prev then -- Have we seen our first invasion?
 			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
@@ -64,18 +76,24 @@ do
 			if check == "29" or check == "59" then
 				t = t + 60 -- Round up to 00min/30min if we're at 29min/59min
 			end
-			tip:AddDoubleLine(
-				_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
-				_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
-				1, 1, 1, 1, 1, 1
-			)
-			for i = 1, 3 do
-				t = t + 66600 + 66600
-				tip:AddDoubleLine(
-					_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
-					_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
-					1, 1, 1, 1, 1, 1
-				)
+			if legionTimerDB.tooltip12hr then
+				for i = 1, 4 do
+					tip:AddDoubleLine(
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. _G["TIMEMANAGER_"..upper(date("%p", t))],
+						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%I:%M", t+66600) .. _G["TIMEMANAGER_"..upper(date("%p", t+66600))],
+						1, 1, 1, 1, 1, 1
+					)
+					t = t + 66600 + 66600
+				end
+			else
+				for i = 1, 4 do
+					tip:AddDoubleLine(
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
+						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
+						1, 1, 1, 1, 1, 1
+					)
+					t = t + 66600 + 66600
+				end
 			end
 		else
 			tip:AddLine(L.waiting, 1, 1, 1)

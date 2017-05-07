@@ -31,6 +31,9 @@ local acOptions = {
 	get = function(info)
 		return lit.db[info[#info]]
 	end,
+	set = function(info, value)
+		lit.db[info[#info]] = value
+	end,
 	args = {
 		lock = {
 			type = "toggle",
@@ -352,24 +355,46 @@ local acOptions = {
 			end,
 			disabled = disabled,
 		},
-		separator = {
+		tooltipHeader = {
+			type = "header",
+			name = L.tooltipHeader,
+			order = 21,
+		},
+		tooltip12hr = {
+			type = "toggle",
+			name = L.tooltip12hr,
+			order = 22,
+		},
+		tooltipHideAchiev = {
+			type = "toggle",
+			name = L.tooltipHideAchiev,
+			order = 23,
+		},
+		tooltipHideNethershard = {
+			type = "toggle",
+			name = L.hide:format((GetCurrencyInfo(1226))),
+			order = 24,
+		},
+		tooltipSupplies = {
+			type = "toggle",
+			name = L.hide:format((GetCurrencyInfo(1342))),
+			order = 25,
+		},
+		miscSeparator = {
 			type = "header",
 			name = "",
-			order = 21,
+			order = 26,
 		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 22,
-			set = function(info, value)
-				lit.db.hideInRaid = value
-			end,
+			order = 27,
 			disabled = disabled,
 		},
 		mode = {
 			type = "select",
 			name = L.mode,
-			order = 23,
+			order = 28,
 			values = {
 				[1] = L.modeBar,
 				[2] = L.modeBroker,
@@ -387,5 +412,5 @@ local acOptions = {
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 530)
+acd:SetDefaultSize(acOptions.name, 400, 600)
 
