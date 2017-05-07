@@ -38,4 +38,4 @@ local L = mod.L
 --L.mode = "Mode"
 --L.modeBar = "Bar"
 --L.modeBroker = "Data Broker"
---L.modeBarOnMap = "Bar on map"
+--L.modeBarOnMap = "Bar On Map"

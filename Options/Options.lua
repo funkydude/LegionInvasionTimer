@@ -389,7 +389,9 @@ local acOptions = {
 			type = "toggle",
 			name = L.hideInRaid,
 			order = 27,
-			disabled = disabled,
+			disabled = function() 
+				return lit.db.mode == 2 or lit.db.mode == 3
+			end,
 		},
 		mode = {
 			type = "select",
@@ -404,6 +406,9 @@ local acOptions = {
 				lit.db.mode = value
 				if value == 2 then
 					lit.db.lock = true
+				end
+				if value == 3 then
+					lit.db.hideInRaid = nil
 				end
 				ReloadUI()
 			end,

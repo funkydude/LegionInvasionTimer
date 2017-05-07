@@ -437,6 +437,10 @@ frame:SetScript("OnEvent", function(f)
 	end
 	if not legionTimerDB.mode then
 		legionTimerDB.mode = 1
+	elseif legionTimerDB.mode == 2 then
+		legionTimerDB.lock = true
+	elseif legionTimerDB.mode == 3 then
+		legionTimerDB.hideInRaid = nil
 	end
 	legionTimerDB.hideBossWarnings = nil
 	if not legionTimerDB.colorNext then
