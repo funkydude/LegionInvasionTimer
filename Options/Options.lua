@@ -375,7 +375,7 @@ local acOptions = {
 			name = L.hide:format((GetCurrencyInfo(1226))),
 			order = 24,
 		},
-		tooltipSupplies = {
+		tooltipHideWarSupplies = {
 			type = "toggle",
 			name = L.hide:format((GetCurrencyInfo(1342))),
 			order = 25,

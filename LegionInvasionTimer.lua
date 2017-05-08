@@ -52,7 +52,7 @@ do
 			local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
 			tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		end
-		if not legionTimerDB.tooltipSupplies then
+		if not legionTimerDB.tooltipHideWarSupplies then
 			splitLine = true
 			local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
 			tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
@@ -443,6 +443,7 @@ frame:SetScript("OnEvent", function(f)
 		legionTimerDB.hideInRaid = nil
 	end
 	legionTimerDB.hideBossWarnings = nil
+	legionTimerDB.tooltipSupplies = nil
 	if not legionTimerDB.colorNext then
 		legionTimerDB.colorNext = {0.25,0.33,0.68,1}
 	end
