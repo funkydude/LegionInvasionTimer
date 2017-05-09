@@ -4,11 +4,9 @@ local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
-mod.c = {r=1,g=1,b=1}
 local bars = {}
 
 local frame = CreateFrame("Frame", name, UIParent)
-mod.f = frame
 frame:SetPoint("CENTER", UIParent, "CENTER")
 frame:SetWidth(180)
 frame:SetHeight(15)
@@ -16,7 +14,20 @@ frame:SetMovable(true)
 frame:EnableMouse(true)
 frame:RegisterForDrag("LeftButton")
 frame:SetClampedToScreen(true)
-frame:Hide()
+frame:Show()
+frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
+frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
+SlashCmdList[name] = function()
+	LoadAddOn("LegionInvasionTimer_Options")
+	LibStub("AceConfigDialog-3.0"):Open(name)
+end
+SLASH_LegionInvasionTimer1 = "/lit"
+SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
+frame:SetScript("OnMouseUp", function(f, btn)
+	if btn == "RightButton" then
+		SlashCmdList.LegionInvasionTimer()
+	end
+end)
 frame:RegisterEvent("PLAYER_LOGIN")
 frame.bars = bars
 
@@ -115,14 +126,14 @@ do
 	end
 end
 
-local rearrangeBars
+local RearrangeBars
 do
 	-- Ripped from BigWigs bar sorter
 	local function barSorter(a, b)
 		return a.remaining < b.remaining and true or false
 	end
 	local tmp = {}
-	rearrangeBars = function()
+	RearrangeBars = function()
 		wipe(tmp)
 		for bar in next, bars do
 			tmp[#tmp + 1] = bar
@@ -152,19 +163,16 @@ do
 			end
 		end
 	end
-	frame.rearrangeBars = rearrangeBars
+	frame.RearrangeBars = RearrangeBars
 end
 
-local function stopBar(text, stopAll)
+local function StopBar(text)
 	for bar in next, bars do
-		if stopAll then
-			bar:Stop(true)
-		elseif bar:GetLabel() == text then
-			bar:Stop(true)
+		if bar:GetLabel() == text then
+			bar:Stop()
 		end
 	end
 end
-mod.stopBar = stopBar
 
 local ChangeBarColor
 do
@@ -189,11 +197,11 @@ do
 	end
 end
 
-local startBar, startBroker
+local StartBar
 local hiddenBars = false
 do
-	startBar = function(text, timeLeft, rewardQuestID, icon, paused)
-		stopBar(text)
+	StartBar = function(text, timeLeft, rewardQuestID, icon, paused)
+		StopBar(text)
 		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
 		bars[bar] = true
 
@@ -241,14 +249,14 @@ do
 		else -- Next invasion bars
 			bar:Start()
 		end
-		rearrangeBars()
+		RearrangeBars()
 		if hiddenBars then
 			bar:Hide()
 		end
 	end
-	mod.startBar = startBar
 end
 
+local StartBroker
 do
 	local obj
 	local prevTime, label, repeater = 0, "", false
@@ -256,7 +264,7 @@ do
 		prevTime = prevTime - 60
 		obj.text = label..": ".. SecondsToTime(prevTime, true)
 	end
-	startBroker = function(text, timeLeft, icon)
+	StartBroker = function(text, timeLeft, icon)
 		if not obj then
 			obj = LibStub("LibDataBroker-1.1"):NewDataObject("LegionInvasionTimer", {
 				type = "data source",
@@ -298,22 +306,22 @@ do
 		for i = 1, #zonePOIIds do
 			local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
 			if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-				stopBar(NEXT)
-				stopBar(L.waiting)
+				StopBar(NEXT)
+				StopBar(L.waiting)
 				local t = timeLeftMinutes * 60
 				if mode == 2 then
-					startBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				else
-					startBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 					frame:RegisterEvent("QUEST_TURNED_IN")
 				end
 				Timer(t+60, FindInvasion)
 				found = true
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 110 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
+				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 350 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
 					FlashClientIcon()
 					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
-					RaidNotice_AddMessage(RaidBossEmoteFrame, text, mod.c)
+					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
 					PlaySoundFile("Sound\\Interface\\RaidWarning.ogg", "Master")
 				end
 				justLoggedIn = false
@@ -341,18 +349,18 @@ do
 					if not isWaiting then
 						isWaiting = true
 						if mode == 2 then
-							startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+							StartBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 						else
-							startBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+							StartBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 						end
 					end
 					return
 				end
 
 				if mode == 2 then
-					startBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					StartBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				else
-					startBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					StartBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				end
 
 				Timer(t + 5, FindInvasion)
@@ -361,9 +369,9 @@ do
 				if not isWaiting then
 					isWaiting = true
 					if mode == 2 then
-						startBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+						StartBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					else
-						startBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+						StartBar(L.waiting, 1000, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					end
 				end
 			end
@@ -449,17 +457,6 @@ frame:SetScript("OnEvent", function(f)
 	end
 	-- END COMPAT --
 
-	f:Show()
-	f:SetScript("OnDragStart", function(f) f:StartMoving() end)
-	f:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
-	SlashCmdList[name] = function() LoadAddOn("LegionInvasionTimer_Options") LibStub("AceConfigDialog-3.0"):Open(name) end
-	SLASH_LegionInvasionTimer1 = "/lit"
-	SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
-	f:SetScript("OnMouseUp", function(f, btn)
-		if btn == "RightButton" then
-			SlashCmdList[name]()
-		end
-	end)
 	f:SetScript("OnEnter", function(f)
 		local tip = legionTimerDB.mode == 3 and WorldMapTooltip or GameTooltip
 		tip:SetOwner(f, "ANCHOR_NONE")
@@ -494,7 +491,7 @@ frame:SetScript("OnEvent", function(f)
 	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
 		if bars[bar] then
 			bars[bar] = nil
-			rearrangeBars()
+			RearrangeBars()
 		end
 	end)
 

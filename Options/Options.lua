@@ -188,7 +188,7 @@ local acOptions = {
 			step = 1,
 			set = function(info, value)
 				lit.db.spacing = value
-				lit.rearrangeBars()
+				lit.RearrangeBars()
 			end,
 			disabled = disabled,
 		},
@@ -262,7 +262,7 @@ local acOptions = {
 			order = 15,
 			set = function(info, value)
 				lit.db.growUp = value
-				lit.rearrangeBars()
+				lit.RearrangeBars()
 			end,
 			disabled = disabled,
 		},
