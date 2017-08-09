@@ -18,6 +18,7 @@ frame:Show()
 frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
 frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
 SlashCmdList[name] = function()
+	if PlaySoundKitID and (IsFalling() or InCombatLockdown() or UnitAffectingCombat("player")) then return end
 	LoadAddOn("LegionInvasionTimer_Options")
 	LibStub("AceConfigDialog-3.0"):Open(name)
 end
