@@ -18,7 +18,6 @@ frame:Show()
 frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
 frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
 SlashCmdList[name] = function()
-	if PlaySoundKitID and (IsFalling() or InCombatLockdown() or UnitAffectingCombat("player")) then return end
 	LoadAddOn("LegionInvasionTimer_Options")
 	LibStub("AceConfigDialog-3.0"):Open(name)
 end
@@ -323,7 +322,7 @@ do
 					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
-					PlaySound(PlaySoundKitID and "RaidWarning" or 8959, "Master", false) -- SOUNDKIT.RAID_WARNING
+					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
 				end
 				justLoggedIn = false
 
