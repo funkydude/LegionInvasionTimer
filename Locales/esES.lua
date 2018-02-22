@@ -3,10 +3,10 @@ if GetLocale() ~= "esES" and GetLocale() ~= "esMX" then return end
 local _, mod = ...
 local L = mod.L
 
---L.firstRunWarning = "Timers will not be shown until you see your first invasion."
---L.underAttack = "|T236292:15:15:0:0:64:64:4:60:4:60|t %s is under attack!"
+L.firstRunWarning = "Los tiempos no se mostrarán hasta que veas tu primera invasión"
+L.underAttack = "¡Están atacando |T236292:15:15:0:0:64:64:4:60:4:60|t %s!"
 L.tooltipClick = "|cffeda55fClick|r para arrastrar y mover."
 L.tooltipClickOptions = "|cffeda55fClick derecho|r para abrir las opciones."
---L.nextInvasions = "Next Invasions"
---L.next = "Next"
---L.waiting = "Waiting"
+L.nextInvasions = "Siguientes Invasiones"
+L.next = "Siguiente"
+L.waiting = "Esperando"
