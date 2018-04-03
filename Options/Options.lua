@@ -164,6 +164,7 @@ local acOptions = {
 			order = 9,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
+			width = "full",
 			get = function()
 				for i, v in next, media:List("statusbar") do
 					if v == lit.db.barTexture then return i end
@@ -179,23 +180,10 @@ local acOptions = {
 			end,
 			disabled = disabled,
 		},
-		spacing = {
-			type = "range",
-			name = L.barSpacing,
-			order = 10,
-			max = 100,
-			min = 0,
-			step = 1,
-			set = function(info, value)
-				lit.db.spacing = value
-				lit.RearrangeBars()
-			end,
-			disabled = disabled,
-		},
 		width = {
 			type = "range",
 			name = L.barWidth,
-			order = 11,
+			order = 10,
 			max = 2000,
 			min = 10,
 			step = 1,
@@ -210,7 +198,7 @@ local acOptions = {
 		height = {
 			type = "range",
 			name = L.barHeight,
-			order = 12,
+			order = 11,
 			max = 100,
 			min = 5,
 			step = 1,
@@ -222,10 +210,39 @@ local acOptions = {
 			end,
 			disabled = disabled,
 		},
+		alignIcon = {
+			type = "select",
+			name = L.alignIcon,
+			order = 12,
+			values = {
+				LEFT = L.left,
+				RIGHT = L.right,
+			},
+			set = function(info, value)
+				lit.db.alignIcon = value
+				for bar in next, lit.bars do
+					bar:SetIconPosition(value)
+				end
+			end,
+			disabled = function() return disabled() or not lit.db.icon end,
+		},
+		spacing = {
+			type = "range",
+			name = L.barSpacing,
+			order = 13,
+			max = 100,
+			min = 0,
+			step = 1,
+			set = function(info, value)
+				lit.db.spacing = value
+				lit.RearrangeBars()
+			end,
+			disabled = disabled,
+		},
 		alignZone = {
 			type = "select",
 			name = L.alignZone,
-			order = 13,
+			order = 14,
 			values = {
 				LEFT = L.left,
 				CENTER = L.center,
@@ -242,7 +259,7 @@ local acOptions = {
 		alignTime = {
 			type = "select",
 			name = L.alignTime,
-			order = 14,
+			order = 15,
 			values = {
 				LEFT = L.left,
 				CENTER = L.center,
@@ -259,7 +276,7 @@ local acOptions = {
 		growUp = {
 			type = "toggle",
 			name = L.growUpwards,
-			order = 15,
+			order = 16,
 			set = function(info, value)
 				lit.db.growUp = value
 				lit.RearrangeBars()
@@ -270,7 +287,7 @@ local acOptions = {
 			name = L.textColor,
 			type = "color",
 			hasAlpha = true,
-			order = 16,
+			order = 17,
 			get = function()
 				return unpack(lit.db.colorText)
 			end,
@@ -286,7 +303,7 @@ local acOptions = {
 			name = L.completedBar,
 			type = "color",
 			hasAlpha = true,
-			order = 17,
+			order = 18,
 			get = function()
 				return unpack(lit.db.colorComplete)
 			end,
@@ -304,7 +321,7 @@ local acOptions = {
 			name = L.incompleteBar,
 			type = "color",
 			hasAlpha = true,
-			order = 18,
+			order = 19,
 			get = function()
 				return unpack(lit.db.colorIncomplete)
 			end,
@@ -322,7 +339,7 @@ local acOptions = {
 			name = L.nextBar,
 			type = "color",
 			hasAlpha = true,
-			order = 19,
+			order = 20,
 			get = function()
 				return unpack(lit.db.colorNext)
 			end,
@@ -341,7 +358,7 @@ local acOptions = {
 			name = L.barBackground,
 			type = "color",
 			hasAlpha = true,
-			order = 20,
+			order = 21,
 			get = function()
 				return unpack(lit.db.colorBarBackground)
 			end,
@@ -358,37 +375,37 @@ local acOptions = {
 		tooltipHeader = {
 			type = "header",
 			name = L.tooltipHeader,
-			order = 21,
+			order = 22,
 		},
 		tooltip12hr = {
 			type = "toggle",
 			name = L.tooltip12hr,
-			order = 22,
+			order = 23,
 		},
 		tooltipHideAchiev = {
 			type = "toggle",
 			name = L.tooltipHideAchiev,
-			order = 23,
+			order = 24,
 		},
 		tooltipHideNethershard = {
 			type = "toggle",
 			name = L.hide:format((GetCurrencyInfo(1226))),
-			order = 24,
+			order = 25,
 		},
 		tooltipHideWarSupplies = {
 			type = "toggle",
 			name = L.hide:format((GetCurrencyInfo(1342))),
-			order = 25,
+			order = 26,
 		},
 		miscSeparator = {
 			type = "header",
 			name = "",
-			order = 26,
+			order = 27,
 		},
 		hideInRaid = {
 			type = "toggle",
 			name = L.hideInRaid,
-			order = 27,
+			order = 28,
 			disabled = function() 
 				return lit.db.mode == 2 or lit.db.mode == 3
 			end,
@@ -396,7 +413,7 @@ local acOptions = {
 		mode = {
 			type = "select",
 			name = L.mode,
-			order = 28,
+			order = 29,
 			values = {
 				[1] = L.modeBar,
 				[2] = L.modeBroker,
@@ -417,5 +434,5 @@ local acOptions = {
 }
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 400, 600)
+acd:SetDefaultSize(acOptions.name, 400, 640)
 

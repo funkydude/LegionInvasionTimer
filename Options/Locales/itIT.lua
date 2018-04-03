@@ -21,6 +21,7 @@ local L = mod.L
 --L.barHeight = "Bar Height"
 --L.alignZone = "Align Zone"
 --L.alignTime = "Align Time"
+--L.alignIcon = "Align Bar Icon"
 --L.left = "Left"
 --L.center = "Center"
 --L.right = "Right"

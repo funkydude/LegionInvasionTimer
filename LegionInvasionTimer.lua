@@ -227,6 +227,7 @@ do
 		bar:SetTextColor(unpack(legionTimerDB.colorText))
 		if legionTimerDB.icon then
 			bar:SetIcon(icon)
+			bar:SetIconPosition(legionTimerDB.alignIcon)
 		end
 		bar:SetTimeVisibility(legionTimerDB.timeText)
 		bar:SetFill(legionTimerDB.fill)
@@ -420,6 +421,7 @@ frame:SetScript("OnEvent", function(f)
 			spacing = 0,
 			alignZone = "LEFT",
 			alignTime = "RIGHT",
+			alignIcon = "LEFT",
 			colorText = {1,1,1,1},
 			colorComplete = {0,1,0,1},
 			colorIncomplete = {1,0,0,1},
@@ -429,31 +431,8 @@ frame:SetScript("OnEvent", function(f)
 		}
 	end
 	-- START COMPAT --
-	if not legionTimerDB.colorText then
-		legionTimerDB.colorText = {1,1,1,1}
-	end
-	if legionTimerDB.texture then -- Cleanup old texture DB entry
-		if legionTimerDB.texture == "BantoBar" then
-			legionTimerDB.barTexture = "Blizzard Raid Bar"
-		else
-			legionTimerDB.barTexture = legionTimerDB.texture
-		end
-		legionTimerDB.texture = nil
-	end
-	if not legionTimerDB.colorBarBackground then -- add new Bar Background Value to legionTimerDB
-		legionTimerDB.colorBarBackground = {0,0,0,0.75}
-	end
-	if not legionTimerDB.mode then
-		legionTimerDB.mode = 1
-	elseif legionTimerDB.mode == 2 then
-		legionTimerDB.lock = true
-	elseif legionTimerDB.mode == 3 then
-		legionTimerDB.hideInRaid = nil
-	end
-	legionTimerDB.hideBossWarnings = nil
-	legionTimerDB.tooltipSupplies = nil
-	if not legionTimerDB.colorNext then
-		legionTimerDB.colorNext = {0.25,0.33,0.68,1}
+	if not legionTimerDB.alignIcon then
+		legionTimerDB.alignIcon = "LEFT"
 	end
 	-- END COMPAT --
 
