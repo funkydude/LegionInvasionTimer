@@ -386,8 +386,8 @@ end
 
 local function CheckIfInRaid()
 	if legionTimerDB.hideInRaid then
-		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
-		if instanceId == 1676 or instanceId == 1530 or instanceId == 1648 or instanceId == 1520 then -- Tomb of Sargeras, Nighthold, Trial of Valor, Emerald Nightmare
+		local _, iType = GetInstanceInfo()
+		if iType == "raid" then
 			hiddenBars = true
 			for bar in next, bars do
 				if bar then
