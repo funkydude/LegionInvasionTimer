@@ -291,7 +291,7 @@ end
 local FindInvasion
 local justLoggedIn = true
 do
-	local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
+	local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft or C_AreaPoiInfo.GetAreaPOITimeLeft -- XXX 8.0
 	local isWaiting = false
 	local zonePOIIds = {5177, 5178, 5210, 5175}
 	local zoneNames = {1024, 1017, 1018, 1015}
