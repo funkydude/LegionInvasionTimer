@@ -293,13 +293,25 @@ local justLoggedIn = true
 do
 	local GetAreaPOITimeLeft = C_WorldMap and C_WorldMap.GetAreaPOITimeLeft or C_AreaPoiInfo.GetAreaPOITimeLeft -- XXX 8.0
 	local isWaiting = false
-	local zonePOIIds = {5177, 5178, 5210, 5175}
-	local zoneNames = {1024, 1017, 1018, 1015}
-	local questIds = {45840, 45839, 45812, 45838}
-	-- 5177 Highmountain 1024 45840
-	-- 5178 Stormheim 1017 45839
-	-- 5210 Val'Sharah 1018 45812
-	-- 5175 Azsuna 1015 45838
+	local zonePOIIds = {
+		5177, -- Highmountain
+		5178, -- Stormheim
+		5210, -- Val'Sharah
+		5175, -- Azsuna
+	}
+	local zoneNames = {
+		-- XXX 8.0
+		GetMapNameByID and GetMapNameByID(1024) or C_Map.GetMapInfo(650).name, -- Highmountain
+		GetMapNameByID and GetMapNameByID(1017) or C_Map.GetMapInfo(634).name, -- Stormheim
+		GetMapNameByID and GetMapNameByID(1018) or C_Map.GetMapInfo(641).name, -- Val'Sharah
+		GetMapNameByID and GetMapNameByID(1015) or C_Map.GetMapInfo(630).name, -- Azsuna
+	}
+	local questIds = {
+		45840, -- Highmountain
+		45839, -- Stormheim
+		45812, -- Val'Sharah
+		45838, -- Azsuna
+	}
 	FindInvasion = function()
 		local mode = legionTimerDB.mode
 		local found = false
@@ -311,16 +323,16 @@ do
 				StopBar(L.waiting)
 				local t = timeLeftMinutes * 60
 				if mode == 2 then
-					StartBroker(GetMapNameByID(zoneNames[i]), t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBroker(zoneNames[i], t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				else
-					StartBar(GetMapNameByID(zoneNames[i]), t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBar(zoneNames[i], t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 					frame:RegisterEvent("QUEST_TURNED_IN")
 				end
 				Timer(t+60, FindInvasion)
 				found = true
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 350 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
 					FlashClientIcon()
-					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(GetMapNameByID(zoneNames[i]))
+					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
 					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
