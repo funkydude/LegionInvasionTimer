@@ -291,7 +291,7 @@ end
 local FindInvasion
 local justLoggedIn = true
 do
-	local GetAreaPOITimeLeft = C_WorldMap and C_WorldMap.GetAreaPOITimeLeft or C_AreaPoiInfo.GetAreaPOITimeLeft -- XXX 8.0
+	local GetAreaPOITimeLeft = C_AreaPoiInfo.GetAreaPOITimeLeft
 	local isWaiting = false
 	local zonePOIIds = {
 		5177, -- Highmountain
@@ -300,11 +300,10 @@ do
 		5175, -- Azsuna
 	}
 	local zoneNames = {
-		-- XXX 8.0
-		GetMapNameByID and GetMapNameByID(1024) or C_Map.GetMapInfo(650).name, -- Highmountain
-		GetMapNameByID and GetMapNameByID(1017) or C_Map.GetMapInfo(634).name, -- Stormheim
-		GetMapNameByID and GetMapNameByID(1018) or C_Map.GetMapInfo(641).name, -- Val'Sharah
-		GetMapNameByID and GetMapNameByID(1015) or C_Map.GetMapInfo(630).name, -- Azsuna
+		C_Map.GetMapInfo(650).name, -- Highmountain
+		C_Map.GetMapInfo(634).name, -- Stormheim
+		C_Map.GetMapInfo(641).name, -- Val'Sharah
+		C_Map.GetMapInfo(630).name, -- Azsuna
 	}
 	local questIds = {
 		45840, -- Highmountain
