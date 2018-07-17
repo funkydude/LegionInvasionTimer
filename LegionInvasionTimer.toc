@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: LegionInvasionTimer
 ## Author: Funkydude
 ## Notes: Shows the Legion invasion timer.
