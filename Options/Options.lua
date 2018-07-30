@@ -42,14 +42,16 @@ local acOptions = {
 			set = function(info, value)
 				lit.db.lock = value
 				if value then
-					lit:EnableMouse(false)
+					value = false
 					lit.bg:Hide()
 					lit.header:Hide()
 				else
-					lit:EnableMouse(true)
+					value = true
 					lit.bg:Show()
 					lit.header:Show()
 				end
+				lit:EnableMouse(value)
+				lit:SetMovable(value)
 			end,
 			disabled = disabled,
 		},

@@ -17,15 +17,17 @@ frame:SetClampedToScreen(true)
 frame:Show()
 frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
 frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
-SlashCmdList[name] = function()
+local function openOpts()
+	EnableAddOn("LegionInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
 	LoadAddOn("LegionInvasionTimer_Options")
 	LibStub("AceConfigDialog-3.0"):Open(name)
 end
+SlashCmdList[name] = openOpts
 SLASH_LegionInvasionTimer1 = "/lit"
 SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
-frame:SetScript("OnMouseUp", function(f, btn)
+frame:SetScript("OnMouseUp", function(_, btn)
 	if btn == "RightButton" then
-		SlashCmdList.LegionInvasionTimer()
+		openOpts()
 	end
 end)
 frame:RegisterEvent("PLAYER_LOGIN")
@@ -468,6 +470,7 @@ frame:SetScript("OnEvent", function(f)
 
 	if legionTimerDB.lock then
 		f:EnableMouse(false)
+		f:SetMovable(false)
 		f.bg:Hide()
 		f.header:Hide()
 	end
