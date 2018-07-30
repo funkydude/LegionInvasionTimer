@@ -470,7 +470,7 @@ frame:SetScript("OnEvent", function(f)
 
 	if legionTimerDB.lock then
 		f:EnableMouse(false)
-		f:SetMovable(false)
+		--f:SetMovable(false)
 		f.bg:Hide()
 		f.header:Hide()
 	end

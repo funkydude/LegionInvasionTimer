@@ -51,7 +51,7 @@ local acOptions = {
 					lit.header:Show()
 				end
 				lit:EnableMouse(value)
-				lit:SetMovable(value)
+				--lit:SetMovable(value)
 			end,
 			disabled = disabled,
 		},
