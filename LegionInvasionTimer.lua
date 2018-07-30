@@ -63,12 +63,12 @@ do
 		if not legionTimerDB.tooltipHideNethershard then
 			splitLine = true
 			local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
-			tip:AddDoubleLine(nName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
+			tip:AddDoubleLine(nName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		end
 		if not legionTimerDB.tooltipHideWarSupplies then
 			splitLine = true
 			local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
-			tip:AddDoubleLine(sName, ("|T%s:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+			tip:AddDoubleLine(sName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
 		end
 
 		if splitLine then
