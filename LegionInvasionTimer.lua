@@ -76,9 +76,9 @@ do
 		end
 
 		tip:AddLine(L.nextInvasions)
-		if legionTimerDB.prev then -- Have we seen our first invasion?
+		if LegionInvasionTime then -- Have we seen our first invasion?
 			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-			local elapsed = time() - legionTimerDB.prev
+			local elapsed = time() - LegionInvasionTime
 			while elapsed > 66600 do
 				elapsed = elapsed - 66600
 			end
@@ -343,14 +343,14 @@ do
 				local t = time()
 				local elapsed = 360-timeLeftMinutes
 				t = t - (elapsed * 60)
-				legionTimerDB.prev = t
+				LegionInvasionTime = t
 			end
 		end
 
 		if not found then
-			if legionTimerDB.prev then
+			if LegionInvasionTime then
 				-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-				local elapsed = time() - legionTimerDB.prev
+				local elapsed = time() - LegionInvasionTime
 				while elapsed > 66600 do
 					elapsed = elapsed - 66600
 				end
@@ -420,6 +420,36 @@ end
 
 frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
+
+	if type(legionTimerDB) == "table" and legionTimerDB.prev then
+		LegionInvasionTime = legionTimerDB.prev
+	end
+	-- saved variables database setup
+	--local defaults = {
+	--	profile = {
+	--		lock = false,
+	--		position = {"CENTER", "CENTER", 0, 0},
+	--		fontSize = 10,
+	--		barTexture = "Blizzard Raid Bar",
+	--		outline = "NONE",
+	--		font = media:GetDefault("font"),
+	--		width = 200,
+	--		height = 20,
+	--		icon = true,
+	--		timeText = true,
+	--		spacing = 0,
+	--		alignText = "LEFT",
+	--		alignTime = "RIGHT",
+	--		alignIcon = "LEFT",
+	--		colorText = {1,1,1,1},
+	--		colorComplete = {0,1,0,1},
+	--		colorIncomplete = {1,0,0,1},
+	--		colorNext = {0.25,0.33,0.68,1},
+	--		colorBarBackground = {0,0,0,0.75},
+	--		mode = 1,
+	--	},
+	--}
+	--db = LibStub("AceDB-3.0"):New("LegionInvasionTimerDB", defaults, true)
 
 	if type(legionTimerDB) ~= "table" then
 		legionTimerDB = {
@@ -492,7 +522,7 @@ frame:SetScript("OnEvent", function(f)
 
 	Timer(15, function()
 		justLoggedIn = false
-		if not legionTimerDB.prev then
+		if not LegionInvasionTime then
 			print("|cFF33FF99LegionInvasionTimer|r:", L.firstRunWarning)
 		end
 	end)
