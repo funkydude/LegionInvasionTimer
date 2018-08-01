@@ -4,7 +4,6 @@ local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
-local bars = {}
 
 local frame = CreateFrame("Frame", name, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
@@ -39,7 +38,6 @@ do
 		end
 	end)
 	frame:RegisterEvent("PLAYER_LOGIN")
-	frame.bars = bars
 end
 
 local OnEnter, ShowTip, HideTip
@@ -137,52 +135,15 @@ do
 	end
 end
 
-local RearrangeBars
-do
-	-- Ripped from BigWigs bar sorter
-	local function barSorter(a, b)
-		return a.remaining < b.remaining and true or false
-	end
-	local tmp = {}
-	RearrangeBars = function()
-		wipe(tmp)
-		for bar in next, bars do
-			tmp[#tmp + 1] = bar
-		end
-		table.sort(tmp, barSorter)
-		local lastBar = nil
-		local up = frame.db.profile.growUp
-		for i, bar in next, tmp do
-			bar:ClearAllPoints()
-			if up then
-				if lastBar then -- Growing from a bar
-					bar:SetPoint("BOTTOMLEFT", lastBar, "TOPLEFT")
-					bar:SetPoint("BOTTOMRIGHT", lastBar, "TOPRIGHT")
-				else -- Growing from the anchor
-					bar:SetPoint("BOTTOM", frame, "TOP")
-				end
-				lastBar = bar
-			else
-				if lastBar then -- Growing from a bar
-					bar:SetPoint("TOPLEFT", lastBar, "BOTTOMLEFT")
-					bar:SetPoint("TOPRIGHT", lastBar, "BOTTOMRIGHT")
-				else -- Growing from the anchor
-					bar:SetPoint("TOP", frame, "BOTTOM")
-				end
-				lastBar = bar
-			end
-		end
-	end
-	frame.RearrangeBars = RearrangeBars
-end
-
-local function StopBar(text)
-	for bar in next, bars do
-		if bar:GetLabel() == text then
-			bar:Stop()
-		end
+local function RearrangeBar()
+	frame.Bar:ClearAllPoints()
+	if frame.db.profile.growUp then
+		frame.Bar:SetPoint("BOTTOM", frame, "TOP")
+	else
+		frame.Bar:SetPoint("TOP", frame, "BOTTOM")
 	end
 end
+frame.RearrangeBar = RearrangeBar
 
 local ChangeBarColor
 do
@@ -199,10 +160,8 @@ do
 	}
 	ChangeBarColor = function(id)
 		if quests[id] then
-			for bar in next, bars do
-				bar:Set("LegionInvasionTimer:complete", 1)
-				bar:SetColor(unpack(frame.db.profile.colorComplete))
-			end
+			frame.Bar:Set("LegionInvasionTimer:complete", 1)
+			frame.Bar:SetColor(unpack(frame.db.profile.colorComplete))
 		end
 	end
 end
@@ -211,9 +170,9 @@ local StartBar
 local hiddenBars = false
 do
 	StartBar = function(text, timeLeft, rewardQuestID, icon, paused)
-		StopBar(text)
+		if frame.Bar then frame.Bar:Stop() end
 		local bar = candy:New(media:Fetch("statusbar", frame.db.profile.barTexture), frame.db.profile.width, frame.db.profile.height)
-		bars[bar] = true
+		frame.Bar = bar
 
 		bar:SetScript("OnEnter", OnEnter)
 		bar:SetScript("OnLeave", HideTip)
@@ -260,7 +219,7 @@ do
 		else -- Next invasion bars
 			bar:Start()
 		end
-		RearrangeBars()
+		RearrangeBar()
 		if hiddenBars then
 			bar:Hide()
 		end
@@ -328,8 +287,6 @@ do
 		for i = 1, #zonePOIIds do
 			local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
 			if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-				StopBar(NEXT)
-				StopBar(L.waiting)
 				local t = timeLeftMinutes * 60
 				if mode == 2 then
 					StartBroker(zoneNames[i], t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
@@ -410,18 +367,10 @@ local function CheckIfInRaid()
 		local _, iType = GetInstanceInfo()
 		if iType == "raid" then
 			hiddenBars = true
-			for bar in next, bars do
-				if bar then
-					bar:Hide()
-				end
-			end
+			frame.Bar:Hide()
 		elseif hiddenBars then
 			hiddenBars = false
-			for bar in next, bars do
-				if bar then
-					bar:Show()
-				end
-			end
+			frame.Bar:Show()
 		end
 	end
 end
@@ -432,6 +381,8 @@ frame:SetScript("OnEvent", function(f)
 	if type(legionTimerDB) == "table" and legionTimerDB.prev then
 		LegionInvasionTime = legionTimerDB.prev
 	end
+	legionTimerDB = nil -- XXX remove old DB
+
 	-- saved variables database setup
 	local defaults = {
 		profile = {
@@ -490,13 +441,6 @@ frame:SetScript("OnEvent", function(f)
 		f:SetFrameStrata("FULLSCREEN")
 		f:SetFrameLevel(10)
 	end
-
-	candy.RegisterCallback(name, "LibCandyBar_Stop", function(_, bar)
-		if bars[bar] then
-			bars[bar] = nil
-			RearrangeBars()
-		end
-	end)
 
 	FindInvasion()
 

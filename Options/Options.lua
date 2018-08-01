@@ -67,9 +67,7 @@ local acOptions = {
 					order = 2,
 					set = function(info, value)
 						lit.db.profile.icon = value
-						for bar in next, lit.bars do
-							bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
-						end
+						lit.Bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 					end,
 					disabled = disabled,
 				},
@@ -79,9 +77,7 @@ local acOptions = {
 					order = 3,
 					set = function(info, value)
 						lit.db.profile.timeText = value
-						for bar in next, lit.bars do
-							bar:SetTimeVisibility(value)
-						end
+						lit.Bar:SetTimeVisibility(value)
 					end,
 					disabled = disabled,
 				},
@@ -91,9 +87,7 @@ local acOptions = {
 					order = 4,
 					set = function(info, value)
 						lit.db.profile.fill = value
-						for bar in next, lit.bars do
-							bar:SetFill(value)
-						end
+						lit.Bar:SetFill(value)
 					end,
 					disabled = disabled,
 				},
@@ -113,10 +107,8 @@ local acOptions = {
 						local list = media:List("font")
 						local font = list[value]
 						lit.db.profile.font = font
-						for bar in next, lit.bars do
-							bar.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
-							bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
-						end
+						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
+						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
 					end,
 					disabled = disabled,
 				},
@@ -129,10 +121,8 @@ local acOptions = {
 					step = 1,
 					set = function(info, value)
 						lit.db.profile.fontSize = value
-						for bar in next, lit.bars do
-							bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
-							bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
-						end
+						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
+						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
 					end,
 					disabled = disabled,
 				},
@@ -142,10 +132,8 @@ local acOptions = {
 					order = 7,
 					set = function(info, value)
 						lit.db.profile.monochrome = value
-						for bar in next, lit.bars do
-							bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-							bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-						end
+						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
+						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 					end,
 					disabled = disabled,
 				},
@@ -160,10 +148,8 @@ local acOptions = {
 					},
 					set = function(info, value)
 						lit.db.profile.outline = value
-						for bar in next, lit.bars do
-							bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-							bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-						end
+						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
+						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 					end,
 					disabled = disabled,
 				},
@@ -177,9 +163,7 @@ local acOptions = {
 					},
 					set = function(info, value)
 						lit.db.profile.alignIcon = value
-						for bar in next, lit.bars do
-							bar:SetIconPosition(value)
-						end
+						lit.Bar:SetIconPosition(value)
 					end,
 					disabled = function() return disabled() or not lit.db.profile.icon end,
 				},
@@ -199,9 +183,7 @@ local acOptions = {
 						local list = media:List("statusbar")
 						local texture = list[value]
 						lit.db.profile.barTexture = texture
-						for bar in next, lit.bars do
-							bar:SetTexture(media:Fetch("statusbar", texture))
-						end
+						lit.Bar:SetTexture(media:Fetch("statusbar", texture))
 					end,
 					disabled = disabled,
 				},
@@ -214,9 +196,7 @@ local acOptions = {
 					step = 1,
 					set = function(info, value)
 						lit.db.profile.width = value
-						for bar in next, lit.bars do
-							bar:SetWidth(value)
-						end
+						lit.Bar:SetWidth(value)
 					end,
 					disabled = disabled,
 				},
@@ -229,9 +209,7 @@ local acOptions = {
 					step = 1,
 					set = function(info, value)
 						lit.db.profile.height = value
-						for bar in next, lit.bars do
-							bar:SetHeight(value)
-						end
+						lit.Bar:SetHeight(value)
 					end,
 					disabled = disabled,
 				},
@@ -246,9 +224,7 @@ local acOptions = {
 					},
 					set = function(info, value)
 						lit.db.profile.alignText = value
-						for bar in next, lit.bars do
-							bar.candyBarLabel:SetJustifyH(value)
-						end
+						lit.Bar.candyBarLabel:SetJustifyH(value)
 					end,
 					disabled = disabled,
 				},
@@ -263,9 +239,7 @@ local acOptions = {
 					},
 					set = function(info, value)
 						lit.db.profile.alignTime = value
-						for bar in next, lit.bars do
-							bar.candyBarDuration:SetJustifyH(value)
-						end
+						lit.Bar.candyBarDuration:SetJustifyH(value)
 					end,
 					disabled = disabled,
 				},
@@ -275,7 +249,7 @@ local acOptions = {
 					order = 15,
 					set = function(info, value)
 						lit.db.profile.growUp = value
-						lit.RearrangeBars()
+						lit.RearrangeBar()
 					end,
 					disabled = disabled,
 				},
@@ -289,9 +263,7 @@ local acOptions = {
 					end,
 					set = function(info, r, g, b, a)
 						lit.db.profile.colorText = {r, g, b, a}
-						for bar in next, lit.bars do
-							bar:SetTextColor(r, g, b, a)
-						end
+						lit.Bar:SetTextColor(r, g, b, a)
 					end,
 					disabled = disabled,
 				},
@@ -305,10 +277,8 @@ local acOptions = {
 					end,
 					set = function(info, r, g, b, a)
 						lit.db.profile.colorComplete = {r, g, b, a}
-						for bar in next, lit.bars do
-							if bar:Get("LegionInvasionTimer:complete") == 1 then
-								bar:SetColor(r, g, b, a)
-							end
+						if lit.Bar:Get("LegionInvasionTimer:complete") == 1 then
+							lit.Bar:SetColor(r, g, b, a)
 						end
 					end,
 					disabled = disabled,
@@ -323,10 +293,8 @@ local acOptions = {
 					end,
 					set = function(info, r, g, b, a)
 						lit.db.profile.colorIncomplete = {r, g, b, a}
-						for bar in next, lit.bars do
-							if bar:Get("LegionInvasionTimer:complete") == 0 then
-								bar:SetColor(r, g, b, a)
-							end
+						if lit.Bar:Get("LegionInvasionTimer:complete") == 0 then
+							lit.Bar:SetColor(r, g, b, a)
 						end
 					end,
 					disabled = disabled,
@@ -341,11 +309,8 @@ local acOptions = {
 					end,
 					set = function(info, r, g, b, a)
 						lit.db.profile.colorNext = {r, g, b, a}
-						for bar in next, lit.bars do
-							local tag = bar:Get("LegionInvasionTimer:complete")
-							if tag ~= 0 and tag ~= 1 then
-								bar:SetColor(r, g, b, a)
-							end
+						if not lit.Bar:Get("LegionInvasionTimer:complete") then
+							lit.Bar:SetColor(r, g, b, a)
 						end
 					end,
 					disabled = disabled,
@@ -360,11 +325,7 @@ local acOptions = {
 					end,
 					set = function(info, r, g, b, a)
 						lit.db.profile.colorBarBackground = {r, g, b, a}
-						for bar in next, lit.bars do
-							if bar then
-								bar.candyBarBackground:SetVertexColor(r, g, b, a)
-							end
-						end
+						lit.Bar.candyBarBackground:SetVertexColor(r, g, b, a)
 					end,
 					disabled = disabled,
 				},
