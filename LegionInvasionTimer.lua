@@ -55,7 +55,7 @@ do
 			end
 			tip:AddLine(description, 1, 1, 1, true)
 			for i = 1, GetAchievementNumCriteria(id) do
-				local criteriaString, criteriaType, completed = GetAchievementCriteriaInfo(id, i)
+				local criteriaString, _, completed = GetAchievementCriteriaInfo(id, i)
 				if completed == false then
 					criteriaString = "|CFF808080 - " .. criteriaString .. "|r"
 				else

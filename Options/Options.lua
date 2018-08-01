@@ -45,7 +45,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.lock,
 					order = 1,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.lock = value
 						if value then
 							value = false
@@ -65,7 +65,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.barIcon,
 					order = 2,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.icon = value
 						lit.Bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 					end,
@@ -75,7 +75,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.showTime,
 					order = 3,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.timeText = value
 						lit.Bar:SetTimeVisibility(value)
 					end,
@@ -85,7 +85,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.fillBar,
 					order = 4,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.fill = value
 						lit.Bar:SetFill(value)
 					end,
@@ -103,7 +103,7 @@ local acOptions = {
 							if v == lit.db.profile.font then return i end
 						end
 					end,
-					set = function(info, value)
+					set = function(_, value)
 						local list = media:List("font")
 						local font = list[value]
 						lit.db.profile.font = font
@@ -119,7 +119,7 @@ local acOptions = {
 					max = 200,
 					min = 1,
 					step = 1,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.fontSize = value
 						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
 						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
@@ -130,7 +130,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.monochrome,
 					order = 7,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.monochrome = value
 						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
@@ -146,7 +146,7 @@ local acOptions = {
 						OUTLINE = L.thin,
 						THICKOUTLINE = L.thick,
 					},
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.outline = value
 						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
@@ -161,7 +161,7 @@ local acOptions = {
 						LEFT = L.left,
 						RIGHT = L.right,
 					},
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.alignIcon = value
 						lit.Bar:SetIconPosition(value)
 					end,
@@ -179,7 +179,7 @@ local acOptions = {
 							if v == lit.db.profile.barTexture then return i end
 						end
 					end,
-					set = function(info, value)
+					set = function(_, value)
 						local list = media:List("statusbar")
 						local texture = list[value]
 						lit.db.profile.barTexture = texture
@@ -194,7 +194,7 @@ local acOptions = {
 					max = 2000,
 					min = 10,
 					step = 1,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.width = value
 						lit.Bar:SetWidth(value)
 					end,
@@ -207,7 +207,7 @@ local acOptions = {
 					max = 100,
 					min = 5,
 					step = 1,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.height = value
 						lit.Bar:SetHeight(value)
 					end,
@@ -222,7 +222,7 @@ local acOptions = {
 						CENTER = L.center,
 						RIGHT = L.right,
 					},
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.alignText = value
 						lit.Bar.candyBarLabel:SetJustifyH(value)
 					end,
@@ -237,7 +237,7 @@ local acOptions = {
 						CENTER = L.center,
 						RIGHT = L.right,
 					},
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.alignTime = value
 						lit.Bar.candyBarDuration:SetJustifyH(value)
 					end,
@@ -247,7 +247,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.growUpwards,
 					order = 15,
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.growUp = value
 						lit.RearrangeBar()
 					end,
@@ -261,7 +261,7 @@ local acOptions = {
 					get = function()
 						return unpack(lit.db.profile.colorText)
 					end,
-					set = function(info, r, g, b, a)
+					set = function(_, r, g, b, a)
 						lit.db.profile.colorText = {r, g, b, a}
 						lit.Bar:SetTextColor(r, g, b, a)
 					end,
@@ -275,7 +275,7 @@ local acOptions = {
 					get = function()
 						return unpack(lit.db.profile.colorComplete)
 					end,
-					set = function(info, r, g, b, a)
+					set = function(_, r, g, b, a)
 						lit.db.profile.colorComplete = {r, g, b, a}
 						if lit.Bar:Get("LegionInvasionTimer:complete") == 1 then
 							lit.Bar:SetColor(r, g, b, a)
@@ -291,7 +291,7 @@ local acOptions = {
 					get = function()
 						return unpack(lit.db.profile.colorIncomplete)
 					end,
-					set = function(info, r, g, b, a)
+					set = function(_, r, g, b, a)
 						lit.db.profile.colorIncomplete = {r, g, b, a}
 						if lit.Bar:Get("LegionInvasionTimer:complete") == 0 then
 							lit.Bar:SetColor(r, g, b, a)
@@ -307,7 +307,7 @@ local acOptions = {
 					get = function()
 						return unpack(lit.db.profile.colorNext)
 					end,
-					set = function(info, r, g, b, a)
+					set = function(_, r, g, b, a)
 						lit.db.profile.colorNext = {r, g, b, a}
 						if not lit.Bar:Get("LegionInvasionTimer:complete") then
 							lit.Bar:SetColor(r, g, b, a)
@@ -323,7 +323,7 @@ local acOptions = {
 					get = function()
 						return unpack(lit.db.profile.colorBarBackground)
 					end,
-					set = function(info, r, g, b, a)
+					set = function(_, r, g, b, a)
 						lit.db.profile.colorBarBackground = {r, g, b, a}
 						lit.Bar.candyBarBackground:SetVertexColor(r, g, b, a)
 					end,
@@ -382,7 +382,7 @@ local acOptions = {
 						[2] = L.modeBroker,
 						[3] = L.modeBarOnMap,
 					},
-					set = function(info, value)
+					set = function(_, value)
 						lit.db.profile.mode = value
 						if value == 2 then
 							lit.db.profile.lock = true
