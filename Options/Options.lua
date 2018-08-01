@@ -11,28 +11,28 @@ end
 
 local function updateFlags()
 	local flags = nil
-	if lit.db.monochrome and lit.db.outline ~= "NONE" then
-		flags = "MONOCHROME," .. lit.db.outline
-	elseif lit.db.monochrome then
+	if lit.db.profile.monochrome and lit.db.profile.outline ~= "NONE" then
+		flags = "MONOCHROME," .. lit.db.profile.outline
+	elseif lit.db.profile.monochrome then
 		flags = "MONOCHROME"
-	elseif lit.db.outline ~= "NONE" then
-		flags = lit.db.outline
+	elseif lit.db.profile.outline ~= "NONE" then
+		flags = lit.db.profile.outline
 	end
 	return flags
 end
 
 local function disabled()
-	return lit.db.mode == 2
+	return lit.db.profile.mode == 2
 end
 
 local acOptions = {
 	type = "group",
 	name = "LegionInvasionTimer",
 	get = function(info)
-		return lit.db[info[#info]]
+		return lit.db.profile[info[#info]]
 	end,
 	set = function(info, value)
-		lit.db[info[#info]] = value
+		lit.db.profile[info[#info]] = value
 	end,
 	args = {
 		lock = {
@@ -40,7 +40,7 @@ local acOptions = {
 			name = L.lock,
 			order = 1,
 			set = function(info, value)
-				lit.db.lock = value
+				lit.db.profile.lock = value
 				if value then
 					value = false
 					lit.bg:Hide()
@@ -51,7 +51,7 @@ local acOptions = {
 					lit.header:Show()
 				end
 				lit:EnableMouse(value)
-				--lit:SetMovable(value)
+				lit:SetMovable(value)
 			end,
 			disabled = disabled,
 		},
@@ -60,7 +60,7 @@ local acOptions = {
 			name = L.barIcon,
 			order = 2,
 			set = function(info, value)
-				lit.db.icon = value
+				lit.db.profile.icon = value
 				for bar in next, lit.bars do
 					bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				end
@@ -72,7 +72,7 @@ local acOptions = {
 			name = L.showTime,
 			order = 3,
 			set = function(info, value)
-				lit.db.timeText = value
+				lit.db.profile.timeText = value
 				for bar in next, lit.bars do
 					bar:SetTimeVisibility(value)
 				end
@@ -84,7 +84,7 @@ local acOptions = {
 			name = L.fillBar,
 			order = 4,
 			set = function(info, value)
-				lit.db.fill = value
+				lit.db.profile.fill = value
 				for bar in next, lit.bars do
 					bar:SetFill(value)
 				end
@@ -99,16 +99,16 @@ local acOptions = {
 			itemControl = "DDI-Font",
 			get = function()
 				for i, v in next, media:List("font") do
-					if v == lit.db.font then return i end
+					if v == lit.db.profile.font then return i end
 				end
 			end,
 			set = function(info, value)
 				local list = media:List("font")
 				local font = list[value]
-				lit.db.font = font
+				lit.db.profile.font = font
 				for bar in next, lit.bars do
-					bar.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
-					bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.fontSize, updateFlags())
+					bar.candyBarLabel:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", font), lit.db.profile.fontSize, updateFlags())
 				end
 			end,
 			disabled = disabled,
@@ -121,10 +121,10 @@ local acOptions = {
 			min = 1,
 			step = 1,
 			set = function(info, value)
-				lit.db.fontSize = value
+				lit.db.profile.fontSize = value
 				for bar in next, lit.bars do
-					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
-					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), value, updateFlags())
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), value, updateFlags())
 				end
 			end,
 			disabled = disabled,
@@ -134,10 +134,10 @@ local acOptions = {
 			name = L.monochrome,
 			order = 7,
 			set = function(info, value)
-				lit.db.monochrome = value
+				lit.db.profile.monochrome = value
 				for bar in next, lit.bars do
-					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 				end
 			end,
 			disabled = disabled,
@@ -152,10 +152,10 @@ local acOptions = {
 				THICKOUTLINE = L.thick,
 			},
 			set = function(info, value)
-				lit.db.outline = value
+				lit.db.profile.outline = value
 				for bar in next, lit.bars do
-					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
-					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.font), lit.db.fontSize, updateFlags())
+					bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
+					bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 				end
 			end,
 			disabled = disabled,
@@ -166,16 +166,16 @@ local acOptions = {
 			order = 9,
 			values = media:List("statusbar"),
 			itemControl = "DDI-Statusbar",
-			width = "full",
+			width = 2,
 			get = function()
 				for i, v in next, media:List("statusbar") do
-					if v == lit.db.barTexture then return i end
+					if v == lit.db.profile.barTexture then return i end
 				end
 			end,
 			set = function(info, value)
 				local list = media:List("statusbar")
 				local texture = list[value]
-				lit.db.barTexture = texture
+				lit.db.profile.barTexture = texture
 				for bar in next, lit.bars do
 					bar:SetTexture(media:Fetch("statusbar", texture))
 				end
@@ -190,7 +190,7 @@ local acOptions = {
 			min = 10,
 			step = 1,
 			set = function(info, value)
-				lit.db.width = value
+				lit.db.profile.width = value
 				for bar in next, lit.bars do
 					bar:SetWidth(value)
 				end
@@ -205,7 +205,7 @@ local acOptions = {
 			min = 5,
 			step = 1,
 			set = function(info, value)
-				lit.db.height = value
+				lit.db.profile.height = value
 				for bar in next, lit.bars do
 					bar:SetHeight(value)
 				end
@@ -221,12 +221,12 @@ local acOptions = {
 				RIGHT = L.right,
 			},
 			set = function(info, value)
-				lit.db.alignIcon = value
+				lit.db.profile.alignIcon = value
 				for bar in next, lit.bars do
 					bar:SetIconPosition(value)
 				end
 			end,
-			disabled = function() return disabled() or not lit.db.icon end,
+			disabled = function() return disabled() or not lit.db.profile.icon end,
 		},
 		spacing = {
 			type = "range",
@@ -236,14 +236,14 @@ local acOptions = {
 			min = 0,
 			step = 1,
 			set = function(info, value)
-				lit.db.spacing = value
+				lit.db.profile.spacing = value
 				lit.RearrangeBars()
 			end,
 			disabled = disabled,
 		},
-		alignZone = {
+		alignText = {
 			type = "select",
-			name = L.alignZone,
+			name = L.alignText,
 			order = 14,
 			values = {
 				LEFT = L.left,
@@ -251,7 +251,7 @@ local acOptions = {
 				RIGHT = L.right,
 			},
 			set = function(info, value)
-				lit.db.alignZone = value
+				lit.db.profile.alignText = value
 				for bar in next, lit.bars do
 					bar.candyBarLabel:SetJustifyH(value)
 				end
@@ -268,7 +268,7 @@ local acOptions = {
 				RIGHT = L.right,
 			},
 			set = function(info, value)
-				lit.db.alignTime = value
+				lit.db.profile.alignTime = value
 				for bar in next, lit.bars do
 					bar.candyBarDuration:SetJustifyH(value)
 				end
@@ -280,7 +280,7 @@ local acOptions = {
 			name = L.growUpwards,
 			order = 16,
 			set = function(info, value)
-				lit.db.growUp = value
+				lit.db.profile.growUp = value
 				lit.RearrangeBars()
 			end,
 			disabled = disabled,
@@ -291,10 +291,10 @@ local acOptions = {
 			hasAlpha = true,
 			order = 17,
 			get = function()
-				return unpack(lit.db.colorText)
+				return unpack(lit.db.profile.colorText)
 			end,
 			set = function(info, r, g, b, a)
-				lit.db.colorText = {r, g, b, a}
+				lit.db.profile.colorText = {r, g, b, a}
 				for bar in next, lit.bars do
 					bar:SetTextColor(r, g, b, a)
 				end
@@ -307,10 +307,10 @@ local acOptions = {
 			hasAlpha = true,
 			order = 18,
 			get = function()
-				return unpack(lit.db.colorComplete)
+				return unpack(lit.db.profile.colorComplete)
 			end,
 			set = function(info, r, g, b, a)
-				lit.db.colorComplete = {r, g, b, a}
+				lit.db.profile.colorComplete = {r, g, b, a}
 				for bar in next, lit.bars do
 					if bar:Get("LegionInvasionTimer:complete") == 1 then
 						bar:SetColor(r, g, b, a)
@@ -325,10 +325,10 @@ local acOptions = {
 			hasAlpha = true,
 			order = 19,
 			get = function()
-				return unpack(lit.db.colorIncomplete)
+				return unpack(lit.db.profile.colorIncomplete)
 			end,
 			set = function(info, r, g, b, a)
-				lit.db.colorIncomplete = {r, g, b, a}
+				lit.db.profile.colorIncomplete = {r, g, b, a}
 				for bar in next, lit.bars do
 					if bar:Get("LegionInvasionTimer:complete") == 0 then
 						bar:SetColor(r, g, b, a)
@@ -343,10 +343,10 @@ local acOptions = {
 			hasAlpha = true,
 			order = 20,
 			get = function()
-				return unpack(lit.db.colorNext)
+				return unpack(lit.db.profile.colorNext)
 			end,
 			set = function(info, r, g, b, a)
-				lit.db.colorNext = {r, g, b, a}
+				lit.db.profile.colorNext = {r, g, b, a}
 				for bar in next, lit.bars do
 					local tag = bar:Get("LegionInvasionTimer:complete")
 					if tag ~= 0 and tag ~= 1 then
@@ -362,10 +362,10 @@ local acOptions = {
 			hasAlpha = true,
 			order = 21,
 			get = function()
-				return unpack(lit.db.colorBarBackground)
+				return unpack(lit.db.profile.colorBarBackground)
 			end,
 			set = function(info, r, g, b, a)
-				lit.db.colorBarBackground = {r, g, b, a}
+				lit.db.profile.colorBarBackground = {r, g, b, a}
 				for bar in next, lit.bars do
 					if bar then
 						bar.candyBarBackground:SetVertexColor(r, g, b, a)
@@ -409,7 +409,7 @@ local acOptions = {
 			name = L.hideInRaid,
 			order = 28,
 			disabled = function() 
-				return lit.db.mode == 2 or lit.db.mode == 3
+				return lit.db.profile.mode == 2 or lit.db.profile.mode == 3
 			end,
 		},
 		mode = {
@@ -422,12 +422,12 @@ local acOptions = {
 				[3] = L.modeBarOnMap,
 			},
 			set = function(info, value)
-				lit.db.mode = value
+				lit.db.profile.mode = value
 				if value == 2 then
-					lit.db.lock = true
+					lit.db.profile.lock = true
 				end
 				if value == 3 then
-					lit.db.hideInRaid = nil
+					lit.db.profile.hideInRaid = nil
 				end
 				ReloadUI()
 			end,

@@ -16,22 +16,31 @@ frame:RegisterForDrag("LeftButton")
 frame:SetClampedToScreen(true)
 frame:Show()
 frame:SetScript("OnDragStart", function(f) f:StartMoving() end)
-frame:SetScript("OnDragStop", function(f) f:StopMovingOrSizing() end)
-local function openOpts()
-	EnableAddOn("LegionInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
-	LoadAddOn("LegionInvasionTimer_Options")
-	LibStub("AceConfigDialog-3.0"):Open(name)
-end
-SlashCmdList[name] = openOpts
-SLASH_LegionInvasionTimer1 = "/lit"
-SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
-frame:SetScript("OnMouseUp", function(_, btn)
-	if btn == "RightButton" then
-		openOpts()
-	end
+frame:SetScript("OnDragStop", function(f)
+	f:StopMovingOrSizing()
+	local a, _, b, c, d = f:GetPoint()
+	f.db.profile.position[1] = a
+	f.db.profile.position[2] = b
+	f.db.profile.position[3] = c
+	f.db.profile.position[4] = d
 end)
-frame:RegisterEvent("PLAYER_LOGIN")
-frame.bars = bars
+do
+	local function openOpts()
+		EnableAddOn("LegionInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
+		LoadAddOn("LegionInvasionTimer_Options")
+		LibStub("AceConfigDialog-3.0"):Open(name)
+	end
+	SlashCmdList[name] = openOpts
+	SLASH_LegionInvasionTimer1 = "/lit"
+	SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
+	frame:SetScript("OnMouseUp", function(_, btn)
+		if btn == "RightButton" then
+			openOpts()
+		end
+	end)
+	frame:RegisterEvent("PLAYER_LOGIN")
+	frame.bars = bars
+end
 
 local OnEnter, ShowTip, HideTip
 do
@@ -40,7 +49,7 @@ do
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
-		if not wasEarnedByMe or not legionTimerDB.tooltipHideAchiev then
+		if not wasEarnedByMe or not frame.db.profile.tooltipHideAchiev then
 			if wasEarnedByMe then
 				tip:AddDoubleLine(name, FormatShortDate(day, month, year), nil, nil, nil, .5, .5, .5)
 			else
@@ -60,12 +69,12 @@ do
 		end
 
 		local splitLine = false
-		if not legionTimerDB.tooltipHideNethershard then
+		if not frame.db.profile.tooltipHideNethershard then
 			splitLine = true
 			local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
 			tip:AddDoubleLine(nName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
 		end
-		if not legionTimerDB.tooltipHideWarSupplies then
+		if not frame.db.profile.tooltipHideWarSupplies then
 			splitLine = true
 			local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
 			tip:AddDoubleLine(sName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
@@ -89,7 +98,7 @@ do
 			if check == "29" or check == "59" then
 				t = t + 60 -- Round up to 00min/30min if we're at 29min/59min
 			end
-			if legionTimerDB.tooltip12hr then
+			if frame.db.profile.tooltip12hr then
 				for i = 1, 4 do
 					tip:AddDoubleLine(
 						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. _G["TIMEMANAGER_"..upper(date("%p", t))],
@@ -113,14 +122,14 @@ do
 		end
 	end
 	HideTip = function()
-		if legionTimerDB.mode == 3 then
+		if frame.db.profile.mode == 3 then
 			WorldMapTooltip:Hide()
 		else
 			GameTooltip:Hide()
 		end
 	end
 	OnEnter = function(f)
-		local tip = legionTimerDB.mode == 3 and WorldMapTooltip or GameTooltip
+		local tip = frame.db.profile.mode == 3 and WorldMapTooltip or GameTooltip
 		tip:SetOwner(f, "ANCHOR_NONE")
 		tip:SetPoint("BOTTOM", f, "TOP")
 		ShowTip(tip)
@@ -142,9 +151,9 @@ do
 		end
 		table.sort(tmp, barSorter)
 		local lastBar = nil
-		local up = legionTimerDB.growUp
+		local up = frame.db.profile.growUp
 		for i, bar in next, tmp do
-			local spacing = legionTimerDB.spacing
+			local spacing = frame.db.profile.spacing
 			bar:ClearAllPoints()
 			if up then
 				if lastBar then -- Growing from a bar
@@ -193,7 +202,7 @@ do
 		if quests[id] then
 			for bar in next, bars do
 				bar:Set("LegionInvasionTimer:complete", 1)
-				bar:SetColor(unpack(legionTimerDB.colorComplete))
+				bar:SetColor(unpack(frame.db.profile.colorComplete))
 			end
 		end
 	end
@@ -204,45 +213,45 @@ local hiddenBars = false
 do
 	StartBar = function(text, timeLeft, rewardQuestID, icon, paused)
 		StopBar(text)
-		local bar = candy:New(media:Fetch("statusbar", legionTimerDB.barTexture), legionTimerDB.width, legionTimerDB.height)
+		local bar = candy:New(media:Fetch("statusbar", frame.db.profile.barTexture), frame.db.profile.width, frame.db.profile.height)
 		bars[bar] = true
 
 		bar:SetScript("OnEnter", OnEnter)
 		bar:SetScript("OnLeave", HideTip)
 		bar:SetParent(frame)
 		bar:SetLabel(text)
-		bar.candyBarLabel:SetJustifyH(legionTimerDB.alignZone)
-		bar.candyBarDuration:SetJustifyH(legionTimerDB.alignTime)
+		bar.candyBarLabel:SetJustifyH(frame.db.profile.alignText)
+		bar.candyBarDuration:SetJustifyH(frame.db.profile.alignTime)
 		bar:SetDuration(timeLeft)
 		if rewardQuestID > 0 then
 			if IsQuestFlaggedCompleted(rewardQuestID) then
-				bar:SetColor(unpack(legionTimerDB.colorComplete))
+				bar:SetColor(unpack(frame.db.profile.colorComplete))
 				bar:Set("LegionInvasionTimer:complete", 1)
 			else
-				bar:SetColor(unpack(legionTimerDB.colorIncomplete))
+				bar:SetColor(unpack(frame.db.profile.colorIncomplete))
 				bar:Set("LegionInvasionTimer:complete", 0)
 			end
 		else
-			bar:SetColor(unpack(legionTimerDB.colorNext))
+			bar:SetColor(unpack(frame.db.profile.colorNext))
 		end
-		bar.candyBarBackground:SetVertexColor(unpack(legionTimerDB.colorBarBackground))
-		bar:SetTextColor(unpack(legionTimerDB.colorText))
-		if legionTimerDB.icon then
+		bar.candyBarBackground:SetVertexColor(unpack(frame.db.profile.colorBarBackground))
+		bar:SetTextColor(unpack(frame.db.profile.colorText))
+		if frame.db.profile.icon then
 			bar:SetIcon(icon)
-			bar:SetIconPosition(legionTimerDB.alignIcon)
+			bar:SetIconPosition(frame.db.profile.alignIcon)
 		end
-		bar:SetTimeVisibility(legionTimerDB.timeText)
-		bar:SetFill(legionTimerDB.fill)
+		bar:SetTimeVisibility(frame.db.profile.timeText)
+		bar:SetFill(frame.db.profile.fill)
 		local flags = nil
-		if legionTimerDB.monochrome and legionTimerDB.outline ~= "NONE" then
-			flags = "MONOCHROME," .. legionTimerDB.outline
-		elseif legionTimerDB.monochrome then
+		if frame.db.profile.monochrome and frame.db.profile.outline ~= "NONE" then
+			flags = "MONOCHROME," .. frame.db.profile.outline
+		elseif frame.db.profile.monochrome then
 			flags = "MONOCHROME"
-		elseif legionTimerDB.outline ~= "NONE" then
-			flags = legionTimerDB.outline
+		elseif frame.db.profile.outline ~= "NONE" then
+			flags = frame.db.profile.outline
 		end
-		bar.candyBarLabel:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
-		bar.candyBarDuration:SetFont(media:Fetch("font", legionTimerDB.font), legionTimerDB.fontSize, flags)
+		bar.candyBarLabel:SetFont(media:Fetch("font", frame.db.profile.font), frame.db.profile.fontSize, flags)
+		bar.candyBarDuration:SetFont(media:Fetch("font", frame.db.profile.font), frame.db.profile.fontSize, flags)
 		if paused then -- Searching bars
 			bar:Start()
 			bar:Pause()
@@ -314,7 +323,7 @@ do
 		45838, -- Azsuna
 	}
 	FindInvasion = function()
-		local mode = legionTimerDB.mode
+		local mode = frame.db.profile.mode
 		local found = false
 
 		for i = 1, #zonePOIIds do
@@ -398,7 +407,7 @@ do
 end
 
 local function CheckIfInRaid()
-	if legionTimerDB.hideInRaid then
+	if frame.db.profile.hideInRaid then
 		local _, iType = GetInstanceInfo()
 		if iType == "raid" then
 			hiddenBars = true
@@ -425,44 +434,23 @@ frame:SetScript("OnEvent", function(f)
 		LegionInvasionTime = legionTimerDB.prev
 	end
 	-- saved variables database setup
-	--local defaults = {
-	--	profile = {
-	--		lock = false,
-	--		position = {"CENTER", "CENTER", 0, 0},
-	--		fontSize = 10,
-	--		barTexture = "Blizzard Raid Bar",
-	--		outline = "NONE",
-	--		font = media:GetDefault("font"),
-	--		width = 200,
-	--		height = 20,
-	--		icon = true,
-	--		timeText = true,
-	--		spacing = 0,
-	--		alignText = "LEFT",
-	--		alignTime = "RIGHT",
-	--		alignIcon = "LEFT",
-	--		colorText = {1,1,1,1},
-	--		colorComplete = {0,1,0,1},
-	--		colorIncomplete = {1,0,0,1},
-	--		colorNext = {0.25,0.33,0.68,1},
-	--		colorBarBackground = {0,0,0,0.75},
-	--		mode = 1,
-	--	},
-	--}
-	--db = LibStub("AceDB-3.0"):New("LegionInvasionTimerDB", defaults, true)
-
-	if type(legionTimerDB) ~= "table" then
-		legionTimerDB = {
+	local defaults = {
+		profile = {
+			lock = false,
+			position = {"CENTER", "CENTER", 0, 0},
 			fontSize = 10,
 			barTexture = "Blizzard Raid Bar",
 			outline = "NONE",
+			monochrome = false,
 			font = media:GetDefault("font"),
 			width = 200,
 			height = 20,
 			icon = true,
 			timeText = true,
+			fill = false,
+			growUp = false,
 			spacing = 0,
-			alignZone = "LEFT",
+			alignText = "LEFT",
 			alignTime = "RIGHT",
 			alignIcon = "LEFT",
 			colorText = {1,1,1,1},
@@ -470,24 +458,19 @@ frame:SetScript("OnEvent", function(f)
 			colorIncomplete = {1,0,0,1},
 			colorNext = {0.25,0.33,0.68,1},
 			colorBarBackground = {0,0,0,0.75},
+			tooltip12hr = false,
+			tooltipHideAchiev = false,
+			tooltipHideNethershard = false,
+			tooltipHideWarSupplies = false,
+			hideInRaid = false,
 			mode = 1,
-		}
-	end
-	-- START COMPAT --
-	if not legionTimerDB.alignIcon then
-		legionTimerDB.alignIcon = "LEFT"
-	end
-	-- END COMPAT --
+		},
+	}
+	f.db = LibStub("AceDB-3.0"):New("LegionInvasionTimerDB", defaults, true)
 
-	f:SetScript("OnEnter", function(f)
-		local tip = legionTimerDB.mode == 3 and WorldMapTooltip or GameTooltip
-		tip:SetOwner(f, "ANCHOR_NONE")
-		tip:SetPoint("BOTTOM", f, "TOP")
-		tip:AddLine(L.tooltipClick, 0.2, 1, 0.2, 1)
-		tip:AddLine(L.tooltipClickOptions, 0.2, 1, 0.2, 1)
-		tip:Show()
-	end)
-	f:SetScript("OnLeave", HideTip)
+	f:ClearAllPoints()
+	f:SetPoint(f.db.profile.position[1], UIParent, f.db.profile.position[2], f.db.profile.position[3], f.db.profile.position[4])
+
 	local bg = f:CreateTexture(nil, "PARENT")
 	bg:SetAllPoints(f)
 	bg:SetColorTexture(0, 1, 0, 0.3)
@@ -496,16 +479,15 @@ frame:SetScript("OnEvent", function(f)
 	header:SetAllPoints(f)
 	header:SetText(name)
 	f.header = header
-	f.db = legionTimerDB
 
-	if legionTimerDB.lock then
+	if f.db.profile.lock then
 		f:EnableMouse(false)
-		--f:SetMovable(false)
+		f:SetMovable(false)
 		f.bg:Hide()
 		f.header:Hide()
 	end
 
-	if legionTimerDB.mode == 3 then
+	if f.db.profile.mode == 3 then
 		f:SetParent(WorldMapFrame)
 		f:SetFrameStrata("FULLSCREEN")
 		f:SetFrameLevel(10)
