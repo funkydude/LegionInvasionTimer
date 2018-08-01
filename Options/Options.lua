@@ -101,6 +101,7 @@ local acOptions = {
 					type = "select",
 					name = L.font,
 					order = 5,
+					width = 2,
 					values = media:List("font"),
 					itemControl = "DDI-Font",
 					get = function()
@@ -166,10 +167,26 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
+				alignIcon = {
+					type = "select",
+					name = L.alignIcon,
+					order = 9,
+					values = {
+						LEFT = L.left,
+						RIGHT = L.right,
+					},
+					set = function(info, value)
+						lit.db.profile.alignIcon = value
+						for bar in next, lit.bars do
+							bar:SetIconPosition(value)
+						end
+					end,
+					disabled = function() return disabled() or not lit.db.profile.icon end,
+				},
 				barTexture = {
 					type = "select",
 					name = L.texture,
-					order = 9,
+					order = 10,
 					values = media:List("statusbar"),
 					itemControl = "DDI-Statusbar",
 					width = 2,
@@ -191,7 +208,7 @@ local acOptions = {
 				width = {
 					type = "range",
 					name = L.barWidth,
-					order = 10,
+					order = 11,
 					max = 2000,
 					min = 10,
 					step = 1,
@@ -206,7 +223,7 @@ local acOptions = {
 				height = {
 					type = "range",
 					name = L.barHeight,
-					order = 11,
+					order = 12,
 					max = 100,
 					min = 5,
 					step = 1,
@@ -218,39 +235,10 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
-				alignIcon = {
-					type = "select",
-					name = L.alignIcon,
-					order = 12,
-					values = {
-						LEFT = L.left,
-						RIGHT = L.right,
-					},
-					set = function(info, value)
-						lit.db.profile.alignIcon = value
-						for bar in next, lit.bars do
-							bar:SetIconPosition(value)
-						end
-					end,
-					disabled = function() return disabled() or not lit.db.profile.icon end,
-				},
-				spacing = {
-					type = "range",
-					name = L.barSpacing,
-					order = 13,
-					max = 100,
-					min = 0,
-					step = 1,
-					set = function(info, value)
-						lit.db.profile.spacing = value
-						lit.RearrangeBars()
-					end,
-					disabled = disabled,
-				},
 				alignText = {
 					type = "select",
 					name = L.alignText,
-					order = 14,
+					order = 13,
 					values = {
 						LEFT = L.left,
 						CENTER = L.center,
@@ -267,7 +255,7 @@ local acOptions = {
 				alignTime = {
 					type = "select",
 					name = L.alignTime,
-					order = 15,
+					order = 14,
 					values = {
 						LEFT = L.left,
 						CENTER = L.center,
@@ -284,7 +272,7 @@ local acOptions = {
 				growUp = {
 					type = "toggle",
 					name = L.growUpwards,
-					order = 16,
+					order = 15,
 					set = function(info, value)
 						lit.db.profile.growUp = value
 						lit.RearrangeBars()
@@ -295,7 +283,7 @@ local acOptions = {
 					name = L.textColor,
 					type = "color",
 					hasAlpha = true,
-					order = 17,
+					order = 16,
 					get = function()
 						return unpack(lit.db.profile.colorText)
 					end,
@@ -311,7 +299,7 @@ local acOptions = {
 					name = L.completedBar,
 					type = "color",
 					hasAlpha = true,
-					order = 18,
+					order = 17,
 					get = function()
 						return unpack(lit.db.profile.colorComplete)
 					end,
@@ -329,7 +317,7 @@ local acOptions = {
 					name = L.incompleteBar,
 					type = "color",
 					hasAlpha = true,
-					order = 19,
+					order = 18,
 					get = function()
 						return unpack(lit.db.profile.colorIncomplete)
 					end,
@@ -347,7 +335,7 @@ local acOptions = {
 					name = L.nextBar,
 					type = "color",
 					hasAlpha = true,
-					order = 20,
+					order = 19,
 					get = function()
 						return unpack(lit.db.profile.colorNext)
 					end,
@@ -366,7 +354,7 @@ local acOptions = {
 					name = L.barBackground,
 					type = "color",
 					hasAlpha = true,
-					order = 21,
+					order = 20,
 					get = function()
 						return unpack(lit.db.profile.colorBarBackground)
 					end,

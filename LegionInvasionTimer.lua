@@ -153,20 +153,19 @@ do
 		local lastBar = nil
 		local up = frame.db.profile.growUp
 		for i, bar in next, tmp do
-			local spacing = frame.db.profile.spacing
 			bar:ClearAllPoints()
 			if up then
 				if lastBar then -- Growing from a bar
-					bar:SetPoint("BOTTOMLEFT", lastBar, "TOPLEFT", 0, spacing)
-					bar:SetPoint("BOTTOMRIGHT", lastBar, "TOPRIGHT", 0, spacing)
+					bar:SetPoint("BOTTOMLEFT", lastBar, "TOPLEFT")
+					bar:SetPoint("BOTTOMRIGHT", lastBar, "TOPRIGHT")
 				else -- Growing from the anchor
 					bar:SetPoint("BOTTOM", frame, "TOP")
 				end
 				lastBar = bar
 			else
 				if lastBar then -- Growing from a bar
-					bar:SetPoint("TOPLEFT", lastBar, "BOTTOMLEFT", 0, -spacing)
-					bar:SetPoint("TOPRIGHT", lastBar, "BOTTOMRIGHT", 0, -spacing)
+					bar:SetPoint("TOPLEFT", lastBar, "BOTTOMLEFT")
+					bar:SetPoint("TOPRIGHT", lastBar, "BOTTOMRIGHT")
 				else -- Growing from the anchor
 					bar:SetPoint("TOP", frame, "BOTTOM")
 				end
@@ -449,7 +448,6 @@ frame:SetScript("OnEvent", function(f)
 			timeText = true,
 			fill = false,
 			growUp = false,
-			spacing = 0,
 			alignText = "LEFT",
 			alignTime = "RIGHT",
 			alignIcon = "LEFT",

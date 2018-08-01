@@ -16,7 +16,6 @@ local L = mod.L
 --L.thin = "Thin"
 --L.thick = "Thick"
 --L.texture = "Texture"
---L.barSpacing = "Bar Spacing"
 --L.barWidth = "Bar Width"
 --L.barHeight = "Bar Height"
 --L.alignText = "Align Text"
