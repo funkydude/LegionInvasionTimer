@@ -385,10 +385,15 @@ local acOptions = {
 					set = function(_, value)
 						lit.db.profile.mode = value
 						if value == 2 then
-							lit.db.profile.lock = true
+							if not lit.db.profile.lock then
+								lit.db.profile.lock = true
+							end
+							if lit.db.profile.hideInRaid then
+								lit.db.profile.hideInRaid = false
+							end
 						end
-						if value == 3 then
-							lit.db.profile.hideInRaid = nil
+						if value == 3 and lit.db.profile.hideInRaid then
+							lit.db.profile.hideInRaid = false
 						end
 						ReloadUI()
 					end,

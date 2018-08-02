@@ -331,6 +331,7 @@ do
 							StartBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 						else
 							StartBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+							frame:UnregisterEvent("QUEST_TURNED_IN")
 						end
 					end
 					return
@@ -340,6 +341,7 @@ do
 					StartBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				else
 					StartBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
 				Timer(t + 5, FindInvasion)
@@ -451,7 +453,11 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 
-	CheckIfInRaid()
+	if f.db.profile.mode == 1 then
+		CheckIfInRaid()
+		f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	end
+
 	f:SetScript("OnEvent", function(_, event, id)
 		if event == "QUEST_TURNED_IN" then
 			ChangeBarColor(id)
@@ -459,6 +465,5 @@ frame:SetScript("OnEvent", function(f)
 			CheckIfInRaid()
 		end
 	end)
-	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end)
 
