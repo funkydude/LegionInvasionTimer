@@ -365,10 +365,16 @@ local acOptions = {
 					name = "",
 					order = 27,
 				},
+				zoneWarnings = {
+					type = "toggle",
+					name = L.zoneWarnings,
+					desc = L.zoneWarningsDesc,
+					order = 28,
+				},
 				hideInRaid = {
 					type = "toggle",
 					name = L.hideInRaid,
-					order = 28,
+					order = 29,
 					disabled = function() 
 						return lit.db.profile.mode == 2 or lit.db.profile.mode == 3
 					end,
@@ -376,7 +382,7 @@ local acOptions = {
 				mode = {
 					type = "select",
 					name = L.mode,
-					order = 29,
+					order = 30,
 					values = {
 						[1] = L.modeBar,
 						[2] = L.modeBroker,

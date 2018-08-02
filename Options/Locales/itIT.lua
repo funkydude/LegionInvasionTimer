@@ -41,3 +41,5 @@ local L = mod.L
 --L.modeBarOnMap = "Bar On Map"
 --L.bar = "Bar"
 --L.general = "General"
+--L.zoneWarnings = "Zone Warnings"
+--L.zoneWarningsDesc = "Show a warning when the legion begins their assault on a zone."

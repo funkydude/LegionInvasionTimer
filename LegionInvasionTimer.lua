@@ -296,7 +296,8 @@ do
 				end
 				Timer(t+60, FindInvasion)
 				found = true
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 350 then -- Not fighting a boss, didn't just log in, has just spawned (safety)
+				-- Not fighting a boss, didn't just log in, legion assault has just spawned (safety), feature is enabled
+				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 350 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
@@ -413,6 +414,7 @@ frame:SetScript("OnEvent", function(f)
 			tooltipHideAchiev = false,
 			tooltipHideNethershard = false,
 			tooltipHideWarSupplies = false,
+			zoneWarnings = true,
 			hideInRaid = false,
 			mode = 1,
 		},
