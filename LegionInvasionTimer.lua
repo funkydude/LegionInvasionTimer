@@ -381,11 +381,6 @@ end
 frame:SetScript("OnEvent", function(f)
 	f:UnregisterEvent("PLAYER_LOGIN")
 
-	if type(legionTimerDB) == "table" and legionTimerDB.prev then
-		LegionInvasionTime = legionTimerDB.prev
-	end
-	legionTimerDB = nil -- XXX remove old DB
-
 	-- saved variables database setup
 	local defaults = {
 		profile = {

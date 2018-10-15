@@ -27,9 +27,8 @@ local function disabled()
 end
 
 local acOptions = {
-	type = "group",
-	childGroups = "tab",
 	name = "LegionInvasionTimer",
+	type = "group", childGroups = "tab",
 	get = function(info)
 		return lit.db.profile[info[#info]]
 	end,
