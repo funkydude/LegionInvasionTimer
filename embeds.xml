@@ -8,6 +8,7 @@
 <!--@no-lib-strip@-->
 <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
 <Include file="Libs\LibCandyBar-3.0\lib.xml"/>
+<Include file="Libs\AceDB-3.0\AceDB-3.0.xml"/>
 <!--@end-no-lib-strip@-->
 
 <!--@do-not-package@-->

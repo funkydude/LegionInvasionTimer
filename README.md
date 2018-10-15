@@ -7,10 +7,10 @@
 ## Warning
 * This addon will not work until you encounter your first invasion with it enabled.
 
-## Configure
+## Options
 * /lit
 * /legioninvasiontimer
 * Right-click the bar anchor
 
 ## Download
-https://mods.curse.com/addons/wow/legioninvasiontimer
+<https://www.curseforge.com/wow/addons/legioninvasiontimer>
