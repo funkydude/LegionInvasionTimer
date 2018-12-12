@@ -260,7 +260,7 @@ end
 local FindInvasion
 local justLoggedIn = true
 do
-	local GetAreaPOITimeLeft = C_AreaPoiInfo.GetAreaPOITimeLeft
+	local GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
 	local isWaiting = false
 	local zonePOIIds = {
 		5177, -- Highmountain
@@ -285,19 +285,19 @@ do
 		local found = false
 
 		for i = 1, #zonePOIIds do
-			local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
-			if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then -- On some realms timeLeftMinutes can return massive values during the initialization of a new event
-				local t = timeLeftMinutes * 60
+			local timeLeftSeconds = GetAreaPOISecondsLeft(zonePOIIds[i])
+			-- On some realms timeLeftSeconds can return massive values during the initialization of a new event
+			if timeLeftSeconds and timeLeftSeconds > 60 and timeLeftSeconds < 21601 then -- 6 hours: (6*60)*60
 				if mode == 2 then
-					StartBroker(zoneNames[i], t, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBroker(zoneNames[i], timeLeftSeconds, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				else
-					StartBar(zoneNames[i], t, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+					StartBar(zoneNames[i], timeLeftSeconds, questIds[i], 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 					frame:RegisterEvent("QUEST_TURNED_IN")
 				end
-				Timer(t+60, FindInvasion)
+				Timer(timeLeftSeconds+60, FindInvasion)
 				found = true
 				-- Not fighting a boss, didn't just log in, legion assault has just spawned (safety), feature is enabled
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftMinutes > 350 and frame.db.profile.zoneWarnings then
+				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 21000 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
@@ -306,10 +306,10 @@ do
 				end
 				justLoggedIn = false
 
-				local t = time()
-				local elapsed = 360-timeLeftMinutes
-				t = t - (elapsed * 60)
-				LegionInvasionTime = t
+				local curTime = time()
+				local elapsed = 21600-timeLeftSeconds
+				local latestInvasionTime = curTime - elapsed
+				LegionInvasionTime = latestInvasionTime
 			end
 		end
 
