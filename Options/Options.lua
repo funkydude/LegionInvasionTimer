@@ -66,7 +66,12 @@ local acOptions = {
 					order = 2,
 					set = function(_, value)
 						lit.db.profile.icon = value
-						lit.Bar:SetIcon(value and 236292) -- Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
+						if value then
+							local icon = lit.Bar:Get("LegionInvasionTimer:icon")
+							lit.Bar:SetIcon(icon)
+						else
+							lit.Bar:SetIcon()
+						end
 					end,
 					disabled = disabled,
 				},

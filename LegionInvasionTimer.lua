@@ -181,6 +181,7 @@ do
 		bar.candyBarLabel:SetJustifyH(frame.db.profile.alignText)
 		bar.candyBarDuration:SetJustifyH(frame.db.profile.alignTime)
 		bar:SetDuration(timeLeft)
+		bar:Set("LegionInvasionTimer:icon", icon)
 		if rewardQuestID > 0 then
 			if IsQuestFlaggedCompleted(rewardQuestID) then
 				bar:SetColor(unpack(frame.db.profile.colorComplete))
