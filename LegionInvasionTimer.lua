@@ -99,8 +99,8 @@ do
 			if frame.db.profile.tooltip12hr then
 				for i = 1, 4 do
 					tip:AddDoubleLine(
-						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. _G["TIMEMANAGER_"..upper(date("%p", t))],
-						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%I:%M", t+66600) .. _G["TIMEMANAGER_"..upper(date("%p", t+66600))],
+						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))],
+						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%I:%M", t+66600) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+66600))],
 						1, 1, 1, 1, 1, 1
 					)
 					t = t + 66600 + 66600
@@ -287,7 +287,7 @@ do
 		for i = 1, #zonePOIIds do
 			local timeLeftSeconds = GetAreaPOISecondsLeft(zonePOIIds[i])
 			-- On some realms timeLeftSeconds can return massive values during the initialization of a new event
-			if timeLeftSeconds and timeLeftSeconds > 60 and timeLeftSeconds < 21601 then -- 6 hours: (6*60)*60
+			if timeLeftSeconds and timeLeftSeconds > 60 and timeLeftSeconds < 21601 then -- 6 hours: (6*60)*60 = 21600
 				if mode == 2 then
 					StartBroker(zoneNames[i], timeLeftSeconds, 236292) -- 236292 = Interface\\Icons\\Ability_Warlock_DemonicEmpowerment
 				else
@@ -296,7 +296,7 @@ do
 				end
 				Timer(timeLeftSeconds+60, FindInvasion)
 				found = true
-				-- Not fighting a boss, didn't just log in, legion assault has just spawned (safety), feature is enabled
+				-- Not fighting a boss, didn't just log in, legion assault has just spawned (6hrs - 10min), feature is enabled
 				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 21000 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = "|T236292:15:15:0:0:64:64:4:60:4:60|t ".. ZONE_UNDER_ATTACK:format(zoneNames[i])
@@ -310,6 +310,7 @@ do
 				local elapsed = 21600-timeLeftSeconds
 				local latestInvasionTime = curTime - elapsed
 				LegionInvasionTime = latestInvasionTime
+				break
 			end
 		end
 
@@ -324,7 +325,7 @@ do
 
 				if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
 					-- If it's longer than 45k then an invasion is currently active.
-					-- Loop every second until GetAreaPOITimeLeft responds with valid results.
+					-- Loop every second until the API call responds with valid results.
 					Timer(1, FindInvasion)
 					if not isWaiting then
 						isWaiting = true
@@ -405,7 +406,7 @@ frame:SetScript("OnEvent", function(f)
 			colorIncomplete = {1,0,0,1},
 			colorNext = {0.25,0.33,0.68,1},
 			colorBarBackground = {0,0,0,0.75},
-			tooltip12hr = false,
+			tooltip12hr = true,
 			tooltipHideAchiev = false,
 			tooltipHideNethershard = false,
 			tooltipHideWarSupplies = false,
