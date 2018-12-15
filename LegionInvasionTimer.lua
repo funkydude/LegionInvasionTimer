@@ -411,7 +411,7 @@ frame:SetScript("OnEvent", function(f)
 			tooltipHideAchiev = false,
 			tooltipHideNethershard = false,
 			tooltipHideWarSupplies = false,
-			zoneWarnings = true,
+			zoneWarnings = false,
 			hideInRaid = false,
 			mode = 1,
 		},
