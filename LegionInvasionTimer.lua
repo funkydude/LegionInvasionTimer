@@ -341,9 +341,9 @@ do
 				end
 
 				if mode == 2 then
-					StartBroker(NEXT, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					StartBroker(L.next, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 				else
-					StartBar(NEXT, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+					StartBar(L.next, t, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
 					frame:UnregisterEvent("QUEST_TURNED_IN")
 				end
 
