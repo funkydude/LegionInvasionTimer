@@ -245,7 +245,7 @@ local acOptions = {
 						lit.db.profile.alignTime = value
 						lit.Bar.candyBarDuration:SetJustifyH(value)
 					end,
-					disabled = disabled,
+					disabled = function() return disabled() or not lit.db.profile.timeText end,
 				},
 				growUp = {
 					type = "toggle",
