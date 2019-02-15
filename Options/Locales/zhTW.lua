@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "鎖定位置"
 L.barIcon = "顯示圖示"
 L.showTime = "顯示時間"
+--L.showText = "Show Text"
 L.fillBar = "反向填色"
 L.font = "字型"
 L.fontSize = "文字大小"

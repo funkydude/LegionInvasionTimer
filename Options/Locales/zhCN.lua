@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "锁定"
 L.barIcon = "条图标"
 L.showTime = "显示时间"
+L.showText = "显示文本"
 L.fillBar = "反转条"
 L.font = "字体"
 L.fontSize = "字体尺寸"

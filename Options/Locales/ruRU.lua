@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "Закреплен"
 L.barIcon = "Иконка полоски"
 L.showTime = "Показ времени"
+L.showText = "Показ текст"
 L.fillBar = "Заполнение полоски"
 L.font = "Шрифт"
 L.fontSize = "Размер шрифта"

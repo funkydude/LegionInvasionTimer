@@ -200,6 +200,7 @@ do
 			bar:SetIconPosition(frame.db.profile.alignIcon)
 		end
 		bar:SetTimeVisibility(frame.db.profile.timeText)
+		bar:SetLabelVisibility(frame.db.profile.labelText)
 		bar:SetFill(frame.db.profile.fill)
 		local flags = nil
 		if frame.db.profile.monochrome and frame.db.profile.outline ~= "NONE" then
@@ -397,6 +398,7 @@ frame:SetScript("OnEvent", function(f)
 			height = 20,
 			icon = true,
 			timeText = true,
+			labelText = true,
 			fill = false,
 			growUp = false,
 			alignText = "LEFT",

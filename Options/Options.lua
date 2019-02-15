@@ -60,45 +60,21 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
-				icon = {
+				monochrome = {
 					type = "toggle",
-					name = L.barIcon,
+					name = L.monochrome,
 					order = 2,
 					set = function(_, value)
-						lit.db.profile.icon = value
-						if value then
-							local icon = lit.Bar:Get("LegionInvasionTimer:icon")
-							lit.Bar:SetIcon(icon)
-						else
-							lit.Bar:SetIcon()
-						end
-					end,
-					disabled = disabled,
-				},
-				timeText = {
-					type = "toggle",
-					name = L.showTime,
-					order = 3,
-					set = function(_, value)
-						lit.db.profile.timeText = value
-						lit.Bar:SetTimeVisibility(value)
-					end,
-					disabled = disabled,
-				},
-				fill = {
-					type = "toggle",
-					name = L.fillBar,
-					order = 4,
-					set = function(_, value)
-						lit.db.profile.fill = value
-						lit.Bar:SetFill(value)
+						lit.db.profile.monochrome = value
+						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
+						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
 					end,
 					disabled = disabled,
 				},
 				font = {
 					type = "select",
 					name = L.font,
-					order = 5,
+					order = 3,
 					width = 2,
 					values = media:List("font"),
 					itemControl = "DDI-Font",
@@ -119,7 +95,7 @@ local acOptions = {
 				fontSize = {
 					type = "range",
 					name = L.fontSize,
-					order = 6,
+					order = 4,
 					max = 200,
 					min = 1,
 					step = 1,
@@ -130,21 +106,10 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
-				monochrome = {
-					type = "toggle",
-					name = L.monochrome,
-					order = 7,
-					set = function(_, value)
-						lit.db.profile.monochrome = value
-						lit.Bar.candyBarLabel:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-						lit.Bar.candyBarDuration:SetFont(media:Fetch("font", lit.db.profile.font), lit.db.profile.fontSize, updateFlags())
-					end,
-					disabled = disabled,
-				},
 				outline = {
 					type = "select",
 					name = L.outline,
-					order = 8,
+					order = 5,
 					values = {
 						NONE = L.none,
 						OUTLINE = L.thin,
@@ -157,10 +122,75 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
+				timeText = {
+					type = "toggle",
+					name = L.showTime,
+					order = 6,
+					set = function(_, value)
+						lit.db.profile.timeText = value
+						lit.Bar:SetTimeVisibility(value)
+					end,
+					disabled = disabled,
+				},
+				alignTime = {
+					type = "select",
+					name = L.alignTime,
+					order = 7,
+					values = {
+						LEFT = L.left,
+						CENTER = L.center,
+						RIGHT = L.right,
+					},
+					set = function(_, value)
+						lit.db.profile.alignTime = value
+						lit.Bar.candyBarDuration:SetJustifyH(value)
+					end,
+					disabled = function() return disabled() or not lit.db.profile.timeText end,
+				},
+				labelText = {
+					type = "toggle",
+					name = L.showText,
+					order = 8,
+					set = function(_, value)
+						lit.db.profile.labelText = value
+						lit.Bar:SetLabelVisibility(value)
+					end,
+					disabled = disabled,
+				},
+				alignText = {
+					type = "select",
+					name = L.alignText,
+					order = 9,
+					values = {
+						LEFT = L.left,
+						CENTER = L.center,
+						RIGHT = L.right,
+					},
+					set = function(_, value)
+						lit.db.profile.alignText = value
+						lit.Bar.candyBarLabel:SetJustifyH(value)
+					end,
+					disabled = function() return disabled() or not lit.db.profile.labelText end,
+				},
+				icon = {
+					type = "toggle",
+					name = L.barIcon,
+					order = 10,
+					set = function(_, value)
+						lit.db.profile.icon = value
+						if value then
+							local icon = lit.Bar:Get("LegionInvasionTimer:icon")
+							lit.Bar:SetIcon(icon)
+						else
+							lit.Bar:SetIcon()
+						end
+					end,
+					disabled = disabled,
+				},
 				alignIcon = {
 					type = "select",
 					name = L.alignIcon,
-					order = 9,
+					order = 11,
 					values = {
 						LEFT = L.left,
 						RIGHT = L.right,
@@ -174,7 +204,7 @@ local acOptions = {
 				barTexture = {
 					type = "select",
 					name = L.texture,
-					order = 10,
+					order = 12,
 					values = media:List("statusbar"),
 					itemControl = "DDI-Statusbar",
 					width = 2,
@@ -194,7 +224,7 @@ local acOptions = {
 				width = {
 					type = "range",
 					name = L.barWidth,
-					order = 11,
+					order = 13,
 					max = 2000,
 					min = 10,
 					step = 1,
@@ -207,7 +237,7 @@ local acOptions = {
 				height = {
 					type = "range",
 					name = L.barHeight,
-					order = 12,
+					order = 14,
 					max = 100,
 					min = 5,
 					step = 1,
@@ -216,36 +246,6 @@ local acOptions = {
 						lit.Bar:SetHeight(value)
 					end,
 					disabled = disabled,
-				},
-				alignText = {
-					type = "select",
-					name = L.alignText,
-					order = 13,
-					values = {
-						LEFT = L.left,
-						CENTER = L.center,
-						RIGHT = L.right,
-					},
-					set = function(_, value)
-						lit.db.profile.alignText = value
-						lit.Bar.candyBarLabel:SetJustifyH(value)
-					end,
-					disabled = disabled,
-				},
-				alignTime = {
-					type = "select",
-					name = L.alignTime,
-					order = 14,
-					values = {
-						LEFT = L.left,
-						CENTER = L.center,
-						RIGHT = L.right,
-					},
-					set = function(_, value)
-						lit.db.profile.alignTime = value
-						lit.Bar.candyBarDuration:SetJustifyH(value)
-					end,
-					disabled = function() return disabled() or not lit.db.profile.timeText end,
 				},
 				growUp = {
 					type = "toggle",
@@ -257,17 +257,13 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
-				colorText = {
-					name = L.textColor,
-					type = "color",
-					hasAlpha = true,
+				fill = {
+					type = "toggle",
+					name = L.fillBar,
 					order = 16,
-					get = function()
-						return unpack(lit.db.profile.colorText)
-					end,
-					set = function(_, r, g, b, a)
-						lit.db.profile.colorText = {r, g, b, a}
-						lit.Bar:SetTextColor(r, g, b, a)
+					set = function(_, value)
+						lit.db.profile.fill = value
+						lit.Bar:SetFill(value)
 					end,
 					disabled = disabled,
 				},
@@ -333,6 +329,20 @@ local acOptions = {
 					end,
 					disabled = disabled,
 				},
+				colorText = {
+					name = L.textColor,
+					type = "color",
+					hasAlpha = true,
+					order = 21,
+					get = function()
+						return unpack(lit.db.profile.colorText)
+					end,
+					set = function(_, r, g, b, a)
+						lit.db.profile.colorText = {r, g, b, a}
+						lit.Bar:SetTextColor(r, g, b, a)
+					end,
+					disabled = disabled,
+				},
 			},
 		},
 		general = {
@@ -348,21 +358,25 @@ local acOptions = {
 					type = "toggle",
 					name = L.tooltip12hr,
 					order = 23,
+					width = 2,
 				},
 				tooltipHideAchiev = {
 					type = "toggle",
 					name = L.tooltipHideAchiev,
 					order = 24,
+					width = 2,
 				},
 				tooltipHideNethershard = {
 					type = "toggle",
 					name = L.hide:format((GetCurrencyInfo(1226))),
 					order = 25,
+					width = 2,
 				},
 				tooltipHideWarSupplies = {
 					type = "toggle",
 					name = L.hide:format((GetCurrencyInfo(1342))),
 					order = 26,
+					width = 2,
 				},
 				miscSeparator = {
 					type = "header",
@@ -416,5 +430,4 @@ local acOptions = {
 acOptions.args.profiles.order = 3
 
 acr:RegisterOptionsTable(acOptions.name, acOptions, true)
-acd:SetDefaultSize(acOptions.name, 420, 580)
-
+acd:SetDefaultSize(acOptions.name, 420, 590)

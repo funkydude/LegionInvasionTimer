@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "Fixar"
 L.barIcon = "Ícone da barra"
 L.showTime = "Exibir Tempo"
+--L.showText = "Show Text"
 L.fillBar = "Preencher barra"
 L.font = "Fonte"
 L.fontSize = "Tamanho da fonte"

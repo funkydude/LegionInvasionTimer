@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "고정시키기"
 L.barIcon = "바 아이콘"
 L.showTime = "시간 표시"
+--L.showText = "Show Text"
 L.fillBar = "바 채우기"
 L.font = "글꼴"
 L.fontSize = "글꼴 크기"

@@ -7,6 +7,7 @@ local L = mod.L
 L.lock = "Fenster fixieren"
 L.barIcon = "Leistensymbol"
 L.showTime = "Zeit anzeigen"
+L.showText = "Text anzeigen"
 L.fillBar = "Leiste füllen"
 L.font = "Schrift"
 L.fontSize = "Schriftgröße"
