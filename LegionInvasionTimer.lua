@@ -43,7 +43,7 @@ end
 local OnEnter, ShowTip, HideTip
 do
 	local id = 11544 -- Defender of the Broken Isles
-	local GameTooltip, WorldMapTooltip = GameTooltip, WorldMapTooltip
+	local GameTooltip = GameTooltip
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
@@ -120,18 +120,13 @@ do
 		end
 	end
 	HideTip = function()
-		if frame.db.profile.mode == 3 then
-			WorldMapTooltip:Hide()
-		else
-			GameTooltip:Hide()
-		end
+		GameTooltip:Hide()
 	end
 	OnEnter = function(f)
-		local tip = frame.db.profile.mode == 3 and WorldMapTooltip or GameTooltip
-		tip:SetOwner(f, "ANCHOR_NONE")
-		tip:SetPoint("BOTTOM", f, "TOP")
-		ShowTip(tip)
-		tip:Show()
+		GameTooltip:SetOwner(f, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOM", f, "TOP")
+		ShowTip(GameTooltip)
+		GameTooltip:Show()
 	end
 end
 
