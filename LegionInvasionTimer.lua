@@ -43,7 +43,7 @@ end
 local OnEnter, ShowTip, HideTip
 do
 	local id = 11544 -- Defender of the Broken Isles
-	local GameTooltip = GameTooltip
+	local tt = CreateFrame("GameTooltip", "LITtooltip", UIParent, "GameTooltipTemplate")
 	local FormatShortDate = FormatShortDate
 	ShowTip = function(tip)
 		local _, name, _, _, month, day, year, description, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
@@ -120,13 +120,13 @@ do
 		end
 	end
 	HideTip = function()
-		GameTooltip:Hide()
+		tt:Hide()
 	end
 	OnEnter = function(f)
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOM", f, "TOP")
-		ShowTip(GameTooltip)
-		GameTooltip:Show()
+		tt:SetOwner(f, "ANCHOR_NONE")
+		tt:SetPoint("BOTTOM", f, "TOP")
+		ShowTip(tt)
+		tt:Show()
 	end
 end
 
