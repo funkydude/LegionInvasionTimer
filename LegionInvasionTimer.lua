@@ -164,6 +164,7 @@ end
 local StartBar
 local hiddenBars = false
 do
+	local IsQuestFlaggedCompleted = C_QuestLog and C_QuestLog.IsQuestFlaggedCompleted or IsQuestFlaggedCompleted -- XXX 8.2.5 compat
 	StartBar = function(text, timeLeft, rewardQuestID, icon, paused)
 		if frame.Bar then frame.Bar:Stop() end
 		local bar = candy:New(media:Fetch("statusbar", frame.db.profile.barTexture), frame.db.profile.width, frame.db.profile.height)
