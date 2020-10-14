@@ -69,13 +69,13 @@ do
 		local splitLine = false
 		if not frame.db.profile.tooltipHideNethershard then
 			splitLine = true
-			local nName, nAmount, nIcon = GetCurrencyInfo(1226) -- Nethershard
-			tip:AddDoubleLine(nName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(nIcon, nAmount), 1, 1, 1, 1, 1, 1)
+			local tbl = C_CurrencyInfo.GetCurrencyInfo(1226) -- Nethershard
+			tip:AddDoubleLine(tbl.name, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(tbl.iconFileID, tbl.quantity), 1, 1, 1, 1, 1, 1)
 		end
 		if not frame.db.profile.tooltipHideWarSupplies then
 			splitLine = true
-			local sName, sAmount, sIcon = GetCurrencyInfo(1342) -- Legionfall War Supplies
-			tip:AddDoubleLine(sName, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(sIcon, sAmount), 1, 1, 1, 1, 1, 1)
+			local tbl = C_CurrencyInfo.GetCurrencyInfo(1342) -- Legionfall War Supplies
+			tip:AddDoubleLine(tbl.name, ("|T%d:15:15:0:0:64:64:4:60:4:60|t %d"):format(tbl.iconFileID, tbl.quantity), 1, 1, 1, 1, 1, 1)
 		end
 
 		if splitLine then
