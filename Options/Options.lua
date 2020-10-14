@@ -368,13 +368,13 @@ local acOptions = {
 				},
 				tooltipHideNethershard = {
 					type = "toggle",
-					name = L.hide:format((GetCurrencyInfo(1226))),
+					name = L.hide:format((C_CurrencyInfo.GetCurrencyInfo(1226).name)),
 					order = 25,
 					width = 2,
 				},
 				tooltipHideWarSupplies = {
 					type = "toggle",
-					name = L.hide:format((GetCurrencyInfo(1342))),
+					name = L.hide:format((C_CurrencyInfo.GetCurrencyInfo(1342).name)),
 					order = 26,
 					width = 2,
 				},
