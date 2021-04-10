@@ -393,7 +393,7 @@ local acOptions = {
 					type = "toggle",
 					name = L.hideInRaid,
 					order = 29,
-					disabled = function() 
+					disabled = function()
 						return lit.db.profile.mode == 2 or lit.db.profile.mode == 3
 					end,
 				},

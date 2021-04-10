@@ -1,11 +1,11 @@
 
-local name, mod = ...
+local addonName, mod = ...
 local L = mod.L
 local candy = LibStub("LibCandyBar-3.0")
 local media = LibStub("LibSharedMedia-3.0")
 local Timer = C_Timer.After
 
-local frame = CreateFrame("Frame", name, UIParent)
+local frame = CreateFrame("Frame", addonName, UIParent)
 frame:SetPoint("CENTER", UIParent, "CENTER")
 frame:SetWidth(180)
 frame:SetHeight(15)
@@ -27,9 +27,9 @@ do
 	local function openOpts()
 		EnableAddOn("LegionInvasionTimer_Options") -- Make sure it wasn't left disabled for whatever reason
 		LoadAddOn("LegionInvasionTimer_Options")
-		LibStub("AceConfigDialog-3.0"):Open(name)
+		LibStub("AceConfigDialog-3.0"):Open(addonName)
 	end
-	SlashCmdList[name] = openOpts
+	SlashCmdList[addonName] = openOpts
 	SLASH_LegionInvasionTimer1 = "/lit"
 	SLASH_LegionInvasionTimer2 = "/legioninvasiontimer"
 	frame:SetScript("OnMouseUp", function(_, btn)
@@ -425,7 +425,7 @@ frame:SetScript("OnEvent", function(f)
 	f.bg = bg
 	local header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
 	header:SetAllPoints(f)
-	header:SetText(name)
+	header:SetText(addonName)
 	f.header = header
 
 	if f.db.profile.lock then

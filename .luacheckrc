@@ -6,10 +6,19 @@ exclude_files = {
 }
 ignore = {
 	"111/SLASH_LegionInvasionTimer[12]", -- slash handlers
+	"213/i", -- unused loop variable
 }
 globals = {
 	"CreateFrame",
-	"GetLocale",
-	"LibStub",
+	"C_AreaPoiInfo",
+	"C_CurrencyInfo",
+	"C_Map",
+	"C_QuestLog",
 	"C_Timer",
+	"GetLocale",
+	"IsEncounterInProgress",
+	"LibStub",
+	"LegionInvasionTimer",
+	"ReloadUI",
+	"time",
 }
