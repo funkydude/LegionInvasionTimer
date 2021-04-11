@@ -6,6 +6,7 @@ exclude_files = {
 }
 ignore = {
 	"111/SLASH_LegionInvasionTimer[12]", -- slash handlers
+	"112/SlashCmdList",
 	"213/i", -- unused loop variable
 }
 globals = {
@@ -15,10 +16,26 @@ globals = {
 	"C_Map",
 	"C_QuestLog",
 	"C_Timer",
+	"date",
+	"EnableAddOn",
+	"FlashClientIcon",
+	"FormatShortDate",
+	"GetAchievementCriteriaInfo",
+	"GetAchievementInfo",
+	"GetAchievementNumCriteria",
+	"GetInstanceInfo",
 	"GetLocale",
 	"IsEncounterInProgress",
-	"LibStub",
+	"LegionInvasionTime",
 	"LegionInvasionTimer",
+	"LibStub",
+	"LoadAddOn",
+	"PlaySound",
+	"RaidBossEmoteFrame",
+	"RaidNotice_AddMessage",
 	"ReloadUI",
+	"SecondsToTime",
 	"time",
+	"UIParent",
+	"WorldMapFrame",
 }
