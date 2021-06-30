@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: LegionInvasionTimer Configuration Options.
