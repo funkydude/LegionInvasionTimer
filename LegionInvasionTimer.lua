@@ -419,7 +419,7 @@ frame:SetScript("OnEvent", function(f)
 	f:ClearAllPoints()
 	f:SetPoint(f.db.profile.position[1], UIParent, f.db.profile.position[2], f.db.profile.position[3], f.db.profile.position[4])
 
-	local bg = f:CreateTexture(nil, "PARENT")
+	local bg = f:CreateTexture()
 	bg:SetAllPoints(f)
 	bg:SetColorTexture(0, 1, 0, 0.3)
 	f.bg = bg
