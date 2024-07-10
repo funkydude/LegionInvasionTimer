@@ -11,6 +11,7 @@ ignore = {
 }
 globals = {
 	"CreateFrame",
+	"C_AddOns",
 	"C_AreaPoiInfo",
 	"C_CurrencyInfo",
 	"C_Map",
