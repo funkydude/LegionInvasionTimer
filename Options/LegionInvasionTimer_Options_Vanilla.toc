@@ -1,4 +1,4 @@
-## Interface: 11502, 11503
+## Interface: 11504, 11505
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkydude
 ## Notes: LegionInvasionTimer Configuration Options.
