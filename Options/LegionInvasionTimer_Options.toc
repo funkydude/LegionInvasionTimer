@@ -1,6 +1,6 @@
-## Interface: 110005, 110007, 110100
+## Interface: 110105, 110107, 110100
 ## Title: LegionInvasionTimer_Options
-## Author: Funkydude
+## Author: Funkeh
 ## Notes: LegionInvasionTimer Configuration Options.
 ## Notes-esES: Opciones de configuración de LegionInvasionTimer.
 ## Notes-esMX: Opciones de configuración de LegionInvasionTimer.

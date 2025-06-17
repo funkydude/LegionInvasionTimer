@@ -1,7 +1,7 @@
-## Interface: 110005, 110007, 110100
+## Interface: 110105, 110107, 110100
 ## Version: @project-version@
 ## Title: LegionInvasionTimer
-## Author: Funkydude
+## Author: Funkeh
 ## Notes: Shows the Legion invasion timer.
 ## Notes-esES: Muestra el temporizador de las invasiones de la Legion.
 ## Notes-esMX: Muestra el temporizador de las invasiones de la Legion.
