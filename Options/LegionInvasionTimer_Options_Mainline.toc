@@ -1,4 +1,4 @@
-## Interface: 110105, 110107, 110100
+## Interface: 110205, 110107, 110200
 ## Title: LegionInvasionTimer_Options
 ## Author: Funkeh
 ## Notes: LegionInvasionTimer Configuration Options.
