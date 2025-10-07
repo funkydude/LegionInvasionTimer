@@ -13,4 +13,5 @@
 * Right-click the bar anchor
 
 ## Download
-<https://www.curseforge.com/wow/addons/legioninvasiontimer>
+* <https://www.curseforge.com/wow/addons/legioninvasiontimer>
+* <https://addons.wago.io/addons/legioninvasiontimer>
