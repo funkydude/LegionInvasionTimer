@@ -348,7 +348,6 @@ do
 
 		for i = 1, #zonePOIIds do
 			local timeLeftSeconds = GetAreaPOISecondsLeft(zonePOIIds[i])
-			print(zoneNames[i],zonePOIIds[i], timeLeftSeconds)
 			-- On some realms timeLeftSeconds can return massive values during the initialization of a new event
 			if timeLeftSeconds and timeLeftSeconds > 60 and timeLeftSeconds < 21601 then -- 6 hours: (6*60)*60 = 21600
 				if mode == 2 then
