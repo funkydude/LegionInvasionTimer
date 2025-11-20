@@ -28,6 +28,7 @@ globals = {
 	"GetLocale",
 	"IsEncounterInProgress",
 	"LegionInvasionTime",
+	"LegionInvasionTimer",
 	"LibStub",
 	"LoadAddOn",
 	"PlaySound",
