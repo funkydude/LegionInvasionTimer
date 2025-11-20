@@ -14,6 +14,7 @@
 ## Notes-ptBR: Mostra o timer da invasão da legião.
 ## Notes-ruRU: Показывает время и место вторжений Легиона.
 ## SavedVariables: LegionInvasionTimerDB, LegionInvasionTime
+## LoadSavedVariablesFirst: 1
 
 ## X-Category: Miscellaneous
 ## X-Website: https://github.com/funkydude/LegionInvasionTimer

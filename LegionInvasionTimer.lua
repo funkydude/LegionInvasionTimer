@@ -39,7 +39,70 @@ do
 			openOpts()
 		end
 	end)
-	frame:RegisterEvent("PLAYER_LOGIN")
+end
+
+do
+	-- saved variables database setup
+	local defaults = {
+		profile = {
+			lock = false,
+			position = {"CENTER", "CENTER", 0, 0},
+			fontSize = 10,
+			barTexture = "Blizzard Raid Bar",
+			outline = "NONE",
+			monochrome = false,
+			font = media:GetDefault("font"),
+			width = 200,
+			height = 20,
+			icon = true,
+			timeText = true,
+			labelText = true,
+			fill = false,
+			growUp = false,
+			alignText = "LEFT",
+			alignTime = "RIGHT",
+			alignIcon = "LEFT",
+			colorText = {1,1,1,1},
+			colorComplete = {0,1,0,1},
+			colorIncomplete = {1,0,0,1},
+			colorNext = {0.25,0.33,0.68,1},
+			colorBarBackground = {0,0,0,0.75},
+			tooltip12hr = true,
+			tooltipHideAchiev = false,
+			tooltipHideNethershard = false,
+			tooltipHideWarSupplies = false,
+			zoneWarnings = false,
+			hideInRaid = false,
+			mode = 1,
+		},
+	}
+	frame.db = LibStub("AceDB-3.0"):New("LegionInvasionTimerDB", defaults, true)
+
+	frame:ClearAllPoints()
+	frame:SetPoint(frame.db.profile.position[1], UIParent, frame.db.profile.position[2], frame.db.profile.position[3], frame.db.profile.position[4])
+
+	local bg = frame:CreateTexture()
+	bg:SetAllPoints(frame)
+	bg:SetColorTexture(0, 1, 0, 0.3)
+	frame.bg = bg
+
+	local header = frame:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
+	header:SetAllPoints(frame)
+	header:SetText(addonName)
+	frame.header = header
+
+	if frame.db.profile.lock then
+		frame:EnableMouse(false)
+		frame:SetMovable(false)
+		frame.bg:Hide()
+		frame.header:Hide()
+	end
+
+	if frame.db.profile.mode == 3 then
+		frame:SetParent(WorldMapFrame)
+		frame:SetFrameStrata("FULLSCREEN")
+		frame:SetFrameLevel(10)
+	end
 end
 
 local OnEnter, ShowTip, HideTip
@@ -86,12 +149,11 @@ do
 
 		tip:AddLine(L.nextInvasions)
 		if LegionInvasionTime then -- Have we seen our first invasion?
-			-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
 			local elapsed = time() - LegionInvasionTime
-			while elapsed > 66600 do
-				elapsed = elapsed - 66600
+			while elapsed > 52200 do
+				elapsed = elapsed - 52200
 			end
-			local t = 66600-elapsed
+			local t = 52200-elapsed
 			t = t+time()
 			local upper, date = string.upper, date
 			local check = date("%M", t)
@@ -102,19 +164,19 @@ do
 				for i = 1, 4 do
 					tip:AddDoubleLine(
 						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%I:%M", t) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t))],
-						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%I:%M", t+66600) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+66600))],
+						_G["WEEKDAY_"..upper(date("%A", t+52200))].." "..date("%I:%M", t+52200) .. " " .. _G["TIMEMANAGER_"..upper(date("%p", t+52200))],
 						1, 1, 1, 1, 1, 1
 					)
-					t = t + 66600 + 66600
+					t = t + 52200 + 52200
 				end
 			else
 				for i = 1, 4 do
 					tip:AddDoubleLine(
 						_G["WEEKDAY_"..upper(date("%A", t))].." "..date("%H:%M", t),
-						_G["WEEKDAY_"..upper(date("%A", t+66600))].." "..date("%H:%M", t+66600),
+						_G["WEEKDAY_"..upper(date("%A", t+52200))].." "..date("%H:%M", t+52200),
 						1, 1, 1, 1, 1, 1
 					)
-					t = t + 66600 + 66600
+					t = t + 52200 + 52200
 				end
 			end
 		else
@@ -286,6 +348,7 @@ do
 
 		for i = 1, #zonePOIIds do
 			local timeLeftSeconds = GetAreaPOISecondsLeft(zonePOIIds[i])
+			print(zoneNames[i],zonePOIIds[i], timeLeftSeconds)
 			-- On some realms timeLeftSeconds can return massive values during the initialization of a new event
 			if timeLeftSeconds and timeLeftSeconds > 60 and timeLeftSeconds < 21601 then -- 6 hours: (6*60)*60 = 21600
 				if mode == 2 then
@@ -315,29 +378,32 @@ do
 		end
 
 		if not found then
-			if LegionInvasionTime then
-				-- 18hrs * 60min = 1,080min = +30min = 1,110min = *60sec = 66,600sec
-				local elapsed = time() - LegionInvasionTime
-				while elapsed > 66600 do
-					elapsed = elapsed - 66600
-				end
-				local t = 66600-elapsed
-
-				if t > 45000 then -- 12hrs * 60min = 720min = +30min = 750min = *60sec = 45,000sec
-					-- If it's longer than 45k then an invasion is currently active.
-					-- Loop every second until the API call responds with valid results.
-					Timer(1, FindInvasion)
-					if not isWaiting then
-						isWaiting = true
-						if mode == 2 then
-							StartBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-						else
-							StartBar(L.waiting, t, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
-							frame:UnregisterEvent("QUEST_TURNED_IN")
+			local tableOfPOIs = C_AreaPoiInfo.GetAreaPOIForMap(619) -- Broken Isles map
+			for numPOIs = 1, #tableOfPOIs do
+				local poi = tableOfPOIs[numPOIs]
+				for i = 1, #zonePOIIds do
+					if poi == zonePOIIds[i] then
+						Timer(5, FindInvasion)
+						if not isWaiting then
+							isWaiting = true
+							if mode == 2 then
+								StartBroker(L.waiting, 0, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+							else
+								StartBar(L.waiting, 100, 0, 132177, true) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
+								frame:UnregisterEvent("QUEST_TURNED_IN")
+							end
 						end
+						return
 					end
-					return
 				end
+			end
+
+			if LegionInvasionTime then
+				local elapsed = time() - LegionInvasionTime
+				while elapsed > 52200 do
+					elapsed = elapsed - 52200
+				end
+				local t = 52200-elapsed
 
 				if mode == 2 then
 					StartBroker(L.next, t, 132177) -- 132177 = Interface\\Icons\\Ability_Hunter_MasterMarksman
@@ -379,83 +445,24 @@ local function CheckIfInRaid()
 	end
 end
 
-frame:SetScript("OnEvent", function(f)
-	f:UnregisterEvent("PLAYER_LOGIN")
+frame:SetScript("OnEvent", function(f, e)
+	f:UnregisterEvent(e)
 
-	-- saved variables database setup
-	local defaults = {
-		profile = {
-			lock = false,
-			position = {"CENTER", "CENTER", 0, 0},
-			fontSize = 10,
-			barTexture = "Blizzard Raid Bar",
-			outline = "NONE",
-			monochrome = false,
-			font = media:GetDefault("font"),
-			width = 200,
-			height = 20,
-			icon = true,
-			timeText = true,
-			labelText = true,
-			fill = false,
-			growUp = false,
-			alignText = "LEFT",
-			alignTime = "RIGHT",
-			alignIcon = "LEFT",
-			colorText = {1,1,1,1},
-			colorComplete = {0,1,0,1},
-			colorIncomplete = {1,0,0,1},
-			colorNext = {0.25,0.33,0.68,1},
-			colorBarBackground = {0,0,0,0.75},
-			tooltip12hr = true,
-			tooltipHideAchiev = false,
-			tooltipHideNethershard = false,
-			tooltipHideWarSupplies = false,
-			zoneWarnings = false,
-			hideInRaid = false,
-			mode = 1,
-		},
-	}
-	f.db = LibStub("AceDB-3.0"):New("LegionInvasionTimerDB", defaults, true)
+	Timer(1, function()
+		FindInvasion()
 
-	f:ClearAllPoints()
-	f:SetPoint(f.db.profile.position[1], UIParent, f.db.profile.position[2], f.db.profile.position[3], f.db.profile.position[4])
+		Timer(15, function()
+			justLoggedIn = false
+			if not LegionInvasionTime then
+				print("|cFF33FF99LegionInvasionTimer|r:", L.firstRunWarning)
+			end
+		end)
 
-	local bg = f:CreateTexture()
-	bg:SetAllPoints(f)
-	bg:SetColorTexture(0, 1, 0, 0.3)
-	f.bg = bg
-	local header = f:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
-	header:SetAllPoints(f)
-	header:SetText(addonName)
-	f.header = header
-
-	if f.db.profile.lock then
-		f:EnableMouse(false)
-		f:SetMovable(false)
-		f.bg:Hide()
-		f.header:Hide()
-	end
-
-	if f.db.profile.mode == 3 then
-		f:SetParent(WorldMapFrame)
-		f:SetFrameStrata("FULLSCREEN")
-		f:SetFrameLevel(10)
-	end
-
-	FindInvasion()
-
-	Timer(15, function()
-		justLoggedIn = false
-		if not LegionInvasionTime then
-			print("|cFF33FF99LegionInvasionTimer|r:", L.firstRunWarning)
+		if f.db.profile.mode == 1 then
+			CheckIfInRaid()
+			f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 		end
 	end)
-
-	if f.db.profile.mode == 1 then
-		CheckIfInRaid()
-		f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	end
 
 	f:SetScript("OnEvent", function(_, event, id)
 		if event == "QUEST_TURNED_IN" then
@@ -465,4 +472,4 @@ frame:SetScript("OnEvent", function(f)
 		end
 	end)
 end)
-
+frame:RegisterEvent("LOADING_SCREEN_DISABLED")
