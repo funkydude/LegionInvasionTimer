@@ -1,5 +1,5 @@
-## Interface: 120100, 120005, 120007
-## Version: @project-version@
+## Interface: 120100, 120105, 120007
+## AllowLoadGameType: standard
 ## Title: LegionInvasionTimer
 ## Author: Funkeh
 ## Notes: Shows the Legion invasion timer.
@@ -13,6 +13,7 @@
 ## Notes-koKR: 군단 침공 타이머를 표시합니다.
 ## Notes-ptBR: Mostra o timer da invasão da legião.
 ## Notes-ruRU: Показывает время и место вторжений Легиона.
+## Version: @project-version@
 ## SavedVariables: LegionInvasionTimerDB, LegionInvasionTime
 ## LoadSavedVariablesFirst: 1
 
