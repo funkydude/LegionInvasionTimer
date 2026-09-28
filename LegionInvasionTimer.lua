@@ -241,7 +241,6 @@ do
 		bar.candyBarLabel:SetJustifyH(frame.db.profile.alignText)
 		bar.candyBarDuration:SetJustifyH(frame.db.profile.alignTime)
 		bar:SetDuration(timeLeft)
-		bar:Set("LegionInvasionTimer:icon", icon)
 		if rewardQuestID > 0 then
 			if IsQuestFlaggedCompleted(rewardQuestID) then
 				bar:SetColor(unpack(frame.db.profile.colorComplete))
@@ -255,10 +254,9 @@ do
 		end
 		bar.candyBarBackground:SetVertexColor(unpack(frame.db.profile.colorBarBackground))
 		bar:SetTextColor(unpack(frame.db.profile.colorText))
-		if frame.db.profile.icon then
-			bar:SetIcon(icon)
-			bar:SetIconPosition(frame.db.profile.alignIcon)
-		end
+		bar:SetIconVisibility(frame.db.profile.icon)
+		bar:SetIcon(icon)
+		bar:SetIconPosition(frame.db.profile.alignIcon)
 		bar:SetTimeVisibility(frame.db.profile.timeText)
 		bar:SetLabelVisibility(frame.db.profile.labelText)
 		bar:SetFill(frame.db.profile.fill)

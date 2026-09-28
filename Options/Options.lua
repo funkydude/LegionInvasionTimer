@@ -178,12 +178,7 @@ local acOptions = {
 					order = 10,
 					set = function(_, value)
 						lit.db.profile.icon = value
-						if value then
-							local icon = lit.Bar:Get("LegionInvasionTimer:icon")
-							lit.Bar:SetIcon(icon)
-						else
-							lit.Bar:SetIcon()
-						end
+						lit.Bar:SetIconVisibility(value)
 					end,
 					disabled = disabled,
 				},
