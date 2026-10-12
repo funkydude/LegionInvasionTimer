@@ -238,6 +238,7 @@ do
 		bar:SetScript("OnLeave", HideTip)
 		bar:SetParent(frame)
 		bar:SetLabel(text)
+		bar:SetPauseWhenDone(true)
 		bar.candyBarLabel:SetJustifyH(frame.db.profile.alignText)
 		bar.candyBarDuration:SetJustifyH(frame.db.profile.alignTime)
 		bar:SetDuration(timeLeft)
@@ -357,11 +358,11 @@ do
 				Timer(timeLeftSeconds+60, FindInvasion)
 				found = true
 				-- Not fighting a boss, didn't just log in, legion assault has just spawned (6hrs - 10min), feature is enabled
-				if not IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 21000 and frame.db.profile.zoneWarnings then
+				if not C_InstanceEncounter.IsEncounterInProgress() and not justLoggedIn and timeLeftSeconds > 21000 and frame.db.profile.zoneWarnings then
 					FlashClientIcon()
 					local text = L.underAttack:format(zoneNames[i])
 					print("|cFF33FF99LegionInvasionTimer|r:", text)
-					RaidNotice_AddMessage(RaidBossEmoteFrame, text, {r=1, g=1, b=1})
+					RaidWarningUtil.AddMessage(text, {r=1, g=1, b=1})
 					PlaySound(8959, "Master", false) -- SOUNDKIT.RAID_WARNING
 				end
 				justLoggedIn = false
